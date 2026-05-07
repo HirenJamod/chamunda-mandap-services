@@ -80,6 +80,48 @@ app.patch('/api/bookings/:id', async (req, res) => {
     res.json({ message: "Booking updated successfully" });
 });
 
+// Gallery Endpoints
+
+// Get all gallery items
+app.get('/api/gallery', async (req, res) => {
+    const { data, error } = await supabase
+        .from('gallery')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+});
+
+// Add new gallery item
+app.post('/api/gallery', async (req, res) => {
+    const { image_url, caption } = req.body;
+    const { data, error } = await supabase
+        .from('gallery')
+        .insert([{ image_url, caption }]);
+
+    if (error) {
+        return res.status(400).json({ error: error.message });
+    }
+    res.json({ message: "Image added to gallery" });
+});
+
+// Delete gallery item
+app.delete('/api/gallery/:id', async (req, res) => {
+    const { id } = req.params;
+    const { data, error } = await supabase
+        .from('gallery')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        return res.status(400).json({ error: error.message });
+    }
+    res.json({ message: "Image removed from gallery" });
+});
+
 // Static files handled by express.static
 
 app.listen(PORT, () => {

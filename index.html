@@ -116,27 +116,35 @@
         <div class="section-header">
             <h2 class="serif">Inspiration Gallery</h2>
         </div>
-        <div class="gallery-masonry">
-            <div class="gallery-item">
-                <img src="hero_mandap_decoration_1778151874213.png" alt="Grand Mandap">
-                <div class="gallery-overlay">
-                    <span>Royal Mandap</span>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="mandap_service_1_1778151894153.png" alt="Floral Entrance">
-                <div class="gallery-overlay">
-                    <span>Traditional Decor</span>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="mandap_service_2_1778151909885.png" alt="Outdoor Setup">
-                <div class="gallery-overlay">
-                    <span>Modern Outdoor</span>
-                </div>
+        <div class="gallery-masonry" id="dynamic-gallery">
+            <!-- Images will be loaded from the database -->
+            <div class="loader-container" style="grid-column: 1/-1;">
+                <span class="loader"></span>
             </div>
         </div>
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/gallery')
+                .then(res => res.json())
+                .then(images => {
+                    const gallery = document.getElementById('dynamic-gallery');
+                    if (images.length === 0) {
+                        gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Gallery coming soon...</p>';
+                    } else {
+                        gallery.innerHTML = images.map(img => `
+                            <div class="gallery-item">
+                                <img src="${img.image_url}" alt="${img.caption}">
+                                <div class="gallery-overlay">
+                                    <span>${img.caption}</span>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                });
+        });
+    </script>
 
     <!-- Booking Section -->
     <section id="booking" style="background-color: #fcf8f3;">
