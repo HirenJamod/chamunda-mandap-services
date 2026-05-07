@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: chamunda-mandap-services
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 20.0.0
+      - key: ADMIN_PASSWORD
+        value: admin_chamunda

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Chamunda Mandap Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-page {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+        }
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-card h2 { margin-bottom: 30px; color: var(--primary); }
+    </style>
+</head>
+<body class="login-page">
+    <div class="login-card">
+        <h2 class="serif">Admin Login</h2>
+        <form id="login-form">
+            <div class="form-group" style="text-align: left;">
+                <label>Access Password</label>
+                <input type="password" id="password" required placeholder="Enter password">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Access Dashboard</button>
+            <p id="error-msg" style="color: red; margin-top: 15px; display: none;">Invalid Password</p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('isAdmin', 'true');
+                    window.location.href = 'admin.html';
+                } else {
+                    document.getElementById('error-msg').style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
