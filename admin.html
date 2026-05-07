@@ -75,12 +75,26 @@
             <div id="gallery-section" class="data-table-container" style="margin-top: 40px;">
                 <h3 class="serif" style="margin-bottom: 20px;">Gallery Manager</h3>
                 <form id="gallery-form" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 30px;">
-                    <input type="text" id="img-url" placeholder="Image URL (e.g., https://...)" required>
+                    <input type="text" id="img-url" placeholder="Image URL" required>
                     <input type="text" id="img-caption" placeholder="Caption" required>
-                    <button type="submit" class="btn btn-primary">Add Image</button>
+                    <button type="submit" class="btn btn-primary">Add Photo</button>
                 </form>
                 <div class="gallery-admin-list" id="gallery-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
-                    <!-- Gallery items will load here -->
+                    <!-- Gallery items -->
+                </div>
+            </div>
+
+            <!-- Service Manager -->
+            <div id="services-section" class="data-table-container" style="margin-top: 40px;">
+                <h3 class="serif" style="margin-bottom: 20px;">Service Manager</h3>
+                <form id="service-form" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; margin-bottom: 30px;">
+                    <input type="text" id="service-title" placeholder="Service Title (e.g. Mandap Decor)" required>
+                    <input type="text" id="service-desc" placeholder="Description" required>
+                    <input type="text" id="service-img" placeholder="Image URL" required>
+                    <button type="submit" class="btn btn-primary">Add Service</button>
+                </form>
+                <div id="services-admin-list">
+                    <!-- Services list -->
                 </div>
             </div>
         </div>
@@ -175,9 +189,54 @@
             }
         }
 
+        // Services Logic
+        function loadServices() {
+            fetch('/api/services')
+                .then(res => res.json())
+                .then(services => {
+                    const list = document.getElementById('services-admin-list');
+                    list.innerHTML = services.map(s => `
+                        <div style="display: flex; align-items: center; gap: 20px; padding: 15px; border-bottom: 1px solid #eee;">
+                            <img src="${s.image_url}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;">
+                            <div style="flex-grow: 1;">
+                                <strong>${s.title}</strong>
+                                <p style="font-size: 0.8rem; color: #888;">${s.description}</p>
+                            </div>
+                            <button onclick="deleteService(${s.id})" class="action-btn btn-reject"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `).join('');
+                });
+        }
+
+        document.getElementById('service-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('service-title').value;
+            const description = document.getElementById('service-desc').value;
+            const image_url = document.getElementById('service-img').value;
+
+            fetch('/api/services', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description, image_url })
+            })
+            .then(res => res.json())
+            .then(() => {
+                document.getElementById('service-form').reset();
+                loadServices();
+            });
+        });
+
+        function deleteService(id) {
+            if (confirm('Delete this service?')) {
+                fetch(`/api/services/${id}`, { method: 'DELETE' })
+                    .then(() => loadServices());
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             loadBookings();
             loadGallery();
+            loadServices();
         });
     </script>
 </body>

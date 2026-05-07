@@ -86,27 +86,10 @@
         <div class="section-header">
             <h2 class="serif">Our Signature Services</h2>
         </div>
-        <div class="services-grid">
-            <div class="service-card">
-                <img src="mandap_service_1_1778151894153.png" alt="Traditional Mandap" class="service-img">
-                <div class="service-info">
-                    <h3 class="serif">Traditional Royal Mandaps</h3>
-                    <p>Grand red and gold themes with intricate carvings and traditional floral arrangements that echo our rich heritage.</p>
-                </div>
-            </div>
-            <div class="service-card">
-                <img src="mandap_service_2_1778151909885.png" alt="Modern Mandap" class="service-img">
-                <div class="service-info">
-                    <h3 class="serif">Modern Minimalist Decor</h3>
-                    <p>Clean lines, pastel palettes, and contemporary floral art for the modern couple who loves sophisticated simplicity.</p>
-                </div>
-            </div>
-            <div class="service-card">
-                <img src="hero_mandap_decoration_1778151874213.png" alt="Exotic Decor" class="service-img">
-                <div class="service-info">
-                    <h3 class="serif">Exotic Floral Themes</h3>
-                    <p>Breathtaking entrance decors and stage backdrops featuring exotic imported blooms and creative lighting.</p>
-                </div>
+        <div class="services-grid" id="dynamic-services">
+            <!-- Services will be loaded from the database -->
+            <div class="loader-container" style="grid-column: 1/-1;">
+                <span class="loader"></span>
             </div>
         </div>
     </section>
@@ -126,6 +109,27 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Fetch Services
+            fetch('/api/services')
+                .then(res => res.json())
+                .then(services => {
+                    const servicesGrid = document.getElementById('dynamic-services');
+                    if (services.length === 0) {
+                        servicesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Our services will be updated shortly...</p>';
+                    } else {
+                        servicesGrid.innerHTML = services.map(s => `
+                            <div class="service-card">
+                                <img src="${s.image_url}" alt="${s.title}" class="service-img">
+                                <div class="service-info">
+                                    <h3 class="serif">${s.title}</h3>
+                                    <p>${s.description}</p>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                });
+
+            // Fetch Gallery
             fetch('/api/gallery')
                 .then(res => res.json())
                 .then(images => {

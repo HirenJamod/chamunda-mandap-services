@@ -122,6 +122,48 @@ app.delete('/api/gallery/:id', async (req, res) => {
     res.json({ message: "Image removed from gallery" });
 });
 
+// Services Endpoints
+
+// Get all services
+app.get('/api/services', async (req, res) => {
+    const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .order('created_at', { ascending: true });
+
+    if (error) {
+        return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+});
+
+// Add new service
+app.post('/api/services', async (req, res) => {
+    const { title, description, image_url } = req.body;
+    const { data, error } = await supabase
+        .from('services')
+        .insert([{ title, description, image_url }]);
+
+    if (error) {
+        return res.status(400).json({ error: error.message });
+    }
+    res.json({ message: "Service added successfully" });
+});
+
+// Delete service
+app.delete('/api/services/:id', async (req, res) => {
+    const { id } = req.params;
+    const { data, error } = await supabase
+        .from('services')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        return res.status(400).json({ error: error.message });
+    }
+    res.json({ message: "Service removed successfully" });
+});
+
 // Static files handled by express.static
 
 app.listen(PORT, () => {
