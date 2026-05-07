@@ -1,48 +1,85 @@
-// Chamunda Mandap Services - Interactive Logic
+// Chamunda Mandap Services - Luxury Modern Logic
 
 document.addEventListener('DOMContentLoaded', () => {
     const navbar = document.getElementById('navbar');
+    const cursor = document.querySelector('.cursor');
+    const follower = document.querySelector('.cursor-follower');
     const bookingForm = document.getElementById('booking-form');
-    const formSuccess = document.getElementById('form-success');
-    const dateInput = document.getElementById('event-date');
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
 
-    // Disable past dates
-    if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.setAttribute('min', today);
-    }
+    // 1. Custom Cursor Logic
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        follower.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    });
 
-    // Mobile Menu Toggle
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const icon = mobileMenuBtn.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
+    document.querySelectorAll('a, button, .service-card').forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            follower.style.width = '60px';
+            follower.style.height = '60px';
+            follower.style.background = 'rgba(197, 160, 89, 0.1)';
         });
-    }
+        link.addEventListener('mouseleave', () => {
+            follower.style.width = '30px';
+            follower.style.height = '30px';
+            follower.style.background = 'transparent';
+        });
+    });
+
+    // 2. Navbar Scroll Effect
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
+        if (window.scrollY > 100) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
     });
 
-    // Form Handling
+    // 3. Dynamic Services Fetching
+    const loadServices = () => {
+        fetch('/api/services')
+            .then(res => res.json())
+            .then(services => {
+                const servicesGrid = document.getElementById('dynamic-services');
+                if (services.length === 0) {
+                    servicesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Services loading...</p>';
+                } else {
+                    servicesGrid.innerHTML = services.map((s, index) => `
+                        <div class="service-card" style="animation-delay: ${index * 0.2}s">
+                            <img src="${s.image_url}" alt="${s.title}" class="service-img">
+                            <div class="service-info">
+                                <h3 class="serif">${s.title}</h3>
+                                <p>${s.description}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            });
+    };
+
+    // 4. Dynamic Gallery Fetching
+    const loadGallery = () => {
+        fetch('/api/gallery')
+            .then(res => res.json())
+            .then(images => {
+                const gallery = document.getElementById('dynamic-gallery');
+                gallery.innerHTML = images.map(img => `
+                    <div class="gallery-item">
+                        <img src="${img.image_url}" alt="${img.caption}">
+                        <div class="gallery-overlay">
+                            <span>${img.caption}</span>
+                        </div>
+                    </div>
+                `).join('');
+            });
+    };
+
+    // 5. Booking Form
     if (bookingForm) {
         bookingForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            // Basic animation for button
             const submitBtn = bookingForm.querySelector('button');
-            const originalText = submitBtn.innerText;
-            submitBtn.innerText = 'Checking...';
-            submitBtn.disabled = true;
+            submitBtn.innerText = 'Sending...';
 
-            // API Call to save to database
             const formData = {
                 id: 'BK-' + Date.now(),
                 name: document.getElementById('full-name').value,
@@ -59,63 +96,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
-            .then(data => {
-                bookingForm.style.display = 'none';
-                formSuccess.style.display = 'block';
-                formSuccess.style.animation = 'fadeInUp 0.5s ease forwards';
-                console.log('Booking Saved to DB:', data);
-            })
-            .catch(error => {
-                console.error('Error saving booking:', error);
-                alert('There was an error saving your booking. Please try again.');
-                submitBtn.innerText = originalText;
-                submitBtn.disabled = false;
+            .then(() => {
+                bookingForm.innerHTML = `<div class="serif" style="font-size: 2rem; text-align: center; color: #C5A059;">Inquiry Sent. We will contact you soon.</div>`;
             });
         });
     }
 
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            
-            // Close mobile menu if open
-            navLinks.classList.remove('active');
-            const icon = mobileMenuBtn.querySelector('i');
-            if (icon) {
-                icon.classList.add('fa-bars');
-                icon.classList.remove('fa-times');
-            }
-
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Intersection Observer for scroll animations
-    const observerOptions = {
-        threshold: 0.1
-    };
-
+    // 6. Intersection Observer for Reveal Animations
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.add('revealed');
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.1 });
 
-    // Apply reveal animation to service cards
-    document.querySelectorAll('.service-card').forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = 'all 0.6s ease-out';
-        observer.observe(card);
-    });
+    document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+    // Initialize
+    loadServices();
+    loadGallery();
+
+    // Disable past dates
+    const dateInput = document.getElementById('event-date');
+    if (dateInput) {
+        dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    }
 });

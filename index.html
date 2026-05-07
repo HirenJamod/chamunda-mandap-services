@@ -56,14 +56,21 @@
     <link rel="stylesheet" href="style.css?v=1.1">
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Background Decoration -->
+    <div class="blob" style="top: 10%; left: -10%;"></div>
+    <div class="blob" style="bottom: 10%; right: -10%; animation-delay: -5s;"></div>
 
     <!-- Navigation -->
     <nav id="navbar">
-        <a href="#" class="logo serif">CHAMUNDA</a>
+        <a href="#" class="logo serif">CHAMUNDA<span>.</span></a>
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#services">Services</a></li>
-            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#gallery">Portfolio</a></li>
             <li><a href="#booking">Book Now</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
@@ -74,10 +81,12 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <!-- Parallax background will be handled by CSS/JS -->
+        <img src="hero_mandap_decoration_1778151874213.png" class="hero-video" alt="Luxury Mandap">
         <div class="hero-content">
-            <h1 class="serif">Creating Royal Memories</h1>
-            <p>Bespoke Mandap Designs & Wedding Decorations tailored to your dream celebration. Elegance in every petal, luxury in every pillar.</p>
-            <a href="#booking" class="btn btn-primary">Reserve Your Date</a>
+            <p data-reveal>Established 1995</p>
+            <h1 class="serif" data-reveal>Exceptional <br>Wedding <br>Artistry</h1>
+            <a href="#booking" class="btn btn-primary" data-reveal>Inquire Now</a>
         </div>
     </section>
 
