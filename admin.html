@@ -265,9 +265,15 @@
             <div id="gallery-section" class="admin-table-container">
                 <h2 class="serif" style="margin-bottom: 20px;">Gallery Manager</h2>
                 <form id="gallery-form" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 30px;">
-                    <input type="text" id="img-url" placeholder="Image URL" required>
-                    <input type="text" id="img-caption" placeholder="Caption" required>
-                    <button type="submit" class="btn btn-primary" style="padding: 12px 24px;">Add Photo</button>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 0.7rem; color: var(--text-muted);">Choose Photo</label>
+                        <input type="file" id="img-file" accept="image/*" required style="padding: 8px !important;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 0.7rem; color: var(--text-muted);">Caption</label>
+                        <input type="text" id="img-caption" placeholder="e.g. Royal Entrance" required>
+                    </div>
+                    <button type="submit" id="gallery-submit" class="btn btn-primary" style="padding: 12px 24px; align-self: flex-end;">Upload Photo</button>
                 </form>
                 <div id="gallery-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;"></div>
             </div>
@@ -276,10 +282,19 @@
             <div id="services-section" class="admin-table-container">
                 <h2 class="serif" style="margin-bottom: 20px;">Service Manager</h2>
                 <form id="service-form" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; margin-bottom: 30px;">
-                    <input type="text" id="service-title" placeholder="Service Name" required>
-                    <input type="text" id="service-desc" placeholder="Description" required>
-                    <input type="text" id="service-img" placeholder="Image URL" required>
-                    <button type="submit" class="btn btn-primary" style="padding: 12px 24px;">Add Service</button>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 0.7rem; color: var(--text-muted);">Service Title</label>
+                        <input type="text" id="service-title" placeholder="e.g. Mandap Decor" required>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 0.7rem; color: var(--text-muted);">Description</label>
+                        <input type="text" id="service-desc" placeholder="Brief details" required>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 0.7rem; color: var(--text-muted);">Service Photo</label>
+                        <input type="file" id="service-file" accept="image/*" required style="padding: 8px !important;">
+                    </div>
+                    <button type="submit" id="service-submit" class="btn btn-primary" style="padding: 12px 24px; align-self: flex-end;">Add Service</button>
                 </form>
                 <div id="services-admin-list"></div>
             </div>
@@ -352,15 +367,21 @@
 
         document.getElementById('gallery-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            const submitBtn = document.getElementById('gallery-submit');
+            submitBtn.innerText = 'Uploading...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('image', document.getElementById('img-file').files[0]);
+            formData.append('caption', document.getElementById('img-caption').value);
+
             fetch('/api/gallery', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    image_url: document.getElementById('img-url').value, 
-                    caption: document.getElementById('img-caption').value 
-                })
+                body: formData
             }).then(() => {
                 document.getElementById('gallery-form').reset();
+                submitBtn.innerText = 'Upload Photo';
+                submitBtn.disabled = false;
                 loadGallery();
             });
         });
@@ -391,16 +412,22 @@
 
         document.getElementById('service-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            const submitBtn = document.getElementById('service-submit');
+            submitBtn.innerText = 'Adding...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('image', document.getElementById('service-file').files[0]);
+            formData.append('title', document.getElementById('service-title').value);
+            formData.append('description', document.getElementById('service-desc').value);
+
             fetch('/api/services', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    title: document.getElementById('service-title').value,
-                    description: document.getElementById('service-desc').value,
-                    image_url: document.getElementById('service-img').value
-                })
+                body: formData
             }).then(() => {
                 document.getElementById('service-form').reset();
+                submitBtn.innerText = 'Add Service';
+                submitBtn.disabled = false;
                 loadServices();
             });
         });

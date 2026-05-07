@@ -4,6 +4,7 @@ const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
+const multer = require('multer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,21 +14,36 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
 
+// Multer for file uploads (storing in memory)
+const upload = multer({ storage: multer.memoryStorage() });
+
 // Supabase Setup
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-    console.warn("WARNING: Supabase credentials missing. Database will not work.");
-}
-
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin_chamunda";
 
+// Helper function to upload to Supabase Storage
+async function uploadToSupabase(file) {
+    const fileName = `${Date.now()}-${file.originalname}`;
+    const { data, error } = await supabase.storage
+        .from('media')
+        .upload(fileName, file.buffer, {
+            contentType: file.mimetype
+        });
+
+    if (error) throw error;
+
+    const { data: publicUrlData } = supabase.storage
+        .from('media')
+        .getPublicUrl(fileName);
+
+    return publicUrlData.publicUrl;
+}
+
 // API Endpoints
 
-// Login Endpoint
 app.post('/api/login', (req, res) => {
     const { password } = req.body;
     if (password === ADMIN_PASSWORD) {
@@ -37,134 +53,82 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// Get all bookings
 app.get('/api/bookings', async (req, res) => {
-    const { data, error } = await supabase
-        .from('bookings')
-        .select('*')
-        .order('timestamp', { ascending: false });
-
-    if (error) {
-        return res.status(400).json({ error: error.message });
-    }
+    const { data, error } = await supabase.from('bookings').select('*').order('timestamp', { ascending: false });
+    if (error) return res.status(400).json({ error: error.message });
     res.json(data);
 });
 
-// Create new booking
 app.post('/api/bookings', async (req, res) => {
     const { id, name, phone, date, style, message, status, timestamp } = req.body;
-    
-    const { data, error } = await supabase
-        .from('bookings')
-        .insert([{ id, name, phone, date, style, message, status, timestamp }]);
-
-    if (error) {
-        return res.status(400).json({ error: error.message });
-    }
-    res.json({ message: "Booking created successfully", id: id });
+    const { data, error } = await supabase.from('bookings').insert([{ id, name, phone, date, style, message, status, timestamp }]);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: "Booking created successfully" });
 });
 
-// Update booking status
 app.patch('/api/bookings/:id', async (req, res) => {
     const { status } = req.body;
     const { id } = req.params;
-    
-    const { data, error } = await supabase
-        .from('bookings')
-        .update({ status })
-        .eq('id', id);
-
-    if (error) {
-        return res.status(400).json({ error: error.message });
-    }
-    res.json({ message: "Booking updated successfully" });
+    const { error } = await supabase.from('bookings').update({ status }).eq('id', id);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: "Booking updated" });
 });
 
 // Gallery Endpoints
-
-// Get all gallery items
 app.get('/api/gallery', async (req, res) => {
-    const { data, error } = await supabase
-        .from('gallery')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        return res.status(400).json({ error: error.message });
-    }
+    const { data, error } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });
+    if (error) return res.status(400).json({ error: error.message });
     res.json(data);
 });
 
-// Add new gallery item
-app.post('/api/gallery', async (req, res) => {
-    const { image_url, caption } = req.body;
-    const { data, error } = await supabase
-        .from('gallery')
-        .insert([{ image_url, caption }]);
-
-    if (error) {
-        return res.status(400).json({ error: error.message });
+app.post('/api/gallery', upload.single('image'), async (req, res) => {
+    try {
+        const { caption } = req.body;
+        const imageUrl = await uploadToSupabase(req.file);
+        
+        const { error } = await supabase.from('gallery').insert([{ image_url: imageUrl, caption }]);
+        if (error) throw error;
+        
+        res.json({ message: "Image uploaded and added to gallery" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-    res.json({ message: "Image added to gallery" });
 });
 
-// Delete gallery item
 app.delete('/api/gallery/:id', async (req, res) => {
     const { id } = req.params;
-    const { data, error } = await supabase
-        .from('gallery')
-        .delete()
-        .eq('id', id);
-
-    if (error) {
-        return res.status(400).json({ error: error.message });
-    }
-    res.json({ message: "Image removed from gallery" });
+    const { error } = await supabase.from('gallery').delete().eq('id', id);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: "Image removed" });
 });
 
 // Services Endpoints
-
-// Get all services
 app.get('/api/services', async (req, res) => {
-    const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-    if (error) {
-        return res.status(400).json({ error: error.message });
-    }
+    const { data, error } = await supabase.from('services').select('*').order('created_at', { ascending: true });
+    if (error) return res.status(400).json({ error: error.message });
     res.json(data);
 });
 
-// Add new service
-app.post('/api/services', async (req, res) => {
-    const { title, description, image_url } = req.body;
-    const { data, error } = await supabase
-        .from('services')
-        .insert([{ title, description, image_url }]);
-
-    if (error) {
-        return res.status(400).json({ error: error.message });
+app.post('/api/services', upload.single('image'), async (req, res) => {
+    try {
+        const { title, description } = req.body;
+        const imageUrl = await uploadToSupabase(req.file);
+        
+        const { error } = await supabase.from('services').insert([{ title, description, image_url: imageUrl }]);
+        if (error) throw error;
+        
+        res.json({ message: "Service uploaded and added" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-    res.json({ message: "Service added successfully" });
 });
 
-// Delete service
 app.delete('/api/services/:id', async (req, res) => {
     const { id } = req.params;
-    const { data, error } = await supabase
-        .from('services')
-        .delete()
-        .eq('id', id);
-
-    if (error) {
-        return res.status(400).json({ error: error.message });
-    }
-    res.json({ message: "Service removed successfully" });
+    const { error } = await supabase.from('services').delete().eq('id', id);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: "Service removed" });
 });
-
-// Static files handled by express.static
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
