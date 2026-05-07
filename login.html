@@ -4,46 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | Chamunda Mandap Services</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .login-page {
+        /* Specific overrides for Login Page */
+        body {
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--primary);
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            cursor: default !important; /* Restore standard cursor */
         }
+
+        .cursor, .cursor-follower { display: none !important; }
+
         .login-card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 3rem;
+            border-radius: 30px;
             width: 100%;
             max-width: 400px;
             text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
         }
-        .login-card h2 { margin-bottom: 30px; color: var(--primary); }
+
+        .login-card h2 {
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px !important;
+            background: rgba(0,0,0,0.2) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            border-radius: 12px !important;
+            color: white !important;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            border-color: var(--secondary) !important;
+            outline: none;
+        }
+
+        .btn-login {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .error-msg {
+            color: #dc3545;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
     </style>
 </head>
-<body class="login-page">
+<body>
     <div class="login-card">
-        <h2 class="serif">Admin Login</h2>
+        <h2 class="serif">Admin Portal</h2>
         <form id="login-form">
-            <div class="form-group" style="text-align: left;">
-                <label>Access Password</label>
-                <input type="password" id="password" required placeholder="Enter password">
+            <div class="form-group">
+                <label>Secure Access Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Access Dashboard</button>
-            <p id="error-msg" style="color: red; margin-top: 15px; display: none;">Invalid Password</p>
+            <button type="submit" class="btn btn-primary btn-login">Authorize Access</button>
+            <div id="error-msg" class="error-msg">Invalid Security Credentials</div>
         </form>
+        <div style="margin-top: 2rem;">
+            <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 1px;">← Back to Website</a>
+        </div>
     </div>
 
     <script>
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const password = document.getElementById('password').value;
-            
+            const errorMsg = document.getElementById('error-msg');
+
             fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -52,11 +110,16 @@
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    localStorage.setItem('isAdmin', 'true');
+                    localStorage.setItem('adminToken', data.token);
                     window.location.href = 'admin.html';
                 } else {
-                    document.getElementById('error-msg').style.display = 'block';
+                    errorMsg.style.display = 'block';
                 }
+            })
+            .catch(err => {
+                console.error('Login error:', err);
+                errorMsg.innerText = 'Server Error. Please try again.';
+                errorMsg.style.display = 'block';
             });
         });
     </script>
