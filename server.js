@@ -1,5 +1,5 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -12,26 +12,17 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
 
-const ADMIN_PASSWORD = "admin_chamunda"; // In production, move to .env
+// Supabase Setup
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
 
-// Database Setup
-const db = new sqlite3.Database('./chamunda.db', (err) => {
-    if (err) {
-        console.error('Database connection error:', err.message);
-    } else {
-        console.log('Connected to SQLite database.');
-        db.run(`CREATE TABLE IF NOT EXISTS bookings (
-            id TEXT PRIMARY KEY,
-            name TEXT,
-            phone TEXT,
-            date TEXT,
-            style TEXT,
-            message TEXT,
-            status TEXT,
-            timestamp TEXT
-        )`);
-    }
-});
+if (!supabaseUrl || !supabaseKey) {
+    console.warn("WARNING: Supabase credentials missing. Database will not work.");
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin_chamunda";
 
 // API Endpoints
 
@@ -46,47 +37,49 @@ app.post('/api/login', (req, res) => {
 });
 
 // Get all bookings
-app.get('/api/bookings', (req, res) => {
-    db.all("SELECT * FROM bookings ORDER BY timestamp DESC", [], (err, rows) => {
-        if (err) {
-            res.status(400).json({ error: err.message });
-            return;
-        }
-        res.json(rows);
-    });
+app.get('/api/bookings', async (req, res) => {
+    const { data, error } = await supabase
+        .from('bookings')
+        .select('*')
+        .order('timestamp', { ascending: false });
+
+    if (error) {
+        return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
 });
 
 // Create new booking
-app.post('/api/bookings', (req, res) => {
+app.post('/api/bookings', async (req, res) => {
     const { id, name, phone, date, style, message, status, timestamp } = req.body;
-    const sql = 'INSERT INTO bookings (id, name, phone, date, style, message, status, timestamp) VALUES (?,?,?,?,?,?,?,?)';
-    const params = [id, name, phone, date, style, message, status, timestamp];
     
-    db.run(sql, params, function(err) {
-        if (err) {
-            res.status(400).json({ error: err.message });
-            return;
-        }
-        res.json({ message: "Booking created successfully", id: id });
-    });
+    const { data, error } = await supabase
+        .from('bookings')
+        .insert([{ id, name, phone, date, style, message, status, timestamp }]);
+
+    if (error) {
+        return res.status(400).json({ error: error.message });
+    }
+    res.json({ message: "Booking created successfully", id: id });
 });
 
 // Update booking status
-app.patch('/api/bookings/:id', (req, res) => {
+app.patch('/api/bookings/:id', async (req, res) => {
     const { status } = req.body;
     const { id } = req.params;
-    const sql = 'UPDATE bookings SET status = ? WHERE id = ?';
     
-    db.run(sql, [status, id], function(err) {
-        if (err) {
-            res.status(400).json({ error: err.message });
-            return;
-        }
-        res.json({ message: "Booking updated successfully" });
-    });
+    const { data, error } = await supabase
+        .from('bookings')
+        .update({ status })
+        .eq('id', id);
+
+    if (error) {
+        return res.status(400).json({ error: error.message });
+    }
+    res.json({ message: "Booking updated successfully" });
 });
 
-// Static files are handled by app.use(express.static(...))
+// Static files handled by express.static
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
