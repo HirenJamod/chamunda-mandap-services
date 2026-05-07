@@ -4,53 +4,207 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Chamunda Mandap Services</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-</head>
-<body class="dashboard-body">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Dedicated Admin Dashboard Styles */
+        body {
+            cursor: default !important;
+            background: #0f0f0f;
+        }
+        .cursor, .cursor-follower { display: none !important; }
 
-    <div class="dashboard-container">
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            width: 260px;
+            background: #151515;
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .admin-sidebar .logo {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            display: block;
+        }
+
+        .admin-nav {
+            list-style: none;
+        }
+
+        .admin-nav li {
+            margin-bottom: 1rem;
+        }
+
+        .admin-nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+
+        .admin-nav a:hover, .admin-nav a.active {
+            color: var(--secondary);
+            background: rgba(197, 160, 89, 0.1);
+        }
+
+        /* Main Content */
+        .admin-main {
+            flex-grow: 1;
+            padding: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .admin-header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        /* Tables */
+        .admin-table-container {
+            background: #1a1a1a;
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 3rem;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        td {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .status-confirmed { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .status-rejected { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .action-btn:hover { border-color: var(--secondary); color: var(--secondary); }
+
+        /* Form Overrides */
+        input {
+            width: 100%;
+            padding: 12px !important;
+            border-radius: 8px !important;
+            margin-bottom: 0 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
         <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="sidebar-logo serif">CMS Admin</div>
-            <ul class="sidebar-menu">
-                <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="#"><i class="fas fa-calendar-alt"></i> Bookings</a></li>
-                <li><a href="#"><i class="fas fa-images"></i> Gallery</a></li>
-                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
-                <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        <aside class="admin-sidebar">
+            <a href="index.html" class="logo serif">CMS<span>Admin</span></a>
+            <ul class="admin-nav">
+                <li><a href="#" class="active"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+                <li><a href="#gallery-section"><i class="fas fa-image"></i> Gallery</a></li>
+                <li><a href="#services-section"><i class="fas fa-concierge-bell"></i> Services</a></li>
+                <li style="margin-top: 40px;"><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
-        </div>
+        </aside>
 
         <!-- Main Content -->
-        <div class="main-content">
-            <div class="dashboard-header">
-                <h2 class="serif">Booking Management</h2>
-                <div class="admin-profile">
-                    <span>Welcome, Admin</span>
-                    <i class="fas fa-user-circle"></i>
-                </div>
-            </div>
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1 class="serif">Booking Management</h1>
+                <p style="color: var(--text-muted);">Welcome back, Admin</p>
+            </header>
 
             <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <h4>Total Bookings</h4>
+                    <h3>Total Inquiries</h3>
                     <div class="value" id="total-bookings">0</div>
                 </div>
                 <div class="stat-card">
-                    <h4>Pending Inquiries</h4>
-                    <div class="value" id="pending-bookings" style="color: #856404;">0</div>
+                    <h3>Pending</h3>
+                    <div class="value" id="pending-bookings" style="color: #ffc107;">0</div>
                 </div>
                 <div class="stat-card">
-                    <h4>Confirmed Dates</h4>
-                    <div class="value" id="confirmed-bookings" style="color: #155724;">0</div>
+                    <h3>Confirmed</h3>
+                    <div class="value" id="confirmed-bookings" style="color: #28a745;">0</div>
                 </div>
             </div>
 
-            <!-- Table -->
-            <div id="bookings-section" class="data-table-container">
+            <!-- Bookings Table -->
+            <div class="admin-table-container">
                 <div id="loader" class="loader-container">
                     <span class="loader"></span>
                 </div>
@@ -58,51 +212,50 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Client Name</th>
+                            <th>Client</th>
                             <th>Date</th>
                             <th>Style</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="bookings-list">
-                        <!-- Bookings will be loaded here -->
-                    </tbody>
+                    <tbody id="bookings-list"></tbody>
                 </table>
             </div>
 
             <!-- Gallery Manager -->
-            <div id="gallery-section" class="data-table-container" style="margin-top: 40px;">
-                <h3 class="serif" style="margin-bottom: 20px;">Gallery Manager</h3>
+            <div id="gallery-section" class="admin-table-container">
+                <h2 class="serif" style="margin-bottom: 20px;">Gallery Manager</h2>
                 <form id="gallery-form" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 30px;">
                     <input type="text" id="img-url" placeholder="Image URL" required>
                     <input type="text" id="img-caption" placeholder="Caption" required>
-                    <button type="submit" class="btn btn-primary">Add Photo</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 12px 24px;">Add Photo</button>
                 </form>
-                <div class="gallery-admin-list" id="gallery-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
-                    <!-- Gallery items -->
-                </div>
+                <div id="gallery-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;"></div>
             </div>
 
             <!-- Service Manager -->
-            <div id="services-section" class="data-table-container" style="margin-top: 40px;">
-                <h3 class="serif" style="margin-bottom: 20px;">Service Manager</h3>
+            <div id="services-section" class="admin-table-container">
+                <h2 class="serif" style="margin-bottom: 20px;">Service Manager</h2>
                 <form id="service-form" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; margin-bottom: 30px;">
-                    <input type="text" id="service-title" placeholder="Service Title (e.g. Mandap Decor)" required>
+                    <input type="text" id="service-title" placeholder="Service Name" required>
                     <input type="text" id="service-desc" placeholder="Description" required>
                     <input type="text" id="service-img" placeholder="Image URL" required>
-                    <button type="submit" class="btn btn-primary">Add Service</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 12px 24px;">Add Service</button>
                 </form>
-                <div id="services-admin-list">
-                    <!-- Services list -->
-                </div>
+                <div id="services-admin-list"></div>
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
-        // Check Auth
-        if (localStorage.getItem('isAdmin') !== 'true') {
+        // Authentication Check
+        if (localStorage.getItem('adminToken') !== 'fake-jwt-token') {
+            window.location.href = 'login.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('adminToken');
             window.location.href = 'login.html';
         }
 
@@ -114,29 +267,27 @@
                     const table = document.getElementById('bookings-table');
                     const loader = document.getElementById('loader');
                     
-                    // Update Stats
                     document.getElementById('total-bookings').innerText = bookings.length;
                     document.getElementById('pending-bookings').innerText = bookings.filter(b => b.status === 'Pending').length;
                     document.getElementById('confirmed-bookings').innerText = bookings.filter(b => b.status === 'Confirmed').length;
 
                     list.innerHTML = bookings.map(b => `
                         <tr>
-                            <td>${b.id}</td>
-                            <td>${b.name}</td>
+                            <td>#${b.id.substring(3,8)}</td>
+                            <td><strong>${b.name}</strong><br><small>${b.phone}</small></td>
                             <td>${b.date}</td>
                             <td>${b.style}</td>
                             <td><span class="status-badge status-${b.status.toLowerCase()}">${b.status}</span></td>
                             <td>
-                                <button class="action-btn btn-approve" onclick="updateStatus('${b.id}', 'Confirmed')"><i class="fas fa-check"></i></button>
-                                <button class="action-btn btn-reject" onclick="updateStatus('${b.id}', 'Rejected')"><i class="fas fa-times"></i></button>
+                                <button class="action-btn" onclick="updateStatus('${b.id}', 'Confirmed')"><i class="fas fa-check"></i></button>
+                                <button class="action-btn" onclick="updateStatus('${b.id}', 'Rejected')"><i class="fas fa-times"></i></button>
                             </td>
                         </tr>
                     `).join('');
 
                     loader.style.display = 'none';
                     table.style.display = 'table';
-                })
-                .catch(err => console.error('Error loading bookings:', err));
+                });
         }
 
         function updateStatus(id, newStatus) {
@@ -144,13 +295,9 @@
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: newStatus })
-            })
-            .then(res => res.json())
-            .then(() => loadBookings())
-            .catch(err => console.error('Error updating status:', err));
+            }).then(() => loadBookings());
         }
 
-        // Gallery Logic
         function loadGallery() {
             fetch('/api/gallery')
                 .then(res => res.json())
@@ -159,7 +306,7 @@
                     list.innerHTML = images.map(img => `
                         <div style="position: relative;">
                             <img src="${img.image_url}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 8px;">
-                            <button onclick="deleteImage(${img.id})" style="position: absolute; top: 5px; right: 5px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer;">&times;</button>
+                            <button onclick="deleteImage(${img.id})" style="position: absolute; top: -5px; right: -5px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;"><i class="fas fa-trash-can" style="font-size: 10px;"></i></button>
                         </div>
                     `).join('');
                 });
@@ -167,42 +314,38 @@
 
         document.getElementById('gallery-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const image_url = document.getElementById('img-url').value;
-            const caption = document.getElementById('img-caption').value;
-
             fetch('/api/gallery', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ image_url, caption })
-            })
-            .then(res => res.json())
-            .then(() => {
+                body: JSON.stringify({ 
+                    image_url: document.getElementById('img-url').value, 
+                    caption: document.getElementById('img-caption').value 
+                })
+            }).then(() => {
                 document.getElementById('gallery-form').reset();
                 loadGallery();
             });
         });
 
         function deleteImage(id) {
-            if (confirm('Delete this image?')) {
-                fetch(`/api/gallery/${id}`, { method: 'DELETE' })
-                    .then(() => loadGallery());
+            if (confirm('Delete photo?')) {
+                fetch(`/api/gallery/${id}`, { method: 'DELETE' }).then(() => loadGallery());
             }
         }
 
-        // Services Logic
         function loadServices() {
             fetch('/api/services')
                 .then(res => res.json())
                 .then(services => {
                     const list = document.getElementById('services-admin-list');
                     list.innerHTML = services.map(s => `
-                        <div style="display: flex; align-items: center; gap: 20px; padding: 15px; border-bottom: 1px solid #eee;">
-                            <img src="${s.image_url}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;">
+                        <div style="display: flex; align-items: center; gap: 20px; padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <img src="${s.image_url}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
                             <div style="flex-grow: 1;">
-                                <strong>${s.title}</strong>
-                                <p style="font-size: 0.8rem; color: #888;">${s.description}</p>
+                                <strong style="color: var(--secondary);">${s.title}</strong>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">${s.description}</p>
                             </div>
-                            <button onclick="deleteService(${s.id})" class="action-btn btn-reject"><i class="fas fa-trash"></i></button>
+                            <button onclick="deleteService(${s.id})" class="action-btn" style="color: #dc3545;"><i class="fas fa-trash"></i></button>
                         </div>
                     `).join('');
                 });
@@ -210,26 +353,23 @@
 
         document.getElementById('service-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const title = document.getElementById('service-title').value;
-            const description = document.getElementById('service-desc').value;
-            const image_url = document.getElementById('service-img').value;
-
             fetch('/api/services', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, description, image_url })
-            })
-            .then(res => res.json())
-            .then(() => {
+                body: JSON.stringify({ 
+                    title: document.getElementById('service-title').value,
+                    description: document.getElementById('service-desc').value,
+                    image_url: document.getElementById('service-img').value
+                })
+            }).then(() => {
                 document.getElementById('service-form').reset();
                 loadServices();
             });
         });
 
         function deleteService(id) {
-            if (confirm('Delete this service?')) {
-                fetch(`/api/services/${id}`, { method: 'DELETE' })
-                    .then(() => loadServices());
+            if (confirm('Delete service?')) {
+                fetch(`/api/services/${id}`, { method: 'DELETE' }).then(() => loadServices());
             }
         }
 
