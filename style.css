@@ -240,14 +240,20 @@ nav.scrolled {
 .form-group input, .form-group select, .form-group textarea {
     background: transparent;
     border: none;
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 2px solid var(--glass-border);
     border-radius: 0;
-    color: white;
+    color: #FFFFFF !important; /* Force white text on dark background */
     padding: 1.5rem 0;
     font-size: 1.1rem;
+    width: 100%;
+    outline: none;
 }
 
-.form-group input:focus {
+.form-group input::placeholder, .form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.form-group input:focus, .form-group textarea:focus {
     border-color: var(--secondary);
 }
 

@@ -163,7 +163,20 @@
             width: 100%;
             padding: 12px !important;
             border-radius: 8px !important;
+            background: #252525 !important;
+            border: 1px solid var(--glass-border) !important;
+            color: #FFFFFF !important;
             margin-bottom: 0 !important;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        input:focus {
+            border-color: var(--secondary) !important;
+            outline: none;
+            background: #2a2a2a !important;
         }
     </style>
 </head>
