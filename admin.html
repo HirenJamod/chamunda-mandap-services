@@ -51,7 +51,10 @@
 
             <!-- Table -->
             <div class="data-table-container">
-                <table id="bookings-table">
+                <div id="loader" class="loader-container">
+                    <span class="loader"></span>
+                </div>
+                <table id="bookings-table" style="display: none;">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -81,6 +84,8 @@
                 .then(res => res.json())
                 .then(bookings => {
                     const list = document.getElementById('bookings-list');
+                    const table = document.getElementById('bookings-table');
+                    const loader = document.getElementById('loader');
                     
                     // Update Stats
                     document.getElementById('total-bookings').innerText = bookings.length;
@@ -100,6 +105,9 @@
                             </td>
                         </tr>
                     `).join('');
+
+                    loader.style.display = 'none';
+                    table.style.display = 'table';
                 })
                 .catch(err => console.error('Error loading bookings:', err));
         }

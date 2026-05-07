@@ -33,7 +33,10 @@
 
             <div class="data-table-container">
                 <p style="margin-bottom: 20px; color: #666;">Track the status of your mandap and decoration bookings below.</p>
-                <table>
+                <div id="loader" class="loader-container">
+                    <span class="loader"></span>
+                </div>
+                <table id="client-table" style="display: none;">
                     <thead>
                         <tr>
                             <th>Booking ID</th>
@@ -62,10 +65,15 @@
                 .then(bookings => {
                     const list = document.getElementById('client-bookings-list');
                     const emptyState = document.getElementById('no-bookings');
+                    const loader = document.getElementById('loader');
+                    const table = document.getElementById('client-table');
+
+                    loader.style.display = 'none';
 
                     if (bookings.length === 0) {
                         emptyState.style.display = 'block';
                     } else {
+                        table.style.display = 'table';
                         list.innerHTML = bookings.map(b => `
                             <tr>
                                 <td><strong>${b.id}</strong></td>
