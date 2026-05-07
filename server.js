@@ -23,7 +23,7 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin@123";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin_chamunda";
 
 // API Endpoints
 

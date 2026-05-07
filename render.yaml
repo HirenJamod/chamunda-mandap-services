@@ -9,7 +9,7 @@ services:
       - key: NODE_VERSION
         value: 20.0.0
       - key: ADMIN_PASSWORD
-        value: admin@123
+        value: admin_chamunda
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_KEY
