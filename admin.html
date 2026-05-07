@@ -9,10 +9,30 @@
     <style>
         /* Dedicated Admin Dashboard Styles */
         body {
-            cursor: default !important;
             background: #0f0f0f;
+            cursor: none !important; /* Hide standard cursor to show gold one */
         }
-        .cursor, .cursor-follower { display: none !important; }
+
+        .cursor {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        .cursor-follower {
+            width: 25px;
+            height: 25px;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
 
         .dashboard-wrapper {
             display: flex;
@@ -182,6 +202,10 @@
     </style>
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
     <div class="dashboard-wrapper">
         <!-- Sidebar -->
         <aside class="admin-sidebar">
@@ -386,6 +410,16 @@
                 fetch(`/api/services/${id}`, { method: 'DELETE' }).then(() => loadServices());
             }
         }
+
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.cursor');
+        const follower = document.querySelector('.cursor-follower');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            follower.style.left = (e.clientX - 10) + 'px';
+            follower.style.top = (e.clientY - 10) + 'px';
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             loadBookings();

@@ -13,10 +13,29 @@
             align-items: center;
             justify-content: center;
             background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-            cursor: default !important; /* Restore standard cursor */
+            cursor: none !important; /* Hide standard cursor */
         }
 
-        .cursor, .cursor-follower { display: none !important; }
+        .cursor {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        .cursor-follower {
+            width: 25px;
+            height: 25px;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
 
         .login-card {
             background: rgba(255, 255, 255, 0.03);
@@ -58,6 +77,7 @@
             border-radius: 12px !important;
             color: white !important;
             font-size: 1rem;
+            caret-color: var(--secondary);
         }
 
         input:focus {
@@ -81,6 +101,10 @@
     </style>
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
     <div class="login-card">
         <h2 class="serif">Admin Portal</h2>
         <form id="login-form">
@@ -97,6 +121,16 @@
     </div>
 
     <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.cursor');
+        const follower = document.querySelector('.cursor-follower');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            follower.style.left = (e.clientX - 10) + 'px';
+            follower.style.top = (e.clientY - 10) + 'px';
+        });
+
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const password = document.getElementById('password').value;
