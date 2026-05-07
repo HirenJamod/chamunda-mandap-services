@@ -242,7 +242,8 @@ nav.scrolled {
     border: none;
     border-bottom: 2px solid var(--glass-border);
     border-radius: 0;
-    color: #FFFFFF !important; /* Force white text on dark background */
+    color: #FFFFFF !important;
+    caret-color: var(--secondary); /* Bright gold typing cursor */
     padding: 1.5rem 0;
     font-size: 1.1rem;
     width: 100%;
