@@ -174,6 +174,47 @@ app.post('/api/settings', async (req, res) => {
     res.json({ message: "Settings updated successfully" });
 });
 
+// Seed Default Data Endpoint (one-time use)
+app.post('/api/seed', async (req, res) => {
+    const { password } = req.body;
+    if (password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        // Default Gallery Items
+        const galleryItems = [
+            { caption: 'Royal Palace Mandap', image_url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1200' },
+            { caption: 'Night Glow Reception', image_url: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=1200' },
+            { caption: 'Traditional Stage Decoration', image_url: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=1200' },
+            { caption: 'Floral Entrance Arch', image_url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200' },
+            { caption: 'Garden Wedding Setup', image_url: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&q=80&w=1200' },
+            { caption: 'Luxury Chandelier Decor', image_url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200' }
+        ];
+
+        // Default Services
+        const serviceItems = [
+            { title: 'Royal Traditional Mandap', description: 'Our signature gold and red theme with hand-carved pillars and fresh rose arrangements.', image_url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1200' },
+            { title: 'Modern Floral Paradise', description: 'A minimalist white and pastel theme with exotic lilies and orchids for morning weddings.', image_url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200' },
+            { title: 'Grand Entrance Decor', description: 'Create a lasting first impression with luxury floral arches and cinematic walkway lighting.', image_url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200' }
+        ];
+
+        const { error: galleryError } = await supabase.from('gallery').insert(galleryItems);
+        const { error: serviceError } = await supabase.from('services').insert(serviceItems);
+
+        if (galleryError) console.log('Gallery seed error:', galleryError.message);
+        if (serviceError) console.log('Service seed error:', serviceError.message);
+
+        res.json({ 
+            message: 'Default data seeded successfully!', 
+            gallery: galleryError ? galleryError.message : '6 items added',
+            services: serviceError ? serviceError.message : '3 items added'
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
