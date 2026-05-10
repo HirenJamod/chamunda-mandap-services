@@ -35,13 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!grid) return;
 
                         grid.innerHTML = services.map(service => `
-                            <div class="service-card" data-reveal>
-                                <div class="service-img-wrapper">
-                                    <img src="${service.image_url}" alt="${service.title}">
-                                </div>
+                            <div class="service-card-elysian" data-reveal>
+                                <img src="${service.image_url}" alt="${service.title}">
                                 <h3>${service.title}</h3>
                                 <p>${service.description}</p>
-                                <a href="portfolio.html" class="btn-outline-gold">View Gallery</a>
+                                <button class="btn-elysian-gold" onclick="window.location.href='portfolio.html'">VIEW GALLERY</button>
                             </div>
                         `).join('');
                     }
