@@ -31,11 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     servicesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">No services added yet.</p>';
                 } else {
                     servicesGrid.innerHTML = services.map((s, index) => `
-                        <div class="service-card" style="animation-delay: ${index * 0.2}s">
+                        <div class="service-card" onclick="selectServiceAndBook('${s.title}')" style="animation-delay: ${index * 0.2}s; cursor: pointer;">
                             <img src="${s.image_url}" alt="${s.title}" class="service-img">
                             <div class="service-info">
                                 <h3 class="serif">${s.title}</h3>
                                 <p>${s.description}</p>
+                                <span style="color: var(--secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; display: block;">Book This Style →</span>
                             </div>
                         </div>
                     `).join('');
@@ -229,6 +230,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const dateInput = document.getElementById('event-date');
     if (dateInput) {
         dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    }
+});
+
+// 11. Global Helper for Service Selection
+window.selectServiceAndBook = (serviceTitle) => {
+    const bookingSection = document.getElementById('booking');
+    const serviceDropdown = document.getElementById('service-type');
+    
+    if (bookingSection && serviceDropdown) {
+        // Find or add the option to the dropdown if it doesn't exist
+        let optionExists = false;
+        for (let i = 0; i < serviceDropdown.options.length; i++) {
+            if (serviceDropdown.options[i].text === serviceTitle || serviceDropdown.options[i].value === serviceTitle) {
+                serviceDropdown.selectedIndex = i;
+                optionExists = true;
+                break;
+            }
+        }
+        
+        if (!optionExists) {
+            const newOpt = new Option(serviceTitle, serviceTitle);
+            serviceDropdown.add(newOpt);
+            serviceDropdown.value = serviceTitle;
+        }
+
+        // Scroll to booking
+        bookingSection.scrollIntoView({ behavior: 'smooth' });
+        
+        // Highlight the image selector to show related images
+        const gallerySelector = document.getElementById('booking-gallery-selector');
+        if (gallerySelector) {
+            gallerySelector.style.boxShadow = '0 0 20px rgba(197, 160, 89, 0.5)';
+            setTimeout(() => gallerySelector.style.boxShadow = 'none', 2000);
+        }
+    } else {
+        // If not on index page, redirect
+        window.location.href = `index.html?service=${encodeURIComponent(serviceTitle)}#booking`;
+    }
+};
+
+// Check for URL parameter on load
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const serviceParam = urlParams.get('service');
+    if (serviceParam) {
+        setTimeout(() => window.selectServiceAndBook(serviceParam), 1000);
     }
 });
 
