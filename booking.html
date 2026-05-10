@@ -21,65 +21,67 @@
         </ul>
     </nav>
 
-    <div class="no-scroll-wrapper" style="padding-top: 80px;">
-        <section id="booking-luxury" style="flex-grow: 1; padding: 0 5% 20px; display: flex; flex-direction: column;">
-            <div class="booking-header-accent" style="text-align: center; margin-bottom: 20px;">
-                <img src="https://img.icons8.com/ios/50/C5A059/flower.png" alt="Accent" style="width: 30px; margin-bottom: 10px;">
-                <h1 class="serif" style="font-size: 3rem; color: #fff;">WEDDING BOOKING</h1>
+    <section id="booking-intro" style="text-align: center;">
+        <div class="glass-panel-premium" style="max-width: 800px; margin: 0 auto;">
+            <img src="https://img.icons8.com/ios/50/C5A059/flower.png" alt="Accent" style="width: 40px; margin-bottom: 20px;">
+            <h1 class="editorial-title">Reserve Artistry</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8;">Begin your journey with Chamunda. Tell us about your vision, and our team of decorators will craft a proposal that transcends expectation.</p>
+            <div style="margin-top: 30px;">
+                <a href="#booking-form-section" class="btn-outline-gold" style="padding: 15px 40px;">Open Inquire Form</a>
             </div>
+        </div>
+    </section>
 
-            <div class="scrollable-content" style="padding: 10px;">
-                <div class="booking-glass-card" style="margin: 0 auto; max-width: 1200px;">
-                    <form id="booking-form-premium">
-                        <div class="form-grid-2">
-                            <div class="form-column">
-                                <div class="form-group-premium">
-                                    <label>Couple's Names</label>
-                                    <input type="text" id="couple-names" placeholder="Enter both names" required>
-                                </div>
-                                <div class="form-grid-inner" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                    <div class="form-group-premium">
-                                        <label>Date</label>
-                                        <input type="date" id="booking-date" required>
-                                    </div>
-                                    <div class="form-group-premium">
-                                        <label>Guests</label>
-                                        <input type="number" id="guest-count" placeholder="Approx.">
-                                    </div>
-                                </div>
-                                <div class="form-group-premium">
-                                    <label>Venue</label>
-                                    <input type="text" id="wedding-venue" placeholder="Location name">
-                                </div>
-                                <div class="services-required">
-                                    <label style="display: block; margin-bottom: 10px; color: var(--secondary); font-size: 0.8rem;">Services</label>
-                                    <div class="checkbox-grid">
-                                        <label class="check-container">Venue <input type="checkbox" class="service-check" value="Venue"> <span class="checkmark"></span></label>
-                                        <label class="check-container">Catering <input type="checkbox" class="service-check" value="Catering"> <span class="checkmark"></span></label>
-                                        <label class="check-container">Decor <input type="checkbox" class="service-check" value="Decor"> <span class="checkmark"></span></label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-column">
-                                <div class="inspiration-header">
-                                    <label>SELECT INSPIRATION</label>
-                                </div>
-                                <div id="booking-gallery-selector" class="inspiration-grid-v2" style="height: 150px; overflow-y: auto;">
-                                    <!-- Images will load here -->
-                                </div>
-                                <div class="form-group-premium" style="margin-top: 15px;">
-                                    <label>Special Requests</label>
-                                    <textarea id="special-requests" rows="3" placeholder="Your vision..."></textarea>
-                                </div>
-                                <button type="submit" class="btn-submit-luxury" style="width: 100%; margin-top: 10px;">SUBMIT BOOKING</button>
-                            </div>
+    <section id="booking-form-section">
+        <div class="glass-panel-premium" style="max-width: 1200px; margin: 0 auto; padding: 40px;">
+            <form id="booking-form-premium" class="form-grid-2">
+                <div class="form-column">
+                    <div class="form-group-premium">
+                        <label>Couple's Names</label>
+                        <input type="text" id="couple-names" placeholder="Enter both names" required>
+                    </div>
+                    <div class="form-grid-inner">
+                        <div class="form-group-premium">
+                            <label>Event Date</label>
+                            <input type="date" id="booking-date" required>
                         </div>
-                    </form>
+                        <div class="form-group-premium">
+                            <label>Expected Guests</label>
+                            <input type="number" id="guest-count" placeholder="Approx.">
+                        </div>
+                    </div>
+                    <div class="form-group-premium">
+                        <label>Venue Location</label>
+                        <input type="text" id="wedding-venue" placeholder="e.g. Surat International Convention Center">
+                    </div>
+                    <div class="services-required">
+                        <label style="display: block; margin-bottom: 15px; color: var(--secondary); font-size: 0.9rem;">Included Artistry</label>
+                        <div class="checkbox-grid">
+                            <label class="check-container">Mandap Decor <input type="checkbox" class="service-check" value="Mandap" checked> <span class="checkmark"></span></label>
+                            <label class="check-container">Catering <input type="checkbox" class="service-check" value="Catering"> <span class="checkmark"></span></label>
+                            <label class="check-container">Stage Decor <input type="checkbox" class="service-check" value="Stage"> <span class="checkmark"></span></label>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
-    </div>
+
+                <div class="form-column">
+                    <div class="inspiration-header">
+                        <label>Visual Direction</label>
+                    </div>
+                    <div id="booking-gallery-selector" class="inspiration-grid-v2" style="height: 200px; overflow-y: auto; border: 1px solid rgba(197, 160, 89, 0.1); border-radius: 15px; padding: 10px;">
+                        <!-- Images will load here -->
+                    </div>
+                    
+                    <div class="form-group-premium" style="margin-top: 25px;">
+                        <label>Vision & Dreams</label>
+                        <textarea id="special-requests" rows="4" placeholder="Tell us your story..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit-luxury" style="width: 100%; margin-top: 10px;">Send Inquiry</button>
+                </div>
+            </form>
+        </div>
+    </section>
 
     <footer id="contact" style="background: var(--primary); color: white; padding: 60px 10% 20px; text-align: center;">
         <h2 class="serif" style="color: var(--secondary); margin-bottom: 30px;">CHAMUNDA</h2>

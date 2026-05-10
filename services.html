@@ -21,32 +21,37 @@
         </ul>
     </nav>
 
-    <div class="no-scroll-wrapper">
-        <section id="services" style="flex-grow: 1; padding: 0 5% 50px; display: flex; flex-direction: column;">
-            <div class="section-header" style="padding-bottom: 30px;">
-                <h1 class="serif" style="margin-bottom: 10px;">Signature Services</h1>
-                <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Experience the art of luxury mandap decorations in a cinematic full-screen view.</p>
+    <section id="services-hero" style="text-align: center;">
+        <div class="glass-panel-premium" style="max-width: 900px; margin: 0 auto;">
+            <span class="gold-accent-text" style="letter-spacing: 5px; font-size: 0.8rem; text-transform: uppercase; display: block; margin-bottom: 20px;">Curated Artistry</span>
+            <h1 class="editorial-title">Signature Services</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">We don't just decorate; we compose cinematic experiences for your most sacred moments.</p>
+            <div style="margin-top: 40px;">
+                <a href="#dynamic-services-section" class="btn-outline-gold" style="padding: 15px 40px;">Explore Collection</a>
             </div>
-            
-            <div class="scrollable-content">
-                <div class="services-grid" id="dynamic-services">
-                    <div class="loader-container" style="grid-column: 1/-1;">
-                        <span class="loader"></span>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <footer id="contact" style="background: var(--primary); padding: 20px 10%; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
-            <h2 class="serif" style="color: var(--secondary); font-size: 1.5rem; margin-bottom: 0;">CHAMUNDA</h2>
-            <div class="social-links" style="display: flex; gap: 20px;">
-                <a href="#" style="color: white;"><i class="fab fa-instagram"></i></a>
-                <a href="#" style="color: white;"><i class="fab fa-facebook"></i></a>
-                <a href="#" style="color: white;"><i class="fab fa-whatsapp"></i></a>
+    <section id="dynamic-services-section">
+        <div class="services-grid" id="dynamic-services" style="width: 100%; max-width: 1400px; margin: 0 auto;">
+            <!-- Intelligently loaded via JS -->
+            <div class="loader-container" style="grid-column: 1/-1;">
+                <span class="loader"></span>
             </div>
-            <p style="font-size: 0.7rem; opacity: 0.6; margin-bottom: 0;">&copy; 2026 Chamunda Mandap Services.</p>
-        </footer>
-    </div>
+        </div>
+    </section>
+
+    <footer id="global-footer" style="background: var(--primary); padding: 80px 10%; border-top: 1px solid var(--glass-border); text-align: center;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
+            <h2 class="serif" style="color: var(--secondary); font-size: 2.5rem; margin-bottom: 20px;">CHAMUNDA</h2>
+            <div class="social-links" style="display: flex; gap: 30px; margin-bottom: 40px;">
+                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
+                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <p style="font-size: 0.8rem; opacity: 0.5;">&copy; 2026 Chamunda Mandap Services. Crafting legacies since 1995.</p>
+        </div>
+    </footer>
 
     <!-- Background Music -->
     <audio id="bg-music" loop autoplay>
