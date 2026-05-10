@@ -27,26 +27,10 @@
         <p style="color: rgba(255,255,255,0.7); max-width: 600px; font-size: 1.1rem;">OF ELEGANCE & ROMANCE</p>
     </header>
 
-    <section id="services-grid-section" style="background: #050505;">
+    <section id="services-grid-section" style="background: #050505; min-height: 50vh;">
         <div class="services-grid-elysian" id="dynamic-services">
-            <!-- Mockup Placeholders while database loads -->
-            <div class="service-card-elysian">
-                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80" alt="Mandap">
-                <h3>Mandap Decoration</h3>
-                <p>Intricate Floral Structures & Traditional Ritual Setups</p>
-                <button class="btn-elysian-gold">VIEW GALLERY</button>
-            </div>
-            <div class="service-card-elysian">
-                <img src="https://images.unsplash.com/photo-1519222970733-f546218fa6d7?auto=format&fit=crop&q=80" alt="Floral">
-                <h3>Floral Themes</h3>
-                <p>Breathtaking Designs for Every Ceremony & Reception</p>
-                <button class="btn-elysian-gold">EXPLORE THEMES</button>
-            </div>
-            <div class="service-card-elysian">
-                <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80" alt="Royal">
-                <h3>Royal Setups</h3>
-                <p>Majestic Designs for Grand Palatial Celebrations</p>
-                <button class="btn-elysian-gold">DISCOVER ROYALTY</button>
+            <div class="loader-container" style="grid-column: 1/-1; height: 300px; display: flex; align-items: center; justify-content: center;">
+                <span class="loader"></span>
             </div>
         </div>
     </section>
@@ -54,16 +38,21 @@
 
 
 
-    <footer id="global-footer" style="background: var(--primary); padding: 80px 10%; border-top: 1px solid var(--glass-border); text-align: center;">
-        <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
-            <h2 class="serif" style="color: var(--secondary); font-size: 2.5rem; margin-bottom: 20px;">CHAMUNDA</h2>
-            <div class="social-links" style="display: flex; gap: 30px; margin-bottom: 40px;">
-                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
-                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
-                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-whatsapp"></i></a>
-            </div>
-            <p style="font-size: 0.8rem; opacity: 0.5;">&copy; 2026 Chamunda Mandap Services. Crafting legacies since 1995.</p>
+    <!-- Footer -->
+    <footer id="contact" style="background: var(--primary); color: white; padding: 60px 10% 20px; text-align: center;">
+        <h2 class="serif" id="footer-logo" style="color: var(--secondary); margin-bottom: 30px;">CHAMUNDA</h2>
+        <p style="margin-bottom: 30px; opacity: 0.8;">Making weddings beautiful since 1995. Let's create your masterpiece.</p>
+        <div style="margin-bottom: 30px; font-size: 0.9rem; opacity: 0.7;">
+            <p class="footer-address">Main Road, Surat, Gujarat</p>
+            <p class="footer-phone" style="color: var(--secondary); margin-top: 10px; font-weight: 600;">+91 98765 43210</p>
         </div>
+        <div class="social-links" style="margin-bottom: 40px; display: flex; justify-content: center; gap: 20px;">
+            <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+            <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+            <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
+        <p style="font-size: 0.8rem; opacity: 0.6;">&copy; 2026 <span class="brand-text">Chamunda Mandap Services</span>. All Rights Reserved.</p>
     </footer>
 
     <!-- Background Music -->

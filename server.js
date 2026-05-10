@@ -63,26 +63,7 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-app.get('/api/bookings', async (req, res) => {
-    const { data, error } = await supabase.from('bookings').select('*').order('timestamp', { ascending: false });
-    if (error) return res.status(400).json({ error: error.message });
-    res.json(data);
-});
-
-app.post('/api/bookings', async (req, res) => {
-    const { id, name, phone, date, style, message, status, timestamp } = req.body;
-    const { data, error } = await supabase.from('bookings').insert([{ id, name, phone, date, style, message, status, timestamp }]);
-    if (error) return res.status(400).json({ error: error.message });
-    res.json({ message: "Booking created successfully" });
-});
-
-app.patch('/api/bookings/:id', async (req, res) => {
-    const { status } = req.body;
-    const { id } = req.params;
-    const { error } = await supabase.from('bookings').update({ status }).eq('id', id);
-    if (error) return res.status(400).json({ error: error.message });
-    res.json({ message: "Booking updated" });
-});
+// Booking routes defined below after gallery/services (single definition)
 
 // Gallery Endpoints
 app.get('/api/gallery', async (req, res) => {
@@ -164,7 +145,7 @@ app.patch('/api/services/:id', async (req, res) => {
     res.json({ message: "Service updated" });
 });
 
-// Bookings Endpoints
+// === Bookings Endpoints (Single Definition) ===
 app.get('/api/bookings', async (req, res) => {
     const { data, error } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
     if (error) return res.status(400).json({ error: error.message });

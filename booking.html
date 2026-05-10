@@ -17,7 +17,7 @@
             <li><a href="portfolio.html">Portfolio</a></li>
             <li><a href="booking.html" class="active">Book Now</a></li>
             <li><a href="contact.html">Contact</a></li>
-            <li><a href="client.html" style="color: var(--secondary); font-size: 0.8rem; margin-left: 20px;"><i class="fas fa-user-circle"></i> Client Portal</a></li>
+            <li><a href="track.html" style="color: var(--secondary); font-size: 0.8rem; margin-left: 20px;"><i class="fas fa-user-circle"></i> Client Portal</a></li>
         </ul>
     </nav>
 
@@ -40,6 +40,11 @@
                         <label>Couple's Names</label>
                         <input type="text" id="couple-names" placeholder="Enter both names" required>
                     </div>
+                    <div class="form-group-premium">
+                        <label>Phone Number <span style="color: #dc3545;">*</span></label>
+                        <input type="tel" id="booking-phone" placeholder="+91 XXXXX XXXXX" required pattern="[0-9+\s]{10,15}" title="Enter a valid phone number (10-15 digits)">
+                        <small style="color: var(--text-muted); font-size: 0.7rem;">You'll use this number to track your booking status</small>
+                    </div>
                     <div class="form-grid-inner">
                         <div class="form-group-premium">
                             <label>Event Date</label>
@@ -47,12 +52,22 @@
                         </div>
                         <div class="form-group-premium">
                             <label>Expected Guests</label>
-                            <input type="number" id="guest-count" placeholder="Approx.">
+                            <input type="number" id="guest-count" placeholder="Approx." min="1">
                         </div>
                     </div>
                     <div class="form-group-premium">
                         <label>Venue Location</label>
                         <input type="text" id="wedding-venue" placeholder="e.g. Surat International Convention Center">
+                    </div>
+                    <div class="form-group-premium">
+                        <label>Ceremony Type</label>
+                        <select id="ceremony-details" style="width:100%; padding:12px; border-radius:12px; background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); color:#fff; font-family:Inter,sans-serif;">
+                            <option value="Wedding" style="background:#1a1a1a;">Wedding</option>
+                            <option value="Engagement" style="background:#1a1a1a;">Engagement</option>
+                            <option value="Reception" style="background:#1a1a1a;">Reception</option>
+                            <option value="Sangeet" style="background:#1a1a1a;">Sangeet / Mehendi</option>
+                            <option value="Other" style="background:#1a1a1a;">Other Function</option>
+                        </select>
                     </div>
                     <div class="services-required">
                         <label style="display: block; margin-bottom: 15px; color: var(--secondary); font-size: 0.9rem;">Included Artistry</label>
@@ -80,12 +95,36 @@
                     <button type="submit" class="btn-submit-luxury" style="width: 100%; margin-top: 10px;">Send Inquiry</button>
                 </div>
             </form>
+
+            <!-- Success Confirmation (hidden by default) -->
+            <div id="booking-success" style="display: none; text-align: center; padding: 60px 20px;">
+                <div style="font-size: 4rem; color: var(--secondary); margin-bottom: 20px;"><i class="fas fa-check-circle"></i></div>
+                <h2 class="serif" style="font-size: 2rem; margin-bottom: 10px;">Inquiry Received!</h2>
+                <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 15px;">Your wedding inquiry has been sent to our artistry team. We will review it and contact you shortly.</p>
+                <p style="color: var(--secondary); font-size: 0.85rem; margin-bottom: 30px;">Booking ID: <strong id="booking-confirm-id"></strong></p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="track.html" class="btn-outline-gold" style="padding: 12px 30px;">Track Your Booking</a>
+                    <a href="index.html" class="btn-outline-gold" style="padding: 12px 30px; opacity: 0.6;">Return Home</a>
+                </div>
+            </div>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer id="contact" style="background: var(--primary); color: white; padding: 60px 10% 20px; text-align: center;">
-        <h2 class="serif" style="color: var(--secondary); margin-bottom: 30px;">CHAMUNDA</h2>
-        <p style="font-size: 0.8rem; opacity: 0.6;">&copy; 2026 Chamunda Mandap Services. All Rights Reserved.</p>
+        <h2 class="serif" id="footer-logo" style="color: var(--secondary); margin-bottom: 30px;">CHAMUNDA</h2>
+        <p style="margin-bottom: 30px; opacity: 0.8;">Making weddings beautiful since 1995. Let's create your masterpiece.</p>
+        <div style="margin-bottom: 30px; font-size: 0.9rem; opacity: 0.7;">
+            <p class="footer-address">Main Road, Surat, Gujarat</p>
+            <p class="footer-phone" style="color: var(--secondary); margin-top: 10px; font-weight: 600;">+91 98765 43210</p>
+        </div>
+        <div class="social-links" style="margin-bottom: 40px; display: flex; justify-content: center; gap: 20px;">
+            <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+            <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+            <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
+        <p style="font-size: 0.8rem; opacity: 0.6;">&copy; 2026 <span class="brand-text">Chamunda Mandap Services</span>. All Rights Reserved.</p>
     </footer>
 
     <!-- Background Music -->

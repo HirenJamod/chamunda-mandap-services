@@ -91,7 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (gallery) {
                     if (!images || images.length === 0) {
-                        gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Gallery is empty.</p>';
+                        gallery.innerHTML = `
+                            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px dashed var(--glass-border);">
+                                <i class="fas fa-camera-retro" style="font-size: 3rem; color: var(--secondary); opacity: 0.5; margin-bottom: 20px;"></i>
+                                <h3 class="serif" style="font-size: 1.5rem; margin-bottom: 10px;">Our Gallery is Growing</h3>
+                                <p style="color: var(--text-muted); margin-bottom: 30px;">Check back soon to see our latest wedding artistry, or start planning your own dream celebration today.</p>
+                                <a href="booking.html" class="btn-outline-gold" style="padding: 10px 25px;">Start Planning</a>
+                            </div>
+                        `;
                     } else {
                         gallery.innerHTML = images.map((img, index) => `
                             <div class="gallery-item-luxury ${index % 3 === 1 ? 'highlight' : ''}">
@@ -126,27 +133,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. Booking Form (Premium)
     const bookingFormPremium = document.getElementById('booking-form-premium');
     if (bookingFormPremium) {
+        // Set min date to today
+        const dateInput = document.getElementById('booking-date');
+        if (dateInput) {
+            dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+        }
+
         bookingFormPremium.addEventListener('submit', (e) => {
             e.preventDefault();
-            const submitBtn = bookingFormPremium.querySelector('button');
+            const submitBtn = bookingFormPremium.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerText;
             submitBtn.innerText = 'PROCESSING...';
             submitBtn.disabled = true;
 
             const selectedImages = Array.from(document.querySelectorAll('input[name="booking-images"]:checked')).map(cb => cb.value);
             const servicesRequired = Array.from(document.querySelectorAll('.service-check:checked')).map(cb => cb.value);
+            const ceremonyEl = document.getElementById('ceremony-details');
+            const bookingId = 'BK-' + Date.now();
 
             const formData = {
-                id: 'BK-' + Date.now(),
+                id: bookingId,
                 couple_names: document.getElementById('couple-names').value,
+                phone: document.getElementById('booking-phone').value,
                 event_date: document.getElementById('booking-date').value,
                 guest_count: document.getElementById('guest-count').value,
                 venue: document.getElementById('wedding-venue').value,
-                ceremony_details: document.getElementById('ceremony-details').value,
+                ceremony_details: ceremonyEl ? ceremonyEl.value : '',
                 services_required: servicesRequired,
+                style: servicesRequired.join(', '),
                 message: document.getElementById('special-requests').value,
                 selected_images: selectedImages,
-                status: 'Planning',
+                status: 'Pending',
                 timestamp: new Date().toISOString()
             };
 
@@ -157,8 +174,16 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(res => res.json())
             .then(data => {
-                alert('Thank you! Your wedding inquiry has been sent to our artistry team.');
-                bookingFormPremium.reset();
+                // Show success confirmation
+                bookingFormPremium.style.display = 'none';
+                const introSection = document.getElementById('booking-intro');
+                if (introSection) introSection.style.display = 'none';
+                const successDiv = document.getElementById('booking-success');
+                const confirmId = document.getElementById('booking-confirm-id');
+                if (successDiv) {
+                    if (confirmId) confirmId.innerText = bookingId;
+                    successDiv.style.display = 'block';
+                }
                 submitBtn.innerText = originalText;
                 submitBtn.disabled = false;
             })
@@ -257,10 +282,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Disable past dates
-    const dateInput = document.getElementById('event-date');
-    if (dateInput) {
-        dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    // Disable past dates (handled in booking form section above)
+
+    // 14. Mobile Menu Toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-active');
+            mobileMenuBtn.querySelector('i').classList.toggle('fa-bars');
+            mobileMenuBtn.querySelector('i').classList.toggle('fa-times');
+        });
+        // Close menu when a link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('mobile-active');
+                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+            });
+        });
     }
 });
 
@@ -270,7 +310,6 @@ window.selectServiceAndBook = (serviceTitle) => {
     const serviceDropdown = document.getElementById('service-type');
     
     if (bookingSection && serviceDropdown) {
-        // Find or add the option to the dropdown if it doesn't exist
         let optionExists = false;
         for (let i = 0; i < serviceDropdown.options.length; i++) {
             if (serviceDropdown.options[i].text === serviceTitle || serviceDropdown.options[i].value === serviceTitle) {
@@ -286,47 +325,8 @@ window.selectServiceAndBook = (serviceTitle) => {
             serviceDropdown.value = serviceTitle;
         }
 
-        // Scroll to booking
         bookingSection.scrollIntoView({ behavior: 'smooth' });
-        
-        // Highlight the image selector to show related images
-        const gallerySelector = document.getElementById('booking-gallery-selector');
-        if (gallerySelector) {
-            gallerySelector.style.boxShadow = '0 0 20px rgba(197, 160, 89, 0.5)';
-            setTimeout(() => gallerySelector.style.boxShadow = 'none', 2000);
-        }
     } else {
-        // If not on index page, redirect
         window.location.href = `index.html?service=${encodeURIComponent(serviceTitle)}#booking`;
     }
 };
-
-// Check for URL parameter on load
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const serviceParam = urlParams.get('service');
-    // 12. Section Navigation Observer
-    const sections = document.querySelectorAll('section, .hero');
-    const dots = document.querySelectorAll('.dot');
-
-    const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const id = entry.target.getAttribute('id');
-                dots.forEach(dot => {
-                    dot.classList.remove('active');
-                    if (dot.getAttribute('href') === `#${id}`) {
-                        dot.classList.add('active');
-                    }
-                });
-            }
-        });
-    }, { threshold: 0.5 });
-
-    sections.forEach(section => scrollObserver.observe(section));
-
-    // 13. INITIALIZE DATA LOADING
-    loadServices();
-    loadGallery();
-});
-

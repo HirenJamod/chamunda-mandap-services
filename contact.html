@@ -17,7 +17,7 @@
             <li><a href="portfolio.html">Portfolio</a></li>
             <li><a href="booking.html">Book Now</a></li>
             <li><a href="contact.html" class="active">Contact</a></li>
-            <li><a href="client.html" style="color: var(--secondary); font-size: 0.8rem; margin-left: 20px;"><i class="fas fa-user-circle"></i> Client Portal</a></li>
+            <li><a href="track.html" style="color: var(--secondary); font-size: 0.8rem; margin-left: 20px;"><i class="fas fa-user-circle"></i> Client Portal</a></li>
         </ul>
     </nav>
 
@@ -44,16 +44,28 @@
                     </div>
                 </div>
                 <div class="contact-map">
-                    <div style="width: 100%; height: 300px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: var(--secondary); opacity: 0.3;"></i>
+                    <div style="width: 100%; height: 300px; border-radius: 24px; overflow: hidden; border: 1px solid var(--glass-border);">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d119066.4170946252!2d72.73989470942358!3d21.159462704739178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04e59411d1563%3A0xfe4558290938b042!2sSurat%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" width="100%" height="100%" style="border:0; filter: grayscale(100%) invert(90%) hue-rotate(180deg);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
         </section>
 
-        <footer id="contact" style="background: var(--primary); padding: 20px 10%; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
-            <h2 class="serif" style="color: var(--secondary); font-size: 1.2rem; margin-bottom: 0;">CHAMUNDA</h2>
-            <p style="font-size: 0.7rem; opacity: 0.6; margin-bottom: 0;">&copy; 2026 Chamunda Mandap Services.</p>
+        <!-- Footer -->
+        <footer id="contact" style="background: var(--primary); color: white; padding: 60px 10% 20px; text-align: center; border-top: 1px solid var(--glass-border);">
+            <h2 class="serif" id="footer-logo" style="color: var(--secondary); margin-bottom: 30px;">CHAMUNDA</h2>
+            <p style="margin-bottom: 30px; opacity: 0.8;">Making weddings beautiful since 1995. Let's create your masterpiece.</p>
+            <div style="margin-bottom: 30px; font-size: 0.9rem; opacity: 0.7;">
+                <p class="footer-address">Main Road, Surat, Gujarat</p>
+                <p class="footer-phone" style="color: var(--secondary); margin-top: 10px; font-weight: 600;">+91 98765 43210</p>
+            </div>
+            <div class="social-links" style="margin-bottom: 40px; display: flex; justify-content: center; gap: 20px;">
+                <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+                <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+                <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
+            <p style="font-size: 0.8rem; opacity: 0.6;">&copy; 2026 <span class="brand-text">Chamunda Mandap Services</span>. All Rights Reserved.</p>
         </footer>
     </div>
 
