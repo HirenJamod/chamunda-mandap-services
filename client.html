@@ -4,13 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Panel | Chamunda Mandap Services</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Dedicated Dashboard Styles */
+        /* Dedicated Client Dashboard Styles - Modernized */
         body {
-            background: #0f0f0f;
+            background: #050505;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Cormorant Garamond', serif;
         }
 
         .dashboard-wrapper {
@@ -18,40 +24,44 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
+        /* Sidebar Redesign */
         .admin-sidebar {
-            width: 260px;
-            background: #151515;
+            width: 280px;
+            background: #0a0a0a;
             border-right: 1px solid var(--glass-border);
-            padding: 2rem;
-            position: sticky;
+            padding: 2rem 1.5rem;
+            position: fixed;
+            left: 0;
             top: 0;
             height: 100vh;
+            z-index: 100;
         }
 
         .admin-sidebar .logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             margin-bottom: 3rem;
-            display: block;
-        }
-
-        .admin-nav {
-            list-style: none;
+            padding-left: 1rem;
+            letter-spacing: 3px;
         }
 
         .admin-nav li {
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .admin-nav a {
-            color: var(--text-muted);
-            text-decoration: none;
+            color: #888;
+            padding: 14px 20px;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px;
+            gap: 15px;
             border-radius: 12px;
-            transition: var(--transition);
+            transition: all 0.3s ease;
+        }
+
+        .admin-nav a i {
+            width: 20px;
+            font-size: 1.1rem;
         }
 
         .admin-nav a:hover, .admin-nav a.active {
@@ -59,43 +69,65 @@
             background: rgba(197, 160, 89, 0.1);
         }
 
+        .admin-nav a.active {
+            background: linear-gradient(90deg, rgba(197, 160, 89, 0.15) 0%, transparent 100%);
+            border-left: 3px solid var(--secondary);
+        }
+
         /* Main Content */
         .admin-main {
+            margin-left: 280px;
+            padding: 40px 60px;
             flex-grow: 1;
-            padding: 3rem;
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
         .admin-header {
-            margin-bottom: 3rem;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
         }
 
-        /* Tables */
-        .admin-table-container {
-            background: #1a1a1a;
+        /* Improved Service Cards for Client Panel */
+        .client-services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .client-service-card {
+            background: var(--glass);
             border-radius: 24px;
-            padding: 1.5rem;
             border: 1px solid var(--glass-border);
-            margin-bottom: 3rem;
-            overflow-x: auto;
+            overflow: hidden;
+            transition: var(--transition);
         }
 
-        table {
+        .client-service-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+        }
+
+        .client-service-img {
             width: 100%;
-            border-collapse: collapse;
+            height: 200px;
+            object-fit: cover;
         }
 
-        th {
-            text-align: left;
-            padding: 1rem;
+        .client-service-info {
+            padding: 25px;
+        }
+
+        .client-service-info h3 {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .client-service-info p {
             color: var(--text-muted);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
         td {
@@ -119,30 +151,29 @@
 </head>
 <body class="dashboard-body">
     <div class="dashboard-wrapper">
-        <!-- Sidebar -->
-        <div class="admin-sidebar">
-            <a href="index.html" class="logo serif">Client<span>Portal</span></a>
+    <div class="dashboard-wrapper">
+        <aside class="admin-sidebar">
+            <a href="index.html" class="logo serif">CLIENT<span>PORTAL</span></a>
             <ul class="admin-nav">
-                <li><a href="#" class="tab-link active" data-target="section-bookings"><i class="fas fa-clipboard-list"></i> My Bookings</a></li>
-                <li><a href="#" class="tab-link" data-target="section-services"><i class="fas fa-concierge-bell"></i> Our Services</a></li>
-                <li><a href="#" class="tab-link" data-target="section-gallery"><i class="fas fa-images"></i> Inspiration Gallery</a></li>
-                <li><a href="index.html#booking"><i class="fas fa-plus"></i> New Inquiry</a></li>
-                
+                <li><a href="#bookings" class="tab-link active" data-target="section-bookings"><i class="fas fa-calendar-check"></i> My Bookings</a></li>
+                <li><a href="#services" class="tab-link" data-target="section-services"><i class="fas fa-magic"></i> Our Services</a></li>
+                <li><a href="#gallery" class="tab-link" data-target="section-gallery"><i class="fas fa-images"></i> Inspiration Gallery</a></li>
+                <li><a href="booking.html"><i class="fas fa-plus-circle"></i> New Inquiry</a></li>
                 <li style="margin-top: 30px; padding-left: 12px; color: #555; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Quick Links</li>
                 <li><a href="index.html"><i class="fas fa-home"></i> Home Page</a></li>
+                <li><a href="index.html" style="color: #f44336; margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
-        </div>
+        </aside>
 
-        <!-- Main Content -->
         <main class="admin-main">
-            <header class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <header class="admin-header">
                 <div>
-                    <h1 class="serif" id="page-title">My Wedding Inquiries</h1>
-                    <p style="color: var(--text-muted);" id="page-subtitle">Track the status of your mandap and decoration bookings below.</p>
+                    <h1 class="serif" style="font-size: 2.5rem; margin-bottom: 5px;">Welcome Back</h1>
+                    <p style="color: #888; font-size: 0.9rem;">Track your wedding planning and explore new themes.</p>
                 </div>
-                <div style="display: flex; align-items: center; gap: 10px; background: var(--glass); padding: 10px 20px; border-radius: 20px; border: 1px solid var(--glass-border);">
-                    <i class="fas fa-user-circle" style="font-size: 1.5rem; color: var(--secondary);"></i>
-                    <span>Welcome, Guest</span>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Client&background=C5A059&color=fff" alt="Client">
+                    <span style="font-size: 0.9rem; font-weight: 500;">Valued Client</span>
                 </div>
             </header>
 
@@ -335,5 +366,19 @@
                 });
         }
     </script>
+    <!-- Background Music -->
+    <audio id="bg-music" loop autoplay>
+        <source src="https://cdn.pixabay.com/audio/2022/10/16/audio_2f28a3830c.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="music-toggle" class="music-btn" title="Toggle Background Music">
+        <i class="fas fa-music"></i>
+        <div class="music-waves">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
 </body>
 </html>
