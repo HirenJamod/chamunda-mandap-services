@@ -30,16 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!services || services.length === 0) {
                     servicesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">No services added yet.</p>';
                 } else {
-                    servicesGrid.innerHTML = services.map((s, index) => `
-                        <div class="service-card" onclick="selectServiceAndBook('${s.title}')" style="animation-delay: ${index * 0.2}s; cursor: pointer;">
-                            <img src="${s.image_url}" alt="${s.title}" class="service-img">
-                            <div class="service-info">
-                                <h3 class="serif">${s.title}</h3>
-                                <p>${s.description}</p>
-                                <span style="color: var(--secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; display: block;">Book This Style →</span>
+                    function renderServices(services) {
+                        const grid = document.getElementById('dynamic-services');
+                        if (!grid) return;
+
+                        grid.innerHTML = services.map(service => `
+                            <div class="service-card" data-reveal>
+                                <div class="service-img-wrapper">
+                                    <img src="${service.image_url}" alt="${service.title}">
+                                </div>
+                                <h3>${service.title}</h3>
+                                <p>${service.description}</p>
+                                <a href="portfolio.html" class="btn-outline-gold">View Gallery</a>
                             </div>
-                        </div>
-                    `).join('');
+                        `).join('');
+                    }
+                    renderServices(services);
                 }
             })
             .catch(err => {

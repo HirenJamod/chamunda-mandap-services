@@ -21,48 +21,80 @@
         </ul>
     </nav>
 
-    <section id="booking" style="padding-top: 150px; background-color: #fcf8f3; min-height: 100vh;">
-        <div class="section-header">
-            <h1 class="serif" style="color: var(--primary); font-size: 4rem; margin-bottom: 20px;">Reserve Your Date</h1>
-            <p style="color: #666; max-width: 600px; margin: 0 auto; margin-bottom: 50px;">Fill out the form below and our team will get back to you within 24 hours to discuss your dream wedding.</p>
-        </div>
-        <div class="booking-container" style="max-width: 800px; margin: 0 auto;">
-            <form id="booking-form">
-                <div class="form-group">
-                    <label for="full-name">Full Name</label>
-                    <input type="text" id="full-name" required placeholder="Enter your name">
-                </div>
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" required placeholder="Your contact number">
+    <section id="booking-luxury" style="padding-top: 150px; background: #050505; min-height: 100vh; padding-bottom: 100px;">
+        <div class="booking-container-premium">
+            <div class="booking-header-accent">
+                <img src="https://img.icons8.com/ios/50/C5A059/flower.png" alt="Accent" style="width: 40px; margin-bottom: 15px;">
+                <h1 class="serif" style="font-size: 4rem; letter-spacing: 5px; color: #fff;">WEDDING BOOKING</h1>
+            </div>
+
+            <div class="booking-glass-card">
+                <form id="booking-form-premium">
+                    <div class="form-grid-2">
+                        <div class="form-column">
+                            <div class="form-group-premium">
+                                <label>Couple's Names</label>
+                                <input type="text" placeholder="Enter both names" required>
+                            </div>
+                            <div class="form-group-premium">
+                                <label>Preferred Date (DD/MM/YYYY)</label>
+                                <input type="date" required>
+                            </div>
+                            <div class="form-grid-inner">
+                                <div class="form-group-premium">
+                                    <label>Guest Count</label>
+                                    <input type="number" placeholder="Approx. guests">
+                                </div>
+                                <div class="form-group-premium">
+                                    <label>Wedding Venue</label>
+                                    <input type="text" placeholder="Location name">
+                                </div>
+                            </div>
+                            <div class="form-group-premium">
+                                <label>Ceremony & Reception Details</label>
+                                <textarea rows="3" placeholder="Tell us about the flow of your day..."></textarea>
+                            </div>
+                            
+                            <div class="services-required">
+                                <label style="display: block; margin-bottom: 15px; color: var(--secondary); font-size: 0.9rem; letter-spacing: 1px;">Services Required</label>
+                                <div class="checkbox-grid">
+                                    <label class="check-container">Venue <input type="checkbox"> <span class="checkmark"></span></label>
+                                    <label class="check-container">Catering <input type="checkbox"> <span class="checkmark"></span></label>
+                                    <label class="check-container">Decor <input type="checkbox"> <span class="checkmark"></span></label>
+                                    <label class="check-container">Photography <input type="checkbox"> <span class="checkmark"></span></label>
+                                    <label class="check-container">Music <input type="checkbox"> <span class="checkmark"></span></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-column">
+                            <div class="inspiration-header">
+                                <label>SELECT INSPIRATION</label>
+                                <span class="font-tag">Cormorant Garamond</span>
+                            </div>
+                            <div id="booking-gallery-selector" class="inspiration-grid-v2">
+                                <!-- Images will load here -->
+                            </div>
+                            
+                            <div class="progress-section">
+                                <div class="progress-bar-container">
+                                    <div class="progress-fill" style="width: 40%;"></div>
+                                </div>
+                                <span class="progress-text">40% Complete</span>
+                            </div>
+
+                            <div class="form-group-premium" style="margin-top: 30px;">
+                                <label>Special Requests</label>
+                                <textarea rows="5" placeholder="Any specific visions or dreams..."></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="event-date">Wedding Date</label>
-                        <input type="date" id="event-date" required>
+
+                    <div style="text-align: center; margin-top: 50px;">
+                        <button type="submit" class="btn-submit-luxury">SUBMIT BOOKING</button>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="service-type">Preferred Style</label>
-                    <select id="service-type">
-                        <option value="traditional">Royal Traditional</option>
-                        <option value="modern">Modern Minimalist</option>
-                        <option value="floral">Floral Paradise</option>
-                        <option value="custom">Custom Theme</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="message">Special Requirements</label>
-                    <textarea id="message" rows="4" placeholder="Tell us about your dream wedding..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Select Inspiration Images from Gallery (Optional)</label>
-                    <div id="booking-gallery-selector">
-                        <p style="color: #888; font-size: 0.8rem;">Loading inspiration images...</p>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Check Availability</button>
-            </form>
+                </form>
+            </div>
         </div>
     </section>
 
