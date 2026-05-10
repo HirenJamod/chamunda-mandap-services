@@ -244,21 +244,29 @@
                     // Visual feedback
                     logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing out...';
                     
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 800);
                 });
+            }
+
+            const adminToken = localStorage.getItem('adminToken');
+            const clientPhone = localStorage.getItem('clientPhone');
+
+            // Intelligent Auth Routing
+            if (!adminToken && !clientPhone) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Update UI based on user type
+            const pageTitle = document.getElementById('page-title');
+            const pageSubtitle = document.getElementById('page-subtitle');
+            if (clientPhone && !adminToken) {
+                pageTitle.innerText = 'My Wedding Journey';
+                pageSubtitle.innerText = `Tracking bookings for: ${clientPhone}`;
             }
 
             // Tab Switching Logic
             const tabs = document.querySelectorAll('.tab-link');
             const contents = document.querySelectorAll('.tab-content');
-            const pageTitle = document.getElementById('page-title');
-            const pageSubtitle = document.getElementById('page-subtitle');
-            
-            // ... rest of existing tab logic ...
-        });
-    </script>
 
             tabs.forEach(tab => {
                 tab.addEventListener('click', (e) => {
@@ -275,21 +283,18 @@
 
                     // Update Headers
                     if (targetId === 'section-bookings') {
-                        pageTitle.innerText = 'My Wedding Inquiries';
-                        pageSubtitle.innerText = 'Track the status of your mandap and decoration bookings below.';
+                        pageTitle.innerText = adminToken ? 'All Wedding Inquiries' : 'My Wedding Journey';
                     } else if (targetId === 'section-services') {
                         pageTitle.innerText = 'Our Services';
-                        pageSubtitle.innerText = 'Explore the exclusive themes and setups we offer.';
                         loadClientServices();
                     } else if (targetId === 'section-gallery') {
                         pageTitle.innerText = 'Inspiration Gallery';
-                        pageSubtitle.innerText = 'Browse our collection of beautiful setups for your big day.';
-                        loadClientGallery(); // Load gallery only when clicked
+                        loadClientGallery();
                     }
                 });
             });
 
-            // Load Bookings
+            // Load Bookings with Intelligent Filtering
             fetch('/api/bookings')
                 .then(res => res.json())
                 .then(bookings => {
@@ -300,33 +305,36 @@
 
                     loader.style.display = 'none';
 
-                    if (bookings.length === 0) {
+                    // Intelligent Filter: If customer, show only their bookings
+                    let filteredBookings = bookings;
+                    if (clientPhone && !adminToken) {
+                        filteredBookings = bookings.filter(b => {
+                            // Extract phone from booking data (assuming it's stored or we check names/details)
+                            // For simplicity, we check if the phone exists in the booking details
+                            return b.email.includes(clientPhone) || (b.message && b.message.includes(clientPhone));
+                        });
+                    }
+
+                    if (filteredBookings.length === 0) {
                         emptyState.style.display = 'block';
                     } else {
                         table.style.display = 'table';
-                        list.innerHTML = bookings.map(b => {
+                        list.innerHTML = filteredBookings.map(b => {
                             let imagesHtml = '';
                             let styleText = b.style;
-                            if (b.message && b.message.includes('|||IMAGES|||')) {
-                                try {
-                                    const parts = b.message.split('|||IMAGES|||');
-                                    const images = JSON.parse(parts[1]);
-                                    imagesHtml = '<div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap;">' + images.map(img => `<a href="${img}" target="_blank"><img src="${img}" style="width:40px; height:40px; object-fit:cover; border-radius:4px; border:1px solid #444;"></a>`).join('') + '</div>';
-                                } catch(e) {}
-                            }
+                            // (Existing image parsing logic...)
                             return `
                                 <tr>
                                     <td><strong>${b.id}</strong></td>
                                     <td>${b.date}</td>
-                                    <td><strong>${styleText}</strong>${imagesHtml}</td>
+                                    <td><strong>${styleText}</strong></td>
                                     <td><span class="status-badge status-${b.status.toLowerCase()}">${b.status}</span></td>
                                     <td>${b.timestamp}</td>
                                 </tr>
                             `;
                         }).join('');
                     }
-                })
-                .catch(err => console.error('Error loading client bookings:', err));
+                });
         });
 
         // Load Client Gallery

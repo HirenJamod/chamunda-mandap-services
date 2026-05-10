@@ -80,31 +80,81 @@
 </head>
 <body>
     <div class="login-card">
-        <h2 class="serif">Admin Portal</h2>
+        <div class="login-tabs" style="display: flex; gap: 20px; margin-bottom: 30px; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+            <button class="tab-btn active" onclick="switchLogin('admin')" style="background: none; border: none; color: var(--secondary); cursor: pointer; font-family: 'Inter'; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px;">ADMIN</button>
+            <button class="tab-btn" onclick="switchLogin('customer')" style="background: none; border: none; color: #888; cursor: pointer; font-family: 'Inter'; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px;">CUSTOMER</button>
+        </div>
+
+        <!-- Admin Form -->
         <form id="login-form">
+            <h2 class="serif" style="font-size: 1.5rem; margin-bottom: 20px;">Admin Access</h2>
             <div class="form-group">
-                <label>Secure Access Password</label>
+                <label>Master Password</label>
                 <input type="password" id="password" placeholder="••••••••" required>
             </div>
             <button type="submit" class="btn btn-primary btn-login">Authorize Access</button>
-            <div id="error-msg" class="error-msg">Invalid Security Credentials</div>
         </form>
+
+        <!-- Customer Form (Hidden by default) -->
+        <form id="customer-login-form" style="display: none;">
+            <h2 class="serif" style="font-size: 1.5rem; margin-bottom: 20px;">Track Booking</h2>
+            <div class="form-group">
+                <label>Registered Phone Number</label>
+                <input type="tel" id="client-phone" placeholder="+91 XXXX XXX XXX" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-login">Access Portal</button>
+            <p style="margin-top: 15px; font-size: 0.7rem; color: #888;">Enter the phone number used during booking.</p>
+        </form>
+
+        <div id="error-msg" class="error-msg">Invalid Credentials</div>
+        
         <div style="margin-top: 2rem;">
             <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 1px;">← Back to Website</a>
         </div>
     </div>
 
     <script>
-        // Custom Cursor Logic
-        const cursor = document.querySelector('.cursor');
-        const follower = document.querySelector('.cursor-follower');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            follower.style.left = (e.clientX - 10) + 'px';
-            follower.style.top = (e.clientY - 10) + 'px';
+        function switchLogin(type) {
+            const adminForm = document.getElementById('login-form');
+            const customerForm = document.getElementById('customer-login-form');
+            const tabs = document.querySelectorAll('.tab-btn');
+            const errorMsg = document.getElementById('error-msg');
+            errorMsg.style.display = 'none';
+
+            if (type === 'admin') {
+                adminForm.style.display = 'block';
+                customerForm.style.display = 'none';
+                tabs[0].classList.add('active');
+                tabs[0].style.color = 'var(--secondary)';
+                tabs[1].classList.remove('active');
+                tabs[1].style.color = '#888';
+            } else {
+                adminForm.style.display = 'none';
+                customerForm.style.display = 'block';
+                tabs[1].classList.add('active');
+                tabs[1].style.color = 'var(--secondary)';
+                tabs[0].classList.remove('active');
+                tabs[0].style.color = '#888';
+            }
+        }
+
+        // Customer Login Logic
+        document.getElementById('customer-login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const phone = document.getElementById('client-phone').value;
+            const submitBtn = e.target.querySelector('.btn-login');
+            
+            submitBtn.innerText = 'Searching...';
+            
+            // For now, we allow access and store the phone to filter on client side
+            localStorage.setItem('clientPhone', phone);
+            
+            setTimeout(() => {
+                window.location.href = 'client.html';
+            }, 800);
         });
 
+        // Admin Login Logic (Existing)
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const password = document.getElementById('password').value;
@@ -114,7 +164,6 @@
             submitBtn.innerText = 'Verifying...';
             submitBtn.disabled = true;
 
-            // First check if it's the master password
             fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -132,10 +181,8 @@
                 }
             })
             .catch(err => {
-                console.error('Login error:', err);
-                errorMsg.innerText = 'Server Connection Error';
+                errorMsg.innerText = 'Server Error';
                 errorMsg.style.display = 'block';
-                submitBtn.innerText = 'Authorize Access';
                 submitBtn.disabled = false;
             });
         });
