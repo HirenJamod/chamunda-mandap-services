@@ -14,6 +14,16 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
 
+// Cache for settings
+let siteSettings = {
+    brand_name: 'CHAMUNDA',
+    hero_title: 'Exceptional Wedding Artistry',
+    hero_subtitle: 'Established 1995',
+    contact_phone: '+91 98765 43210',
+    contact_email: 'info@chamundamandap.com',
+    office_address: 'Main Road, Surat, Gujarat'
+};
+
 // Multer for file uploads (storing in memory)
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -144,6 +154,24 @@ app.patch('/api/services/:id', async (req, res) => {
     const { error } = await supabase.from('services').update({ title, description }).eq('id', id);
     if (error) return res.status(400).json({ error: error.message });
     res.json({ message: "Service updated" });
+});
+
+// Settings Endpoints
+app.get('/api/settings', async (req, res) => {
+    // Try to get from Supabase, fallback to memory
+    const { data, error } = await supabase.from('settings').select('*').single();
+    if (error || !data) return res.json(siteSettings);
+    res.json(data);
+});
+
+app.post('/api/settings', async (req, res) => {
+    const newSettings = req.body;
+    const { error } = await supabase.from('settings').upsert([newSettings]);
+    if (error) {
+        siteSettings = { ...siteSettings, ...newSettings }; // Fallback to memory
+        return res.status(400).json({ error: error.message });
+    }
+    res.json({ message: "Settings updated successfully" });
 });
 
 app.listen(PORT, () => {
