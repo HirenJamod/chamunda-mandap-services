@@ -1214,16 +1214,37 @@ img, video, iframe, table {
     height: auto;
 }
 
-/* Dashboard Layout Defaults */
-.dashboard-wrapper {
-    display: flex;
-    min-height: 100vh;
+/* Cinematic No-Scroll Architecture */
+html, body {
+    height: 100%;
+    overflow: hidden; /* Lock the window */
 }
 
+.no-scroll-wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 100px; /* Navbar space */
+}
+
+.scrollable-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    scrollbar-width: none; /* Hide scrollbar for clean look */
+    -ms-overflow-style: none;
+}
+
+.scrollable-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Dashboard Layout Defaults - No Scroll */
 .admin-main {
     margin-left: 280px;
-    padding: 60px;
+    padding: 40px 60px;
     flex-grow: 1;
+    height: 100vh;
+    overflow-y: auto;
     width: calc(100% - 280px);
 }
 
