@@ -24,44 +24,40 @@
             min-height: 100vh;
         }
 
-        /* Sidebar Redesign */
+        /* Sidebar */
         .admin-sidebar {
-            width: 280px;
-            background: #0a0a0a;
+            width: 260px;
+            background: #151515;
             border-right: 1px solid var(--glass-border);
-            padding: 2rem 1.5rem;
-            position: fixed;
-            left: 0;
+            padding: 2rem;
+            position: sticky;
             top: 0;
             height: 100vh;
-            z-index: 100;
         }
 
         .admin-sidebar .logo {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             margin-bottom: 3rem;
-            padding-left: 1rem;
-            letter-spacing: 3px;
+            display: block;
+        }
+
+        .admin-nav {
+            list-style: none;
         }
 
         .admin-nav li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .admin-nav a {
-            color: #888;
-            padding: 14px 20px;
-            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            padding: 12px;
             border-radius: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .admin-nav a i {
-            width: 20px;
-            font-size: 1.1rem;
+            transition: var(--transition);
         }
 
         .admin-nav a:hover, .admin-nav a.active {
@@ -69,98 +65,46 @@
             background: rgba(197, 160, 89, 0.1);
         }
 
-        .admin-nav a.active {
-            background: linear-gradient(90deg, rgba(197, 160, 89, 0.15) 0%, transparent 100%);
-            border-left: 3px solid var(--secondary);
-        }
-
-        /* Stats Cards Redesign */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: #111;
-            padding: 25px;
-            border-radius: 24px;
-            border: 1px solid var(--glass-border);
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--secondary);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-
-        .stat-card i {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            font-size: 1.5rem;
-            color: var(--secondary);
-            opacity: 0.3;
-        }
-
-        .stat-card h3 {
-            color: #888;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        .stat-card .value {
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .stat-card .trend {
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .trend.up { color: #4caf50; }
-        .trend.down { color: #f44336; }
-
-        /* Main Content Adjustments */
+        /* Main Content */
         .admin-main {
-            margin-left: 280px;
-            padding: 40px 60px;
+            flex-grow: 1;
+            padding: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 50px;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 2rem;
         }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
             background: var(--glass);
-            padding: 8px 20px;
-            border-radius: 50px;
             border: 1px solid var(--glass-border);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
         }
 
-        .user-profile img {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
+        .stat-card h3 {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
         }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            color: var(--secondary);
             font-weight: 700;
         }
 
@@ -269,9 +213,17 @@
 </head>
 <body class="dashboard-body">
     <div class="dashboard-wrapper">
+        <!-- Sidebar -->
         <aside class="admin-sidebar">
-            <a href="index.html" class="logo serif">CHAMUNDA<span>.</span></a>
+            <a href="index.html" class="logo serif">CMS<span>Admin</span></a>
             <ul class="admin-nav">
+                <li><a href="#" class="active" onclick="switchSection(event, 'bookings-section')"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+                <li><a href="#gallery-section" onclick="switchSection(event, 'gallery-section')"><i class="fas fa-image"></i> Gallery Manager</a></li>
+                <li><a href="#services-section" onclick="switchSection(event, 'services-section')"><i class="fas fa-concierge-bell"></i> Services Manager</a></li>
+                <li><a href="#settings-section" onclick="switchSection(event, 'settings-section')"><i class="fas fa-cog"></i> Site Settings</a></li>
+                
+                <li style="margin-top: 30px; padding-left: 12px; color: #555; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Client View</li>
+                <li><a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> Home Page</a></li>
                 <li><a href="services.html" target="_blank"><i class="fas fa-external-link-alt"></i> Our Services</a></li>
                 <li><a href="portfolio.html" target="_blank"><i class="fas fa-external-link-alt"></i> Portfolio</a></li>
                 
