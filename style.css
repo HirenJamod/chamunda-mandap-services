@@ -363,11 +363,97 @@ section {
     border-bottom: 2px solid var(--glass-border);
     border-radius: 0;
     color: #FFFFFF !important;
-    caret-color: var(--secondary); /* Bright gold typing cursor */
-    padding: 1.5rem 0;
-    font-size: 1.1rem;
+    caret-color: var(--secondary); /* Explorer / Slideshow Layout */
+}
+
+.explore-slide {
+    display: flex;
+    align-items: center;
+    gap: 10%;
     width: 100%;
-    outline: none;
+}
+
+.explore-slide.reverse {
+    flex-direction: row-reverse;
+}
+
+.explore-content {
+    flex: 1;
+}
+
+.explore-content h2 {
+    font-size: clamp(3rem, 8vw, 5rem);
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.explore-content p {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    max-width: 500px;
+}
+
+.explore-img {
+    flex: 1.2;
+    height: 70vh;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 50px 120px rgba(0,0,0,0.6);
+    border: 1px solid var(--glass-border);
+}
+
+.explore-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.explore-slide:hover .explore-img img {
+    transform: scale(1.1);
+}
+
+/* Footer & Final CTA */
+#cta-final {
+    text-align: center;
+    background: radial-gradient(circle at center, #111 0%, #000 100%);
+}
+
+#footer {
+    padding: 100px 10% 50px;
+    text-align: center;
+    border-top: 1px solid var(--glass-border);
+}
+
+.footer-content p {
+    margin: 20px 0;
+    opacity: 0.6;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.social-links a {
+    color: white;
+    font-size: 1.5rem;
+    transition: var(--transition);
+}
+
+.social-links a:hover {
+    color: var(--secondary);
+    transform: translateY(-5px);
+}
+
+.footer-bottom {
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.8rem;
 }
 
 .form-group input::placeholder, .form-group textarea::placeholder {
