@@ -299,8 +299,24 @@ window.selectServiceAndBook = (serviceTitle) => {
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const serviceParam = urlParams.get('service');
-    if (serviceParam) {
-        setTimeout(() => window.selectServiceAndBook(serviceParam), 1000);
-    }
+    // 12. Section Navigation Observer
+    const sections = document.querySelectorAll('section, .hero');
+    const dots = document.querySelectorAll('.dot');
+
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                dots.forEach(dot => {
+                    dot.classList.remove('active');
+                    if (dot.getAttribute('href') === `#${id}`) {
+                        dot.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, { threshold: 0.5 });
+
+    sections.forEach(section => scrollObserver.observe(section));
 });
 

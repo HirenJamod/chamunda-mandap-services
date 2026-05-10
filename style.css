@@ -24,6 +24,7 @@
 
 html {
     scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
 }
 
 body {
@@ -104,6 +105,38 @@ a, button, input[type="submit"], select, .service-card {
 
 .music-waves span:nth-child(2) { animation-delay: 0.2s; height: 10px; }
 .music-waves span:nth-child(3) { animation-delay: 0.4s; height: 8px; }
+
+/* Section Navigation Dots */
+.section-nav {
+    position: fixed;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 1000;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.dot:hover {
+    background: var(--secondary);
+    transform: scale(1.5);
+}
+
+.dot.active {
+    background: var(--secondary);
+    box-shadow: 0 0 15px var(--secondary);
+    transform: scale(1.8);
+}
 
 @keyframes wave {
     0% { height: 5px; }
@@ -198,15 +231,29 @@ nav.scrolled {
     border-radius: 2px;
 }
 
+section {
+    min-height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 100px 10%;
+    position: relative;
+    overflow: hidden;
+}
+
 /* Hero Section - Immersive */
 .hero {
     height: 100vh;
+    scroll-snap-align: start;
     position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    padding: 0;
 }
 
 .hero-video {
