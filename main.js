@@ -193,6 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicBtn = document.getElementById('music-toggle');
 
     if (music && musicBtn) {
+        music.volume = 1.0; // Ensure volume is at max
+
         // Function to start music
         const startMusic = () => {
             music.play().then(() => {
