@@ -215,15 +215,26 @@
                         emptyState.style.display = 'block';
                     } else {
                         table.style.display = 'table';
-                        list.innerHTML = bookings.map(b => `
-                            <tr>
-                                <td><strong>${b.id}</strong></td>
-                                <td>${b.date}</td>
-                                <td>${b.style}</td>
-                                <td><span class="status-badge status-${b.status.toLowerCase()}">${b.status}</span></td>
-                                <td>${b.timestamp}</td>
-                            </tr>
-                        `).join('');
+                        list.innerHTML = bookings.map(b => {
+                            let imagesHtml = '';
+                            let styleText = b.style;
+                            if (b.message && b.message.includes('|||IMAGES|||')) {
+                                try {
+                                    const parts = b.message.split('|||IMAGES|||');
+                                    const images = JSON.parse(parts[1]);
+                                    imagesHtml = '<div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap;">' + images.map(img => `<a href="${img}" target="_blank"><img src="${img}" style="width:40px; height:40px; object-fit:cover; border-radius:4px; border:1px solid #444;"></a>`).join('') + '</div>';
+                                } catch(e) {}
+                            }
+                            return `
+                                <tr>
+                                    <td><strong>${b.id}</strong></td>
+                                    <td>${b.date}</td>
+                                    <td><strong>${styleText}</strong>${imagesHtml}</td>
+                                    <td><span class="status-badge status-${b.status.toLowerCase()}">${b.status}</span></td>
+                                    <td>${b.timestamp}</td>
+                                </tr>
+                            `;
+                        }).join('');
                     }
                 })
                 .catch(err => console.error('Error loading client bookings:', err));

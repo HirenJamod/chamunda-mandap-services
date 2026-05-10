@@ -69,27 +69,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Dynamic Gallery Fetching with Cache Busting
     const loadGallery = () => {
         const gallery = document.getElementById('dynamic-gallery');
-        if (!gallery) return;
+        const bookingSelector = document.getElementById('booking-gallery-selector');
 
         fetch(`/api/gallery?t=${Date.now()}`)
             .then(res => res.json())
             .then(images => {
-                if (!images || images.length === 0) {
-                    gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Gallery is empty.</p>';
-                } else {
-                    gallery.innerHTML = images.map(img => `
-                        <div class="gallery-item">
-                            <img src="${img.image_url}" alt="${img.caption}">
-                            <div class="gallery-overlay">
-                                <span>${img.caption}</span>
+                if (gallery) {
+                    if (!images || images.length === 0) {
+                        gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Gallery is empty.</p>';
+                    } else {
+                        gallery.innerHTML = images.map(img => `
+                            <div class="gallery-item">
+                                <img src="${img.image_url}" alt="${img.caption}">
+                                <div class="gallery-overlay">
+                                    <span>${img.caption}</span>
+                                </div>
                             </div>
-                        </div>
-                    `).join('');
+                        `).join('');
+                    }
+                }
+
+                if (bookingSelector) {
+                    if (!images || images.length === 0) {
+                        bookingSelector.innerHTML = '<p style="color: #888; font-size: 0.8rem;">No images available.</p>';
+                    } else {
+                        bookingSelector.innerHTML = images.map(img => `
+                            <label style="cursor: pointer; position: relative; border-radius: 8px; overflow: hidden; border: 2px solid transparent; transition: 0.3s;">
+                                <input type="checkbox" name="booking-images" value="${img.image_url}" style="position: absolute; top: 5px; right: 5px; z-index: 10; width: 16px; height: 16px;">
+                                <img src="${img.image_url}" alt="${img.caption}" style="width: 100%; height: 80px; object-fit: cover; display: block;">
+                            </label>
+                        `).join('');
+                        
+                        // Add some quick CSS for checked state
+                        bookingSelector.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                            cb.addEventListener('change', (e) => {
+                                e.target.parentElement.style.borderColor = e.target.checked ? 'var(--secondary)' : 'transparent';
+                            });
+                        });
+                    }
                 }
             })
             .catch(err => {
                 console.error('Error loading gallery:', err);
-                gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #dc3545;">Failed to load gallery.</p>';
+                if (gallery) gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #dc3545;">Failed to load gallery.</p>';
             });
     };
 
@@ -102,13 +124,19 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerText = 'Sending...';
             submitBtn.disabled = true;
 
+            const selectedImages = Array.from(document.querySelectorAll('input[name="booking-images"]:checked')).map(cb => cb.value);
+            let finalMessage = document.getElementById('message').value;
+            if (selectedImages.length > 0) {
+                finalMessage += '|||IMAGES|||' + JSON.stringify(selectedImages);
+            }
+
             const formData = {
                 id: 'BK-' + Date.now(),
                 name: document.getElementById('full-name').value,
                 phone: document.getElementById('phone').value,
                 date: document.getElementById('event-date').value,
                 style: document.getElementById('service-type').value,
-                message: document.getElementById('message').value,
+                message: finalMessage,
                 status: 'Pending',
                 timestamp: new Date().toLocaleString()
             };

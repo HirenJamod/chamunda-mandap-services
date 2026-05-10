@@ -160,6 +160,13 @@
                     <label for="message">Special Requirements</label>
                     <textarea id="message" rows="4" placeholder="Tell us about your dream wedding..."></textarea>
                 </div>
+                <div class="form-group">
+                    <label>Select Inspiration Images from Gallery (Optional)</label>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Select photos from our gallery that match your vision.</p>
+                    <div id="booking-gallery-selector" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; max-height: 200px; overflow-y: auto; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--glass-border);">
+                        <!-- Images will load here -->
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Check Availability</button>
             </form>
             <div id="form-success" style="display: none; text-align: center; margin-top: 20px; color: green; font-weight: 600;">

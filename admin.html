@@ -455,19 +455,30 @@
                     document.getElementById('pending-bookings').innerText = bookings.filter(b => b.status === 'Pending').length;
                     document.getElementById('confirmed-bookings').innerText = bookings.filter(b => b.status === 'Confirmed').length;
 
-                    list.innerHTML = bookings.map(b => `
-                        <tr>
-                            <td>#${b.id.substring(3,8)}</td>
-                            <td><strong>${b.name}</strong><br><small>${b.phone}</small></td>
-                            <td>${b.date}</td>
-                            <td>${b.style}</td>
-                            <td><span class="status-badge status-${b.status.toLowerCase()}">${b.status}</span></td>
-                            <td>
-                                <button class="action-btn" onclick="updateStatus('${b.id}', 'Confirmed')"><i class="fas fa-check"></i></button>
-                                <button class="action-btn" onclick="updateStatus('${b.id}', 'Rejected')"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
-                    `).join('');
+                    list.innerHTML = bookings.map(b => {
+                        let imagesHtml = '';
+                        let styleText = b.style;
+                        if (b.message && b.message.includes('|||IMAGES|||')) {
+                            try {
+                                const parts = b.message.split('|||IMAGES|||');
+                                const images = JSON.parse(parts[1]);
+                                imagesHtml = '<div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap;">' + images.map(img => `<a href="${img}" target="_blank"><img src="${img}" style="width:40px; height:40px; object-fit:cover; border-radius:4px; border:1px solid #444;"></a>`).join('') + '</div>';
+                            } catch(e) {}
+                        }
+                        return `
+                            <tr>
+                                <td>#${b.id.substring(3,8)}</td>
+                                <td><strong>${b.name}</strong><br><small>${b.phone}</small></td>
+                                <td>${b.date}</td>
+                                <td><strong>${styleText}</strong>${imagesHtml}</td>
+                                <td><span class="status-badge status-${b.status.toLowerCase()}">${b.status}</span></td>
+                                <td>
+                                    <button class="action-btn" onclick="updateStatus('${b.id}', 'Confirmed')"><i class="fas fa-check"></i></button>
+                                    <button class="action-btn" onclick="updateStatus('${b.id}', 'Rejected')"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
 
                     loader.style.display = 'none';
                     table.style.display = 'table';
