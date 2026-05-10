@@ -3,413 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Panel | Chamunda Mandap Services</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Client Portal | Chamunda Mandap Services</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* Dedicated Client Dashboard Styles - Modernized */
-        body {
-            background: #050505;
-            font-family: 'Inter', sans-serif;
+        body.client-dashboard-luxury {
+            margin: 0;
+            background: #121212;
             color: #fff;
-        }
-
-        h1, h2, h3, .serif {
-            font-family: 'Cormorant Garamond', serif;
-        }
-
-        .dashboard-wrapper {
             display: flex;
             min-height: 100vh;
+            overflow-x: hidden;
         }
-
-        /* Sidebar Redesign */
-        .admin-sidebar {
+        .client-sidebar-luxury {
             width: 280px;
-            background: #0a0a0a;
-            border-right: 1px solid var(--glass-border);
-            padding: 2rem 1.5rem;
+            background: #1a1a1a;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            padding: 40px 20px;
             position: fixed;
-            left: 0;
-            top: 0;
             height: 100vh;
             z-index: 100;
         }
-
-        .admin-sidebar .logo {
-            font-size: 1.8rem;
-            margin-bottom: 3rem;
-            padding-left: 1rem;
-            letter-spacing: 3px;
+        .main-content-luxury {
+            margin-left: 280px;
+            flex-grow: 1;
+            padding: 60px 5%;
+            max-width: 1200px;
         }
-
-        .admin-nav li {
-            margin-bottom: 0.5rem;
+        .client-logo-luxury {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            color: #fff;
+            margin-bottom: 50px;
+            display: block;
+            text-decoration: none;
         }
-
-        .admin-nav a {
-            color: #888;
-            padding: 14px 20px;
-            font-size: 0.9rem;
+        .client-nav-link {
             display: flex;
             align-items: center;
             gap: 15px;
+            padding: 15px 25px;
+            color: #666;
+            text-decoration: none;
             border-radius: 12px;
-            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
-
-        .admin-nav a i {
-            width: 20px;
-            font-size: 1.1rem;
-        }
-
-        .admin-nav a:hover, .admin-nav a.active {
-            color: var(--secondary);
+        .client-nav-link.active {
             background: rgba(197, 160, 89, 0.1);
-        }
-
-        .admin-nav a.active {
-            background: linear-gradient(90deg, rgba(197, 160, 89, 0.15) 0%, transparent 100%);
-            border-left: 3px solid var(--secondary);
-        }
-
-        /* Main Content */
-        .admin-main {
-            flex-grow: 1;
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 50px;
-        }
-
-        /* Improved Service Cards for Client Panel */
-        .client-services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        .client-service-card {
-            background: var(--glass);
-            border-radius: 24px;
-            border: 1px solid var(--glass-border);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .client-service-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--secondary);
-        }
-
-        .client-service-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .client-service-info {
-            padding: 25px;
-        }
-
-        .client-service-info h3 {
-            font-size: 1.5rem;
             color: var(--secondary);
-            margin-bottom: 10px;
+            border-left: 4px solid var(--secondary);
+            border-radius: 0 12px 12px 0;
         }
-
-        .client-service-info p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            line-height: 1.5;
+        .client-nav-link:hover:not(.active) {
+            color: #fff;
+            background: rgba(255,255,255,0.03);
         }
-
-        td {
-            padding: 1.2rem 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.9rem;
+        .welcome-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.03);
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-
-        .status-badge {
-            padding: 4px 12px;
+        .luxury-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 15px;
+            margin-top: 30px;
+        }
+        .luxury-table th {
+            text-align: left;
+            padding: 10px 20px;
+            color: #444;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .luxury-table td {
+            padding: 25px 20px;
+            background: #1a1a1a;
+            border-top: 1px solid rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .luxury-table tr td:first-child { border-left: 1px solid rgba(255,255,255,0.03); border-radius: 15px 0 0 15px; }
+        .luxury-table tr td:last-child { border-right: 1px solid rgba(255,255,255,0.03); border-radius: 0 15px 15px 0; }
+        .status-pill {
+            padding: 6px 15px;
             border-radius: 20px;
             font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
-
-        .status-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
-        .status-confirmed { background: rgba(40, 167, 69, 0.2); color: #28a745; }
-        .status-rejected { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+        .pill-pending { background: rgba(197, 160, 89, 0.15); color: var(--secondary); }
+        .pill-confirmed { background: rgba(40, 167, 69, 0.15); color: #2ecc71; }
     </style>
 </head>
 <body class="client-dashboard-luxury">
-    <div style="display: flex; min-height: 100vh;">
-        <aside class="client-sidebar-luxury">
-            <span class="client-logo-luxury serif">Client Portal<span style="color: var(--secondary);">.</span></span>
-            <nav>
-                <a href="#bookings" class="client-nav-link active" data-target="section-bookings"><i class="fas fa-calendar-check"></i> My Bookings</a>
-                <a href="booking.html" class="client-nav-link"><i class="fas fa-plus-circle"></i> New Inquiry</a>
-                
-                <div style="margin: 30px 0 10px; color: #444; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; padding-left: 20px;">Quick Links</div>
-                <a href="index.html" class="client-nav-link"><i class="fas fa-home"></i> Home Page</a>
-                <a href="#services" class="client-nav-link tab-link" data-target="section-services"><i class="fas fa-magic"></i> Our Services</a>
-                <a href="#gallery" class="client-nav-link tab-link" data-target="section-gallery"><i class="fas fa-images"></i> Inspiration Gallery</a>
-                
-                <a href="#" id="client-logout" class="client-nav-link" style="margin-top: 50px; color: rgba(220,53,69,0.6);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </nav>
-        </aside>
+    <aside class="client-sidebar-luxury">
+        <a href="index.html" class="client-logo-luxury">Client Portal<span style="color: var(--secondary);">.</span></a>
+        <nav>
+            <a href="#" class="client-nav-link active" onclick="showSection('bookings')">
+                <i class="fas fa-calendar-alt"></i> My Bookings
+            </a>
+            <a href="booking.html" class="client-nav-link">
+                <i class="fas fa-edit"></i> New Inquiry
+            </a>
+            <div style="margin: 40px 0 15px; color: #333; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; padding-left: 25px;">Quick Links</div>
+            <a href="index.html" class="client-nav-link"><i class="fas fa-home"></i> Home Page</a>
+            <a href="services.html" class="client-nav-link"><i class="fas fa-magic"></i> Our Services</a>
+            <a href="portfolio.html" class="client-nav-link"><i class="fas fa-images"></i> Inspiration Gallery</a>
+            
+            <a href="#" id="logout-btn" class="client-nav-link" style="margin-top: 60px; color: rgba(231, 76, 60, 0.6);">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </aside>
 
-        <main style="flex-grow: 1; padding: 60px 5%; max-width: 1200px; margin: 0 auto;">
-            <header style="margin-bottom: 50px; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <h1 id="page-title" class="serif" style="font-size: 2.5rem; margin-bottom: 10px;">My Wedding Inquiries</h1>
-                    <p id="page-subtitle" style="color: #666; font-size: 0.95rem;">Track the status of your mandap and decoration bookings below</p>
-                </div>
-                <div style="display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.03); padding: 10px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05);">
-                    <span style="font-size: 0.8rem; color: #888;">Welcome, <strong style="color: #fff;">Guest</strong></span>
-                    <i class="fas fa-user-circle" style="font-size: 1.5rem; color: var(--secondary);"></i>
-                </div>
-            </header>
-
-            <!-- Bookings Section -->
-            <div id="section-bookings" class="tab-content active" style="display: block;">
-                <div class="admin-table-container">
-                    <div id="loader" class="loader-container">
-                        <span class="loader"></span>
-                    </div>
-                    <table id="client-table" style="display: none;">
-                        <thead>
-                            <tr>
-                                <th>Booking ID</th>
-                                <th>Event Date</th>
-                                <th>Style</th>
-                                <th>Status</th>
-                                <th>Submitted On</th>
-                            </tr>
-                        </thead>
-                        <tbody id="client-bookings-list">
-                            <!-- Bookings will be loaded here -->
-                        </tbody>
-                    </table>
-                    <div id="no-bookings" style="display: none; text-align: center; padding: 60px 20px;">
-                        <i class="fas fa-calendar-times" style="font-size: 4rem; color: rgba(255,255,255,0.1); margin-bottom: 20px;"></i>
-                        <h3 class="serif" style="font-size: 1.5rem; margin-bottom: 10px;">No Inquiries Yet</h3>
-                        <p style="color: var(--text-muted); margin-bottom: 20px;">You haven't made any inquiries yet. Ready to start planning?</p>
-                        <a href="booking.html" class="btn btn-primary" style="text-decoration: none; display: inline-block;">Start Your Booking</a>
-                    </div>
+    <main class="main-content-luxury">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px;">
+            <div>
+                <h1 class="serif" style="font-size: 2.8rem; margin: 0;">My Wedding Inquiries</h1>
+                <p style="color: #555; margin-top: 10px;">Track the status of your mandap and decoration bookings below</p>
+            </div>
+            <div class="welcome-badge">
+                <span style="font-size: 0.8rem; color: #777;">Welcome, <strong id="user-display" style="color: #fff;">Guest</strong></span>
+                <div style="width: 32px; height: 32px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000;">
+                    <i class="fas fa-user" style="font-size: 0.8rem;"></i>
                 </div>
             </div>
+        </header>
 
-            <!-- Services Section -->
-            <div id="section-services" class="tab-content" style="display: none;">
-                <div class="admin-table-container" style="background: transparent; border: none; padding: 0;">
-                    <div class="services-grid" id="client-services-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
-                        <div class="loader-container" style="grid-column: 1/-1;">
-                            <span class="loader"></span>
-                        </div>
-                    </div>
-                </div>
+        <section id="bookings-section">
+            <div id="empty-state" style="display: none; text-align: center; padding: 100px 0;">
+                <i class="fas fa-calendar-times" style="font-size: 3rem; color: #222; margin-bottom: 20px;"></i>
+                <p style="color: #444;">No bookings found for your phone number.</p>
             </div>
-
-            <!-- Gallery Section -->
-            <div id="section-gallery" class="tab-content" style="display: none;">
-                <div class="admin-table-container" style="background: transparent; border: none; padding: 0;">
-                    <div class="gallery-masonry" id="client-gallery-grid">
-                        <div class="loader-container" style="grid-column: 1/-1;">
-                            <span class="loader"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+            
+            <table id="bookings-table" class="luxury-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Event Date</th>
+                        <th>Style</th>
+                        <th>Status</th>
+                        <th>Submitted On</th>
+                    </tr>
+                </thead>
+                <tbody id="bookings-list">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+        </section>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Logout Functionality
-            const logoutBtn = document.getElementById('client-logout');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    // Clear all security tokens and session data
-                    localStorage.removeItem('adminToken');
-                    localStorage.removeItem('clientToken');
-                    sessionStorage.clear();
-                    
-                    // Visual feedback
-                    logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing out...';
-                    
-                });
-            }
-
-            const adminToken = localStorage.getItem('adminToken');
             const clientPhone = localStorage.getItem('clientPhone');
+            const adminToken = localStorage.getItem('adminToken');
 
-            // Intelligent Auth Routing
-            if (!adminToken && !clientPhone) {
+            if (!clientPhone && !adminToken) {
                 window.location.href = 'track.html';
                 return;
             }
 
-            // Update UI based on user type
-            const pageTitle = document.getElementById('page-title');
-            const pageSubtitle = document.getElementById('page-subtitle');
-            if (clientPhone && !adminToken) {
-                pageTitle.innerText = 'My Wedding Journey';
-                pageSubtitle.innerText = `Tracking bookings for: ${clientPhone}`;
+            if (clientPhone) {
+                document.getElementById('user-display').innerText = clientPhone;
             }
 
-            // Tab Switching Logic
-            const tabs = document.querySelectorAll('.tab-link');
-            const contents = document.querySelectorAll('.tab-content');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = tab.getAttribute('data-target');
-                    if (!targetId) return;
-
-                    // Update Active States
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-
-                    contents.forEach(c => c.style.display = 'none');
-                    document.getElementById(targetId).style.display = 'block';
-
-                    // Update Headers
-                    if (targetId === 'section-bookings') {
-                        pageTitle.innerText = adminToken ? 'All Wedding Inquiries' : 'My Wedding Journey';
-                    } else if (targetId === 'section-services') {
-                        pageTitle.innerText = 'Our Services';
-                        loadClientServices();
-                    } else if (targetId === 'section-gallery') {
-                        pageTitle.innerText = 'Inspiration Gallery';
-                        loadClientGallery();
-                    }
-                });
-            });
-
-            // Load Bookings with Intelligent Filtering
+            // Fetch and Filter Bookings
             fetch('/api/bookings')
                 .then(res => res.json())
                 .then(bookings => {
-                    const list = document.getElementById('client-bookings-list');
-                    const emptyState = document.getElementById('no-bookings');
-                    const loader = document.getElementById('loader');
-                    const table = document.getElementById('client-table');
+                    const filtered = clientPhone ? 
+                        bookings.filter(b => b.phone.includes(clientPhone) || clientPhone.includes(b.phone)) : 
+                        bookings;
 
-                    loader.style.display = 'none';
+                    const list = document.getElementById('bookings-list');
+                    const table = document.getElementById('bookings-table');
+                    const empty = document.getElementById('empty-state');
 
-                    // Intelligent Filter: If customer, show only their bookings
-                    let filteredBookings = bookings;
-                    if (clientPhone && !adminToken) {
-                        filteredBookings = bookings.filter(b => {
-                            // Extract phone from booking data (assuming it's stored or we check names/details)
-                            // For simplicity, we check if the phone exists in the booking details
-                            return b.email.includes(clientPhone) || (b.message && b.message.includes(clientPhone));
-                        });
-                    }
-
-                    if (filteredBookings.length === 0) {
-                        emptyState.style.display = 'block';
+                    if (filtered.length === 0) {
+                        empty.style.display = 'block';
                     } else {
-                        table.className = 'luxury-table';
                         table.style.display = 'table';
-                        list.innerHTML = filteredBookings.map(b => {
-                            let statusClass = 'pill-pending';
-                            if (b.status.toLowerCase() === 'confirmed') statusClass = 'pill-confirmed';
-                            if (b.status.toLowerCase() === 'rejected') statusClass = 'pill-rejected';
-
-                            return `
-                                <tr>
-                                    <td><strong style="color:var(--secondary)">#${b.id}</strong></td>
-                                    <td>${b.date}</td>
-                                    <td>${b.style}</td>
-                                    <td><span class="status-pill ${statusClass}">${b.status}</span></td>
-                                    <td style="color: #666; font-size: 0.8rem;">${b.timestamp}</td>
-                                </tr>
-                            `;
-                        }).join('');
+                        list.innerHTML = filtered.map(b => `
+                            <tr>
+                                <td><strong style="color: var(--secondary)">#${b.id}</strong></td>
+                                <td>${b.date}</td>
+                                <td>${b.style}</td>
+                                <td><span class="status-pill ${b.status.toLowerCase() === 'confirmed' ? 'pill-confirmed' : 'pill-pending'}">${b.status}</span></td>
+                                <td style="color: #444; font-size: 0.8rem;">${new Date(b.timestamp).toLocaleDateString()}</td>
+                            </tr>
+                        `).join('');
                     }
                 });
+
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.clear();
+                window.location.href = 'index.html';
+            });
         });
-
-        // Load Client Gallery
-        let galleryLoaded = false;
-        function loadClientGallery() {
-            if (galleryLoaded) return;
-            const grid = document.getElementById('client-gallery-grid');
-            
-            fetch('/api/gallery')
-                .then(res => res.json())
-                .then(images => {
-                    if (images.length === 0) {
-                        grid.innerHTML = '<p style="text-align: center; color: #888; grid-column: 1/-1;">Gallery is currently empty.</p>';
-                    } else {
-                        grid.innerHTML = images.map(img => `
-                            <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px;">
-                                <img src="${img.image_url}" alt="${img.caption}" style="width: 100%; height: auto; display: block;">
-                                <div class="gallery-overlay" style="position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8));">
-                                    <span style="color: var(--secondary); font-weight: 600;">${img.caption}</span>
-                                </div>
-                            </div>
-                        `).join('');
-                        galleryLoaded = true;
-                    }
-                })
-                .catch(err => {
-                    grid.innerHTML = '<p style="color: red; text-align: center;">Failed to load gallery.</p>';
-                });
-        }
-
-        // Load Client Services
-        let servicesLoaded = false;
-        function loadClientServices() {
-            if (servicesLoaded) return;
-            const grid = document.getElementById('client-services-grid');
-            
-            fetch('/api/services')
-                .then(res => res.json())
-                .then(services => {
-                    if (services.length === 0) {
-                        grid.innerHTML = '<p style="text-align: center; color: #888; grid-column: 1/-1;">No services added yet.</p>';
-                    } else {
-                        grid.innerHTML = services.map(s => `
-                            <div class="service-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; transition: var(--transition);">
-                                <img src="${s.image_url}" alt="${s.title}" style="width: 100%; height: 200px; object-fit: cover;">
-                                <div style="padding: 20px;">
-                                    <h3 class="serif" style="color: var(--secondary); margin-bottom: 10px;">${s.title}</h3>
-                                    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">${s.description}</p>
-                                </div>
-                            </div>
-                        `).join('');
-                        servicesLoaded = true;
-                    }
-                })
-                .catch(err => {
-                    grid.innerHTML = '<p style="color: red; text-align: center;">Failed to load services.</p>';
-                });
-        }
     </script>
-    <!-- Background Music -->
-    <audio id="bg-music" loop autoplay>
-        <source src="https://cdn.pixabay.com/audio/2022/10/16/audio_2f28a3830c.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <div id="music-toggle" class="music-btn" title="Toggle Background Music">
-        <i class="fas fa-music"></i>
-        <div class="music-waves">
-            <span></span><span></span><span></span>
-        </div>
-    </div>
-
-    <script src="main.js"></script>
 </body>
 </html>
