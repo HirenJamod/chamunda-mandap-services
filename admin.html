@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Chamunda Mandap Services</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Dedicated Admin Dashboard Styles */
+        /* Dedicated Admin Dashboard Styles - Modernized */
         body {
-            background: #0f0f0f;
+            background: #050505;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Cormorant Garamond', serif;
         }
 
         .dashboard-wrapper {
@@ -747,5 +754,19 @@
             });
         });
     </script>
+    <!-- Background Music -->
+    <audio id="bg-music" loop autoplay>
+        <source src="https://cdn.pixabay.com/audio/2022/10/16/audio_2f28a3830c.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="music-toggle" class="music-btn" title="Toggle Background Music">
+        <i class="fas fa-music"></i>
+        <div class="music-waves">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
 </body>
 </html>
