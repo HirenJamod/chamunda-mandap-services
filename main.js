@@ -93,12 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!images || images.length === 0) {
                         gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Gallery is empty.</p>';
                     } else {
-                        gallery.innerHTML = images.map(img => `
-                            <div class="gallery-item">
+                        gallery.innerHTML = images.map((img, index) => `
+                            <div class="gallery-item-luxury ${index % 3 === 1 ? 'highlight' : ''}">
                                 <img src="${img.image_url}" alt="${img.caption}">
-                                <div class="gallery-overlay">
-                                    <span>${img.caption}</span>
-                                </div>
                             </div>
                         `).join('');
                     }

@@ -570,6 +570,72 @@ section {
     box-shadow: 0 0 30px rgba(197, 160, 89, 0.3);
 }
 
+/* --- Elara Luxury Portfolio System --- */
+.portfolio-page-luxury {
+    background: #0a0a0a;
+    color: #fff;
+    padding-bottom: 100px;
+}
+
+.portfolio-header-luxury {
+    text-align: center;
+    padding: 100px 5% 60px;
+}
+
+.portfolio-header-luxury h1 {
+    font-size: clamp(3rem, 10vw, 5rem);
+    letter-spacing: 12px;
+    color: var(--secondary);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.gallery-masonry-luxury {
+    column-count: 3;
+    column-gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 5%;
+}
+
+.gallery-item-luxury {
+    break-inside: avoid;
+    margin-bottom: 30px;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The "Golden Glow" from mockup */
+.gallery-item-luxury.highlight {
+    border: 2px solid var(--secondary);
+    box-shadow: 0 0 40px rgba(197, 160, 89, 0.3);
+}
+
+.gallery-item-luxury img {
+    width: 100%;
+    display: block;
+    transition: 0.8s;
+}
+
+.gallery-item-luxury:hover {
+    transform: scale(1.02);
+    border-color: var(--secondary);
+}
+
+.gallery-item-luxury:hover img {
+    transform: scale(1.05);
+}
+
+@media (max-width: 1024px) {
+    .gallery-masonry-luxury { column-count: 2; }
+}
+@media (max-width: 600px) {
+    .gallery-masonry-luxury { column-count: 1; }
+}
+
 /* Gallery Masonry 2.0 */
 .gallery-masonry {
     columns: 3 300px;
