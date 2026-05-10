@@ -47,7 +47,7 @@ h1, h2, h3, .serif {
 }
 
 body {
-    cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij48cGF0aCBkPSJNMAswIEwwLDIwIEw1LDE1IEw5LDI0IEwxMywyMiBMOSwxMyBMMTYsMTMgWiIgZmlsbD0iI0M1QTA1OSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=='), auto !important;
+    /* Reverted to OS default cursor */
 }
 
 /* Custom Cursor (Removed JS logic, keeping classes empty or deleting them) */
@@ -55,7 +55,7 @@ body {
 .cursor-follower { display: none; }
 
 a, button, input[type="submit"], select, .service-card {
-    cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij4KPHBhdGggZD0iTTEwLDAgTDEwLDggTDEzLDggTDEzLDExIEwxNiwxMSBMMTYsMTQgTDE5LDE0IEwxOSwyNSBMNSwyNSBMNSwxNCBMMTAsMTQgWiIgZmlsbD0iI0M1QTA1OSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4='), pointer !important;
+    cursor: pointer;
 }
 
 /* Floating Blobs Background */
