@@ -49,6 +49,33 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // 4. Dynamic Gallery Fetching with Cache Busting
+    let allGalleryImages = [];
+
+    const renderBookingImages = (filteredImages) => {
+        const bookingSelector = document.getElementById('booking-gallery-selector');
+        if (!bookingSelector) return;
+        
+        if (filteredImages.length === 0) {
+            bookingSelector.innerHTML = '<p style="color: #888; font-size: 0.8rem; grid-column: 1/-1; text-align: center; padding: 20px;">Showing all gallery images. Select a specific style to filter.</p>';
+            // Fallback: show all if no specific filter matches
+            renderBookingImages(allGalleryImages.slice(0, 8)); // Show a subset
+        } else {
+            bookingSelector.innerHTML = filteredImages.map(img => `
+                <label style="cursor: pointer; position: relative; border-radius: 12px; overflow: hidden; border: 2px solid transparent; transition: 0.3s; display: block; aspect-ratio: 1/1;">
+                    <input type="checkbox" name="booking-images" value="${img.image_url}" style="position: absolute; top: 8px; right: 8px; z-index: 10; width: 18px; height: 18px; accent-color: var(--secondary);">
+                    <img src="${img.image_url}" alt="${img.caption}" title="${img.caption}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                </label>
+            `).join('');
+            
+            bookingSelector.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    e.target.parentElement.style.borderColor = e.target.checked ? 'var(--secondary)' : 'transparent';
+                    e.target.parentElement.style.boxShadow = e.target.checked ? '0 0 15px rgba(197, 160, 89, 0.3)' : 'none';
+                });
+            });
+        }
+    };
+
     const loadGallery = () => {
         const gallery = document.getElementById('dynamic-gallery');
         const bookingSelector = document.getElementById('booking-gallery-selector');
@@ -56,6 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`/api/gallery?t=${Date.now()}`)
             .then(res => res.json())
             .then(images => {
+                allGalleryImages = images;
+
                 if (gallery) {
                     if (!images || images.length === 0) {
                         gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Gallery is empty.</p>';
@@ -72,23 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (bookingSelector) {
-                    if (!images || images.length === 0) {
-                        bookingSelector.innerHTML = '<p style="color: #888; font-size: 0.8rem;">No images available.</p>';
-                    } else {
-                        bookingSelector.innerHTML = images.map(img => `
-                            <label style="cursor: pointer; position: relative; border-radius: 8px; overflow: hidden; border: 2px solid transparent; transition: 0.3s;">
-                                <input type="checkbox" name="booking-images" value="${img.image_url}" style="position: absolute; top: 5px; right: 5px; z-index: 10; width: 16px; height: 16px;">
-                                <img src="${img.image_url}" alt="${img.caption}" style="width: 100%; height: 80px; object-fit: cover; display: block;">
-                            </label>
-                        `).join('');
-                        
-                        // Add some quick CSS for checked state
-                        bookingSelector.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                            cb.addEventListener('change', (e) => {
-                                e.target.parentElement.style.borderColor = e.target.checked ? 'var(--secondary)' : 'transparent';
-                            });
-                        });
-                    }
+                    renderBookingImages(allGalleryImages);
                 }
             })
             .catch(err => {
@@ -96,6 +109,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (gallery) gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #dc3545;">Failed to load gallery.</p>';
             });
     };
+
+    // Style filtering listener
+    const serviceDropdown = document.getElementById('service-type');
+    if (serviceDropdown) {
+        serviceDropdown.addEventListener('change', (e) => {
+            const style = e.target.value.toLowerCase();
+            const filtered = allGalleryImages.filter(img => 
+                (img.caption && img.caption.toLowerCase().includes(style)) || style === ""
+            );
+            renderBookingImages(filtered.length > 0 ? filtered : allGalleryImages);
+        });
+    }
 
     // 5. Booking Form
     if (bookingForm) {
