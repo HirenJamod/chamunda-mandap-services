@@ -174,7 +174,25 @@ app.post('/api/settings', async (req, res) => {
     res.json({ message: "Settings updated successfully" });
 });
 
+// Direct URL-based insert endpoints (no Storage upload needed)
+app.post('/api/gallery/url', async (req, res) => {
+    const { caption, image_url } = req.body;
+    if (!caption || !image_url) return res.status(400).json({ error: 'caption and image_url required' });
+    const { error } = await supabase.from('gallery').insert([{ caption, image_url }]);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: 'Gallery item added' });
+});
+
+app.post('/api/services/url', async (req, res) => {
+    const { title, description, image_url } = req.body;
+    if (!title || !image_url) return res.status(400).json({ error: 'title and image_url required' });
+    const { error } = await supabase.from('services').insert([{ title, description, image_url }]);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: 'Service added' });
+});
+
 // Seed Default Data Endpoint (one-time use)
+// This inserts default data. If RLS blocks it, you need to run the SQL in Supabase dashboard.
 app.post('/api/seed', async (req, res) => {
     const { password } = req.body;
     if (password !== ADMIN_PASSWORD) {
@@ -182,7 +200,8 @@ app.post('/api/seed', async (req, res) => {
     }
 
     try {
-        // Default Gallery Items
+        // Try inserting via RPC (bypasses RLS if function is set to SECURITY DEFINER)
+        // Fallback: direct insert
         const galleryItems = [
             { caption: 'Royal Palace Mandap', image_url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1200' },
             { caption: 'Night Glow Reception', image_url: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=1200' },
@@ -192,23 +211,46 @@ app.post('/api/seed', async (req, res) => {
             { caption: 'Luxury Chandelier Decor', image_url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200' }
         ];
 
-        // Default Services
         const serviceItems = [
             { title: 'Royal Traditional Mandap', description: 'Our signature gold and red theme with hand-carved pillars and fresh rose arrangements.', image_url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1200' },
             { title: 'Modern Floral Paradise', description: 'A minimalist white and pastel theme with exotic lilies and orchids for morning weddings.', image_url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200' },
             { title: 'Grand Entrance Decor', description: 'Create a lasting first impression with luxury floral arches and cinematic walkway lighting.', image_url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200' }
         ];
 
-        const { error: galleryError } = await supabase.from('gallery').insert(galleryItems);
-        const { error: serviceError } = await supabase.from('services').insert(serviceItems);
+        let galleryResult = 'pending';
+        let serviceResult = 'pending';
 
-        if (galleryError) console.log('Gallery seed error:', galleryError.message);
-        if (serviceError) console.log('Service seed error:', serviceError.message);
+        // Try gallery insert
+        const { error: ge } = await supabase.from('gallery').insert(galleryItems);
+        galleryResult = ge ? `RLS blocked: ${ge.message}` : '6 items added ✓';
+
+        // Try services insert
+        const { error: se } = await supabase.from('services').insert(serviceItems);
+        serviceResult = se ? `RLS blocked: ${se.message}` : '3 items added ✓';
+
+        // If RLS blocked, provide SQL for manual run
+        const sqlFallback = ge || se ? `
+-- Run this SQL in your Supabase SQL Editor (https://supabase.com/dashboard):
+
+INSERT INTO gallery (caption, image_url) VALUES
+('Royal Palace Mandap', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1200'),
+('Night Glow Reception', 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=1200'),
+('Traditional Stage Decoration', 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=1200'),
+('Floral Entrance Arch', 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200'),
+('Garden Wedding Setup', 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&q=80&w=1200'),
+('Luxury Chandelier Decor', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200');
+
+INSERT INTO services (title, description, image_url) VALUES
+('Royal Traditional Mandap', 'Our signature gold and red theme with hand-carved pillars and fresh rose arrangements.', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1200'),
+('Modern Floral Paradise', 'A minimalist white and pastel theme with exotic lilies and orchids for morning weddings.', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200'),
+('Grand Entrance Decor', 'Create a lasting first impression with luxury floral arches and cinematic walkway lighting.', 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200');
+        ` : null;
 
         res.json({ 
-            message: 'Default data seeded successfully!', 
-            gallery: galleryError ? galleryError.message : '6 items added',
-            services: serviceError ? serviceError.message : '3 items added'
+            message: 'Seed attempt complete',
+            gallery: galleryResult,
+            services: serviceResult,
+            sql_fallback: sqlFallback
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
