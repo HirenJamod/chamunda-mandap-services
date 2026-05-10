@@ -193,7 +193,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicBtn = document.getElementById('music-toggle');
 
     if (music && musicBtn) {
-        musicBtn.addEventListener('click', () => {
+        // Function to start music
+        const startMusic = () => {
+            music.play().then(() => {
+                musicBtn.classList.add('playing');
+                // Remove listeners once music starts
+                document.removeEventListener('click', startMusic);
+                document.removeEventListener('touchstart', startMusic);
+                document.removeEventListener('scroll', startMusic);
+            }).catch(e => {
+                console.log("Autoplay blocked, waiting for interaction...");
+            });
+        };
+
+        // Add listeners for various interactions
+        document.addEventListener('click', startMusic);
+        document.addEventListener('touchstart', startMusic);
+        document.addEventListener('scroll', startMusic);
+
+        musicBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent the global click listener from firing
             if (music.paused) {
                 music.play();
                 musicBtn.classList.add('playing');
