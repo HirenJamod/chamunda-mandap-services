@@ -6,26 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const follower = document.querySelector('.cursor-follower');
     const bookingForm = document.getElementById('booking-form');
 
-    // 1. Custom Cursor Logic with Safety Checks
-    if (cursor && follower) {
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-            follower.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-        });
-
-        document.querySelectorAll('a, button, .service-card').forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                follower.style.width = '60px';
-                follower.style.height = '60px';
-                follower.style.background = 'rgba(197, 160, 89, 0.1)';
-            });
-            link.addEventListener('mouseleave', () => {
-                follower.style.width = '30px';
-                follower.style.height = '30px';
-                follower.style.background = 'transparent';
-            });
-        });
-    }
+    // 1. Custom Cursor Removed (Using CSS now)
 
     // 2. Navbar Scroll Effect
     if (navbar) {

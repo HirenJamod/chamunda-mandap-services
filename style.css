@@ -46,27 +46,16 @@ h1, h2, h3, .serif {
     letter-spacing: -1px;
 }
 
-/* Custom Cursor */
-.cursor {
-    width: 10px;
-    height: 10px;
-    background: var(--secondary);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.1s ease;
+body {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><path d="M0,0 L0,20 L5,15 L9,24 L13,22 L9,13 L16,13 Z" fill="%23C5A059" stroke="%23ffffff" stroke-width="1.5" stroke-linejoin="round"/></svg>'), auto;
 }
 
-.cursor-follower {
-    width: 30px;
-    height: 30px;
-    border: 1px solid var(--secondary);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9998;
-    transition: transform 0.2s ease, width 0.3s, height 0.3s;
+/* Custom Cursor (Removed JS logic, keeping classes empty or deleting them) */
+.cursor { display: none; }
+.cursor-follower { display: none; }
+
+a, button, input[type="submit"], select, .service-card {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><path d="M10,0 L10,8 L13,8 L13,11 L16,11 L16,14 L19,14 L19,25 L5,25 L5,14 L10,14 Z" fill="%23C5A059" stroke="%23ffffff" stroke-width="1.5" stroke-linejoin="round"/></svg>'), pointer;
 }
 
 /* Floating Blobs Background */
