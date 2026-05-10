@@ -21,27 +21,23 @@
         </ul>
     </nav>
 
-    <div class="no-scroll-wrapper">
-        <section id="gallery" style="flex-grow: 1; padding: 0 5% 50px; display: flex; flex-direction: column;">
-            <div class="section-header" style="padding-bottom: 30px;">
-                <h1 class="serif" style="margin-bottom: 10px;">Inspiration Gallery</h1>
-                <p style="color: #666; max-width: 600px; margin: 0 auto;">A stationary cinematic view of our finest works and traditions.</p>
+    <section id="gallery">
+        <div class="glass-panel-premium" style="text-align: center; margin-bottom: 60px;">
+            <h1 class="editorial-title">Inspiration Gallery</h1>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Explore the cinematic details of our finest wedding artistry and traditions.</p>
+        </div>
+        
+        <div class="gallery-masonry" id="dynamic-gallery">
+            <div class="loader-container" style="grid-column: 1/-1;">
+                <span class="loader"></span>
             </div>
-            
-            <div class="scrollable-content">
-                <div class="gallery-masonry" id="dynamic-gallery">
-                    <div class="loader-container" style="grid-column: 1/-1;">
-                        <span class="loader"></span>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <footer id="contact" style="background: var(--primary); padding: 20px 10%; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
-            <h2 class="serif" style="color: var(--secondary); font-size: 1.5rem; margin-bottom: 0;">CHAMUNDA</h2>
-            <p style="font-size: 0.7rem; opacity: 0.6; margin-bottom: 0;">&copy; 2026 Chamunda Mandap Services.</p>
-        </footer>
-    </div>
+    <footer id="global-footer" style="background: var(--primary); padding: 40px 10%; border-top: 1px solid var(--glass-border); text-align: center;">
+        <h2 class="serif" style="color: var(--secondary); font-size: 1.5rem; margin-bottom: 10px;">CHAMUNDA</h2>
+        <p style="font-size: 0.7rem; opacity: 0.5;">&copy; 2026 Chamunda Mandap Services.</p>
+    </footer>
 
     <!-- Background Music -->
     <audio id="bg-music" loop autoplay>

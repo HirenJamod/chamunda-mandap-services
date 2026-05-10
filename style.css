@@ -16,6 +16,46 @@
     --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* --- Navigation Safe Zones --- */
+nav {
+    height: 80px;
+    z-index: 1000 !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(5, 5, 5, 0.8);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+/* Intelligent Section Framing */
+section {
+    min-height: 100vh;
+    padding-top: 120px; /* Safe space for fixed navbar */
+    padding-bottom: 60px;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.glass-panel-premium {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 4rem);
+    /* Rest of the styles remain same */
+}
+
+/* Responsive Editorial Titles - Fixed Clashes */
+.editorial-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 6vw, 4.5rem); /* Scaled down for better fit */
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: -1px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -503,29 +543,34 @@ section {
 
 .gallery-item img {
     width: 100%;
-    height: auto;
     display: block;
-    object-fit: cover;
     transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .gallery-item:hover img {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .gallery-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 50%);
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
     display: flex;
     align-items: flex-end;
-    padding: 20px;
+    padding: 30px;
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: 0.4s;
 }
 
 .gallery-item:hover .gallery-overlay {
     opacity: 1;
+}
+
+@media (max-width: 992px) {
+    .gallery-masonry { column-count: 2; }
+}
+@media (max-width: 600px) {
+    .gallery-masonry { column-count: 1; }
 }
 
 .gallery-overlay span {
