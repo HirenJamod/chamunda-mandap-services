@@ -329,5 +329,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.5 });
 
     sections.forEach(section => scrollObserver.observe(section));
+
+    // 13. INITIALIZE DATA LOADING
+    loadServices();
+    loadGallery();
 });
 
