@@ -13,28 +13,6 @@
             align-items: center;
             justify-content: center;
             background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-            cursor: none !important; /* Hide standard cursor */
-        }
-
-        .cursor {
-            width: 8px;
-            height: 8px;
-            background: var(--secondary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-        }
-
-        .cursor-follower {
-            width: 25px;
-            height: 25px;
-            border: 2px solid var(--secondary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease;
         }
 
         .login-card {
@@ -101,10 +79,6 @@
     </style>
 </head>
 <body>
-    <!-- Custom Cursor -->
-    <div class="cursor"></div>
-    <div class="cursor-follower"></div>
-
     <div class="login-card">
         <h2 class="serif">Admin Portal</h2>
         <form id="login-form">
