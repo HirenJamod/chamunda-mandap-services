@@ -94,10 +94,18 @@ app.get('/api/gallery', async (req, res) => {
 app.post('/api/gallery', upload.single('image'), async (req, res) => {
     try {
         const { caption } = req.body;
-        const imageUrl = await uploadToSupabase(req.file);
+        
+        let imageUrl;
+        try {
+            imageUrl = await uploadToSupabase(req.file);
+        } catch (storageErr) {
+            return res.status(500).json({ error: 'Storage Error: ' + storageErr.message });
+        }
         
         const { error } = await supabase.from('gallery').insert([{ image_url: imageUrl, caption }]);
-        if (error) throw error;
+        if (error) {
+            return res.status(500).json({ error: 'Database Error: ' + error.message });
+        }
         
         res.json({ message: "Image uploaded and added to gallery" });
     } catch (err) {
