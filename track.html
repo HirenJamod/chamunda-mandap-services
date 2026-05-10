@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Booking | Chamunda Mandap Services</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        .track-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 4rem;
+            border-radius: 40px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 50px 150px rgba(0,0,0,0.6);
+        }
+        .form-group {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        input {
+            width: 100%;
+            padding: 18px !important;
+            background: rgba(0,0,0,0.3) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            border-radius: 15px !important;
+            color: white !important;
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        input:focus {
+            border-color: var(--secondary) !important;
+            outline: none;
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.1);
+        }
+        .btn-track {
+            width: 100%;
+            margin-top: 30px;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="track-card">
+        <span style="color: var(--secondary); letter-spacing: 4px; font-size: 0.7rem; text-transform: uppercase;">Customer Portal</span>
+        <h1 class="serif" style="font-size: 2.2rem; color: #fff; margin-top: 15px;">Track Your Journey</h1>
+        <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Enter the phone number used during your inquiry.</p>
+
+        <form id="customer-track-form">
+            <div class="form-group">
+                <label>Registered Phone Number</label>
+                <input type="tel" id="client-phone" placeholder="+91 XXXX XXX XXX" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-track">ACCESS BOOKINGS</button>
+        </form>
+
+        <div style="margin-top: 3rem;">
+            <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.75rem; letter-spacing: 1px;">← Return to Main Website</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('customer-track-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const phone = document.getElementById('client-phone').value;
+            const submitBtn = e.target.querySelector('.btn-track');
+            
+            submitBtn.innerText = 'LOCATING JOURNEY...';
+            submitBtn.disabled = true;
+            
+            // Store phone for intelligent portal filtering
+            localStorage.setItem('clientPhone', phone);
+            localStorage.removeItem('adminToken'); // Ensure no admin conflict
+            
+            setTimeout(() => {
+                window.location.href = 'client.html';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
