@@ -47,7 +47,7 @@ h1, h2, h3, .serif {
 }
 
 body {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><path d="M0,0 L0,20 L5,15 L9,24 L13,22 L9,13 L16,13 Z" fill="%23C5A059" stroke="%23ffffff" stroke-width="1.5" stroke-linejoin="round"/></svg>'), auto;
+    cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij48cGF0aCBkPSJNMAswIEwwLDIwIEw1LDE1IEw5LDI0IEwxMywyMiBMOSwxMyBMMTYsMTMgWiIgZmlsbD0iI0M1QTA1OSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=='), auto !important;
 }
 
 /* Custom Cursor (Removed JS logic, keeping classes empty or deleting them) */
@@ -55,7 +55,7 @@ body {
 .cursor-follower { display: none; }
 
 a, button, input[type="submit"], select, .service-card {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><path d="M10,0 L10,8 L13,8 L13,11 L16,11 L16,14 L19,14 L19,25 L5,25 L5,14 L10,14 Z" fill="%23C5A059" stroke="%23ffffff" stroke-width="1.5" stroke-linejoin="round"/></svg>'), pointer;
+    cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij4KPHBhdGggZD0iTTEwLDAgTDEwLDggTDEzLDggTDEzLDExIEwxNiwxMSBMMTYsMTQgTDE5LDE0IEwxOSwyNSBMNSwyNSBMNSwxNCBMMTAsMTQgWiIgZmlsbD0iI0M1QTA1OSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4='), pointer !important;
 }
 
 /* Floating Blobs Background */
