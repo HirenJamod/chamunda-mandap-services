@@ -4,14 +4,14 @@
 */
 
 :root {
-    --primary: #0A0A0A;      /* Deep Midnight */
+    --primary: #050505;      /* Deeper Midnight */
     --secondary: #C5A059;    /* Champagne Gold */
     --accent: #1A1A1A;       /* Subtle Dark */
     --text-gold: #D4AF37;
     --text-light: #FFFFFF;
     --text-muted: rgba(255, 255, 255, 0.6);
     --glass: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.1);
     --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -24,7 +24,8 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
+    overflow-x: hidden;
+    width: 100vw;
 }
 
 body {
@@ -32,13 +33,18 @@ body {
     background-color: var(--primary);
     color: var(--text-light);
     overflow-x: hidden;
+    width: 100%;
     line-height: 1.6;
 }
+
+h1 { font-size: clamp(2.5rem, 10vw, 5rem); }
+h2 { font-size: clamp(2rem, 6vw, 3.5rem); }
+h3 { font-size: clamp(1.5rem, 4vw, 2.2rem); }
 
 h1, h2, h3, .serif {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 600;
-    letter-spacing: -0.5px;
+    line-height: 1.1;
 }
 
 body {
@@ -1119,7 +1125,109 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 50px rgba(197, 160, 89, 0.4);
 }
 
-@media (max-width: 992px) {
-    .form-grid-2 { grid-template-columns: 1fr; gap: 40px; }
-    .booking-glass-card { padding: 30px; }
+/* Advanced Auto-Sizing & Responsiveness */
+@media (max-width: 1024px) {
+    .dashboard-wrapper {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 1.5rem;
+        border-right: none;
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+    .admin-main, .admin-main-content {
+        margin-left: 0 !important;
+        padding: 2rem 1rem !important;
+    }
+
+    .admin-nav {
+        display: flex;
+        overflow-x: auto;
+        gap: 10px;
+        padding-bottom: 10px;
+    }
+
+    .admin-nav li {
+        flex-shrink: 0;
+        margin-bottom: 0;
+    }
+
+    .admin-nav a {
+        padding: 10px 15px;
+        white-space: nowrap;
+    }
+
+    .admin-sidebar .logo {
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .services-grid, .client-services-grid {
+        grid-template-columns: 1fr;
+        padding: 0 15px;
+    }
+
+    .form-grid-2, .form-grid-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-glass-card {
+        padding: 30px 20px;
+        border-radius: 20px;
+    }
+
+    .inspiration-grid-v2 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .admin-sidebar .logo { font-size: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+    .inspiration-grid-v2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .btn-submit-luxury {
+        width: 100%;
+        padding: 15px 20px;
+        letter-spacing: 2px;
+    }
+}
+
+/* Ensure no element causes horizontal scroll */
+img, video, iframe, table {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Dashboard Layout Defaults */
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-main {
+    margin-left: 280px;
+    padding: 60px;
+    flex-grow: 1;
+    width: calc(100% - 280px);
+}
+
+.admin-table-container {
+    width: 100%;
+    overflow-x: auto;
 }
