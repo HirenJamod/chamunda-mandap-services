@@ -188,6 +188,22 @@ document.addEventListener('DOMContentLoaded', () => {
     loadGallery();
     loadSiteSettings();
 
+    // 10. Background Music Logic
+    const music = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-toggle');
+
+    if (music && musicBtn) {
+        musicBtn.addEventListener('click', () => {
+            if (music.paused) {
+                music.play();
+                musicBtn.classList.add('playing');
+            } else {
+                music.pause();
+                musicBtn.classList.remove('playing');
+            }
+        });
+    }
+
     // Disable past dates
     const dateInput = document.getElementById('event-date');
     if (dateInput) {
