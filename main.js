@@ -128,30 +128,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. Booking Form
-    if (bookingForm) {
-        bookingForm.addEventListener('submit', (e) => {
+    // 5. Booking Form (Premium)
+    const bookingFormPremium = document.getElementById('booking-form-premium');
+    if (bookingFormPremium) {
+        bookingFormPremium.addEventListener('submit', (e) => {
             e.preventDefault();
-            const submitBtn = bookingForm.querySelector('button');
+            const submitBtn = bookingFormPremium.querySelector('button');
             const originalText = submitBtn.innerText;
-            submitBtn.innerText = 'Sending...';
+            submitBtn.innerText = 'PROCESSING...';
             submitBtn.disabled = true;
 
             const selectedImages = Array.from(document.querySelectorAll('input[name="booking-images"]:checked')).map(cb => cb.value);
-            let finalMessage = document.getElementById('message').value;
-            if (selectedImages.length > 0) {
-                finalMessage += '|||IMAGES|||' + JSON.stringify(selectedImages);
-            }
+            const servicesRequired = Array.from(document.querySelectorAll('.service-check:checked')).map(cb => cb.value);
 
             const formData = {
                 id: 'BK-' + Date.now(),
-                name: document.getElementById('full-name').value,
-                phone: document.getElementById('phone').value,
-                date: document.getElementById('event-date').value,
-                style: document.getElementById('service-type').value,
-                message: finalMessage,
-                status: 'Pending',
-                timestamp: new Date().toLocaleString()
+                couple_names: document.getElementById('couple-names').value,
+                event_date: document.getElementById('booking-date').value,
+                guest_count: document.getElementById('guest-count').value,
+                venue: document.getElementById('wedding-venue').value,
+                ceremony_details: document.getElementById('ceremony-details').value,
+                services_required: servicesRequired,
+                message: document.getElementById('special-requests').value,
+                selected_images: selectedImages,
+                status: 'Planning',
+                timestamp: new Date().toISOString()
             };
 
             fetch('/api/bookings', {
@@ -159,14 +160,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             })
-            .then(() => {
-                bookingForm.innerHTML = `<div class="serif" style="font-size: 2rem; text-align: center; color: #C5A059; padding: 40px 0;">Inquiry Sent. <br><small style="font-size: 1rem; color: #888;">We will contact you soon.</small></div>`;
+            .then(res => res.json())
+            .then(data => {
+                alert('Thank you! Your wedding inquiry has been sent to our artistry team.');
+                bookingFormPremium.reset();
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
             })
             .catch(err => {
                 console.error('Booking error:', err);
+                alert('Failed to send inquiry. Please try again.');
                 submitBtn.innerText = originalText;
                 submitBtn.disabled = false;
-                alert('Failed to send inquiry. Please try again.');
             });
         });
     }

@@ -164,6 +164,54 @@ app.patch('/api/services/:id', async (req, res) => {
     res.json({ message: "Service updated" });
 });
 
+// Bookings Endpoints
+app.get('/api/bookings', async (req, res) => {
+    const { data, error } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
+    if (error) return res.status(400).json({ error: error.message });
+    res.json(data);
+});
+
+app.post('/api/bookings', async (req, res) => {
+    try {
+        const bookingData = req.body;
+        // Map frontend fields to DB fields if necessary
+        const entry = {
+            id: bookingData.id || `BK-${Date.now()}`,
+            name: bookingData.name || bookingData.couple_names,
+            phone: bookingData.phone,
+            date: bookingData.date || bookingData.event_date,
+            style: bookingData.style,
+            message: bookingData.message,
+            venue: bookingData.venue,
+            guest_count: bookingData.guest_count,
+            services_required: bookingData.services_required,
+            status: bookingData.status || 'Pending',
+            total_revenue: bookingData.total_revenue || 0
+        };
+
+        const { data, error } = await supabase.from('bookings').insert([entry]);
+        if (error) throw error;
+        res.json({ message: "Booking submitted successfully", data });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.patch('/api/bookings/:id', async (req, res) => {
+    const { id } = req.params;
+    const updateData = req.body;
+    const { error } = await supabase.from('bookings').update(updateData).eq('id', id);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: "Booking updated" });
+});
+
+app.delete('/api/bookings/:id', async (req, res) => {
+    const { id } = req.params;
+    const { error } = await supabase.from('bookings').delete().eq('id', id);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: "Booking deleted" });
+});
+
 // Settings Endpoints
 app.get('/api/settings', async (req, res) => {
     // Try to get from Supabase, fallback to memory
