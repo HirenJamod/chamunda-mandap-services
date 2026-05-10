@@ -226,7 +226,9 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="admin-main">
+        <main class="admin-main" style="position: relative;">
+            <div class="toast-container" id="toast-container"></div>
+            
             <header class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <h1 class="serif" id="admin-page-title">Booking Management</h1>
@@ -342,6 +344,32 @@
                 </form>
                 <div id="settings-msg" style="margin-top: 20px; text-align: center; color: var(--secondary); display: none;">Settings updated successfully!</div>
             </div>
+
+            <!-- Global Edit Modal -->
+            <div class="modal-overlay" id="edit-modal">
+                <div class="modal-content">
+                    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+                    <div class="modal-header">
+                        <h3 id="modal-title">Edit Item</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;" id="modal-desc">Update the details below.</p>
+                    </div>
+                    <form id="modal-form">
+                        <div class="floating-group">
+                            <input type="text" id="modal-input-1" class="floating-input" placeholder=" " required>
+                            <label class="floating-label" id="modal-label-1">Field 1</label>
+                        </div>
+                        <div class="floating-group" id="modal-group-2" style="display: none;">
+                            <input type="text" id="modal-input-2" class="floating-input" placeholder=" ">
+                            <label class="floating-label" id="modal-label-2">Field 2</label>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.9rem;">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </main>
     </div>
 
@@ -518,33 +546,100 @@
 
         function deleteService(id) {
             if (confirm('Delete service?')) {
-                fetch(`/api/services/${id}`, { method: 'DELETE' }).then(() => loadServices());
+                fetch(`/api/services/${id}`, { method: 'DELETE' }).then(() => {
+                    loadServices();
+                    showToast('Service deleted successfully');
+                });
             }
+        }
+
+        // Modal Logic
+        let currentEditId = null;
+        let currentEditType = null;
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        function closeModal() {
+            document.getElementById('edit-modal').classList.remove('active');
         }
 
         function editImage(id, oldCaption) {
-            const newCaption = prompt('Enter new caption:', oldCaption);
-            if (newCaption !== null) {
-                fetch(`/api/gallery/${id}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ caption: newCaption })
-                }).then(() => loadGallery());
-            }
+            currentEditId = id;
+            currentEditType = 'gallery';
+            
+            document.getElementById('modal-title').innerText = 'Edit Gallery Caption';
+            document.getElementById('modal-desc').innerText = 'Update the caption for this image.';
+            document.getElementById('modal-label-1').innerText = 'Caption';
+            document.getElementById('modal-input-1').value = oldCaption;
+            document.getElementById('modal-group-2').style.display = 'none';
+            document.getElementById('modal-input-2').removeAttribute('required');
+            
+            document.getElementById('edit-modal').classList.add('active');
         }
 
         function editService(id, oldTitle, oldDesc) {
-            const newTitle = prompt('Enter new title:', oldTitle);
-            if (newTitle === null) return;
-            const newDesc = prompt('Enter new description:', oldDesc);
-            if (newDesc === null) return;
-
-            fetch(`/api/services/${id}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: newTitle, description: newDesc })
-            }).then(() => loadServices());
+            currentEditId = id;
+            currentEditType = 'service';
+            
+            document.getElementById('modal-title').innerText = 'Edit Service';
+            document.getElementById('modal-desc').innerText = 'Update the service title and description.';
+            document.getElementById('modal-label-1').innerText = 'Service Title';
+            document.getElementById('modal-input-1').value = oldTitle;
+            
+            document.getElementById('modal-label-2').innerText = 'Description';
+            document.getElementById('modal-input-2').value = oldDesc;
+            document.getElementById('modal-group-2').style.display = 'block';
+            document.getElementById('modal-input-2').setAttribute('required', 'true');
+            
+            document.getElementById('edit-modal').classList.add('active');
         }
+
+        document.getElementById('modal-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.innerText = 'Saving...';
+            btn.disabled = true;
+
+            if (currentEditType === 'gallery') {
+                const newCaption = document.getElementById('modal-input-1').value;
+                fetch(`/api/gallery/${currentEditId}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ caption: newCaption })
+                }).then(() => {
+                    loadGallery();
+                    closeModal();
+                    showToast('Caption updated successfully');
+                    btn.innerText = 'Save Changes';
+                    btn.disabled = false;
+                });
+            } else if (currentEditType === 'service') {
+                const newTitle = document.getElementById('modal-input-1').value;
+                const newDesc = document.getElementById('modal-input-2').value;
+                fetch(`/api/services/${currentEditId}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: newTitle, description: newDesc })
+                }).then(() => {
+                    loadServices();
+                    closeModal();
+                    showToast('Service updated successfully');
+                    btn.innerText = 'Save Changes';
+                    btn.disabled = false;
+                });
+            }
+        });
 
         function exportToCSV() {
             fetch('/api/bookings')
@@ -618,8 +713,7 @@
                 body: JSON.stringify(settings)
             }).then(() => {
                 btn.innerText = 'Save All Settings';
-                msg.style.display = 'block';
-                setTimeout(() => msg.style.display = 'none', 3000);
+                showToast('Settings saved successfully!');
             });
         });
     </script>

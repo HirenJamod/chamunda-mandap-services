@@ -12,11 +12,12 @@
 
     <div class="dashboard-container">
         <!-- Sidebar -->
-        <div class="sidebar" style="background: #2c3e50;">
-            <div class="sidebar-logo serif" style="color: #ecf0f1;">Client Portal</div>
-            <ul class="sidebar-menu">
-                <li class="active"><a href="#"><i class="fas fa-clipboard-list"></i> My Bookings</a></li>
+        <div class="admin-sidebar">
+            <a href="index.html" class="logo serif">Client<span>Portal</span></a>
+            <ul class="admin-nav">
+                <li><a href="#" class="active"><i class="fas fa-clipboard-list"></i> My Bookings</a></li>
                 <li><a href="index.html#booking"><i class="fas fa-plus"></i> New Inquiry</a></li>
+                <li style="margin-top: 30px; padding-left: 12px; color: #555; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Quick Links</li>
                 <li><a href="index.html" target="_blank"><i class="fas fa-home"></i> Home Page</a></li>
                 <li><a href="services.html" target="_blank"><i class="fas fa-concierge-bell"></i> Our Services</a></li>
                 <li><a href="portfolio.html" target="_blank"><i class="fas fa-images"></i> Inspiration Gallery</a></li>
@@ -24,17 +25,19 @@
         </div>
 
         <!-- Main Content -->
-        <div class="main-content">
-            <div class="dashboard-header">
-                <h2 class="serif">My Wedding Inquiries</h2>
-                <div class="user-info">
-                    <span>Welcome Guest</span>
-                    <i class="fas fa-user-circle"></i>
+        <main class="admin-main">
+            <header class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 class="serif">My Wedding Inquiries</h1>
+                    <p style="color: var(--text-muted);">Track the status of your mandap and decoration bookings below.</p>
                 </div>
-            </div>
+                <div style="display: flex; align-items: center; gap: 10px; background: var(--glass); padding: 10px 20px; border-radius: 20px; border: 1px solid var(--glass-border);">
+                    <i class="fas fa-user-circle" style="font-size: 1.5rem; color: var(--secondary);"></i>
+                    <span>Welcome, Guest</span>
+                </div>
+            </header>
 
-            <div class="data-table-container">
-                <p style="margin-bottom: 20px; color: #666;">Track the status of your mandap and decoration bookings below.</p>
+            <div class="admin-table-container">
                 <div id="loader" class="loader-container">
                     <span class="loader"></span>
                 </div>
@@ -52,9 +55,11 @@
                         <!-- Bookings will be loaded here -->
                     </tbody>
                 </table>
-                <div id="no-bookings" style="display: none; text-align: center; padding: 40px;">
-                    <i class="fas fa-calendar-times" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
-                    <p>You haven't made any inquiries yet. <a href="index.html#booking">Click here to book.</a></p>
+                <div id="no-bookings" style="display: none; text-align: center; padding: 60px 20px;">
+                    <i class="fas fa-calendar-times" style="font-size: 4rem; color: rgba(255,255,255,0.1); margin-bottom: 20px;"></i>
+                    <h3 class="serif" style="font-size: 1.5rem; margin-bottom: 10px;">No Inquiries Yet</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">You haven't made any inquiries yet. Ready to start planning?</p>
+                    <a href="index.html#booking" class="btn btn-primary" style="text-decoration: none; display: inline-block;">Start Your Booking</a>
                 </div>
             </div>
         </div>
