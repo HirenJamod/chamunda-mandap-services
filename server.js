@@ -102,6 +102,14 @@ app.delete('/api/gallery/:id', async (req, res) => {
     res.json({ message: "Image removed" });
 });
 
+app.patch('/api/gallery/:id', async (req, res) => {
+    const { id } = req.params;
+    const { caption } = req.body;
+    const { error } = await supabase.from('gallery').update({ caption }).eq('id', id);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: "Gallery item updated" });
+});
+
 // Services Endpoints
 app.get('/api/services', async (req, res) => {
     const { data, error } = await supabase.from('services').select('*').order('created_at', { ascending: true });
@@ -128,6 +136,14 @@ app.delete('/api/services/:id', async (req, res) => {
     const { error } = await supabase.from('services').delete().eq('id', id);
     if (error) return res.status(400).json({ error: error.message });
     res.json({ message: "Service removed" });
+});
+
+app.patch('/api/services/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, description } = req.body;
+    const { error } = await supabase.from('services').update({ title, description }).eq('id', id);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: "Service updated" });
 });
 
 app.listen(PORT, () => {

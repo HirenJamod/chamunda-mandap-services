@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chamunda Mandap Services | Premium Wedding Decorations</title>
-    <meta name="description" content="Luxurious wedding mandap and decoration services. Book your special date with Chamunda Mandap Services for a royal wedding experience.">
+    <meta name="description" content="Exquisite mandap and wedding decorations in Surat. Experience luxury and tradition with Chamunda Mandap Services. Book your date today for a royal wedding experience.">
+    <meta name="keywords" content="Mandap decoration, wedding decor Surat, luxury wedding, floral mandap, royal wedding India, Chamunda Mandap Services">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chamunda-mandap-services.onrender.com/">
+    <meta property="og:title" content="Chamunda Mandap Services | Premium Wedding Decorations">
+    <meta property="og:description" content="Exquisite mandap and wedding decorations in Surat. Luxury meets tradition.">
+    <meta property="og:image" content="hero_mandap_decoration_1778151874213.png">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,11 +76,11 @@
     <nav id="navbar">
         <a href="#" class="logo serif">CHAMUNDA<span>.</span></a>
         <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#gallery">Portfolio</a></li>
-            <li><a href="#booking">Book Now</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="booking.html">Book Now</a></li>
+            <li><a href="contact.html">Contact</a></li>
         </ul>
         <div class="mobile-menu-btn">
             <i class="fas fa-bars"></i>
@@ -116,48 +124,7 @@
         </div>
     </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Fetch Services
-            fetch('/api/services')
-                .then(res => res.json())
-                .then(services => {
-                    const servicesGrid = document.getElementById('dynamic-services');
-                    if (services.length === 0) {
-                        servicesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Our services will be updated shortly...</p>';
-                    } else {
-                        servicesGrid.innerHTML = services.map(s => `
-                            <div class="service-card">
-                                <img src="${s.image_url}" alt="${s.title}" class="service-img">
-                                <div class="service-info">
-                                    <h3 class="serif">${s.title}</h3>
-                                    <p>${s.description}</p>
-                                </div>
-                            </div>
-                        `).join('');
-                    }
-                });
 
-            // Fetch Gallery
-            fetch('/api/gallery')
-                .then(res => res.json())
-                .then(images => {
-                    const gallery = document.getElementById('dynamic-gallery');
-                    if (images.length === 0) {
-                        gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Gallery coming soon...</p>';
-                    } else {
-                        gallery.innerHTML = images.map(img => `
-                            <div class="gallery-item">
-                                <img src="${img.image_url}" alt="${img.caption}">
-                                <div class="gallery-overlay">
-                                    <span>${img.caption}</span>
-                                </div>
-                            </div>
-                        `).join('');
-                    }
-                });
-        });
-    </script>
 
     <!-- Booking Section -->
     <section id="booking" style="background-color: #fcf8f3;">

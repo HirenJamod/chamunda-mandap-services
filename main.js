@@ -6,42 +6,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const follower = document.querySelector('.cursor-follower');
     const bookingForm = document.getElementById('booking-form');
 
-    // 1. Custom Cursor Logic
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-        follower.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-    });
+    // 1. Custom Cursor Logic with Safety Checks
+    if (cursor && follower) {
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+            follower.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        });
 
-    document.querySelectorAll('a, button, .service-card').forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            follower.style.width = '60px';
-            follower.style.height = '60px';
-            follower.style.background = 'rgba(197, 160, 89, 0.1)';
+        document.querySelectorAll('a, button, .service-card').forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                follower.style.width = '60px';
+                follower.style.height = '60px';
+                follower.style.background = 'rgba(197, 160, 89, 0.1)';
+            });
+            link.addEventListener('mouseleave', () => {
+                follower.style.width = '30px';
+                follower.style.height = '30px';
+                follower.style.background = 'transparent';
+            });
         });
-        link.addEventListener('mouseleave', () => {
-            follower.style.width = '30px';
-            follower.style.height = '30px';
-            follower.style.background = 'transparent';
-        });
-    });
+    }
 
     // 2. Navbar Scroll Effect
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    }
 
-    // 3. Dynamic Services Fetching
+    // 3. Dynamic Services Fetching with Cache Busting
     const loadServices = () => {
-        fetch('/api/services')
+        const servicesGrid = document.getElementById('dynamic-services');
+        if (!servicesGrid) return;
+        
+        fetch(`/api/services?t=${Date.now()}`)
             .then(res => res.json())
             .then(services => {
-                const servicesGrid = document.getElementById('dynamic-services');
-                if (services.length === 0) {
-                    servicesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Services loading...</p>';
+                if (!services || services.length === 0) {
+                    servicesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">No services added yet.</p>';
                 } else {
                     servicesGrid.innerHTML = services.map((s, index) => `
                         <div class="service-card" style="animation-delay: ${index * 0.2}s">
@@ -53,23 +59,37 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     `).join('');
                 }
+            })
+            .catch(err => {
+                console.error('Error loading services:', err);
+                servicesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #dc3545;">Failed to load services.</p>';
             });
     };
 
-    // 4. Dynamic Gallery Fetching
+    // 4. Dynamic Gallery Fetching with Cache Busting
     const loadGallery = () => {
-        fetch('/api/gallery')
+        const gallery = document.getElementById('dynamic-gallery');
+        if (!gallery) return;
+
+        fetch(`/api/gallery?t=${Date.now()}`)
             .then(res => res.json())
             .then(images => {
-                const gallery = document.getElementById('dynamic-gallery');
-                gallery.innerHTML = images.map(img => `
-                    <div class="gallery-item">
-                        <img src="${img.image_url}" alt="${img.caption}">
-                        <div class="gallery-overlay">
-                            <span>${img.caption}</span>
+                if (!images || images.length === 0) {
+                    gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #888;">Gallery is empty.</p>';
+                } else {
+                    gallery.innerHTML = images.map(img => `
+                        <div class="gallery-item">
+                            <img src="${img.image_url}" alt="${img.caption}">
+                            <div class="gallery-overlay">
+                                <span>${img.caption}</span>
+                            </div>
                         </div>
-                    </div>
-                `).join('');
+                    `).join('');
+                }
+            })
+            .catch(err => {
+                console.error('Error loading gallery:', err);
+                gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #dc3545;">Failed to load gallery.</p>';
             });
     };
 
@@ -78,7 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
         bookingForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const submitBtn = bookingForm.querySelector('button');
+            const originalText = submitBtn.innerText;
             submitBtn.innerText = 'Sending...';
+            submitBtn.disabled = true;
 
             const formData = {
                 id: 'BK-' + Date.now(),
@@ -97,7 +119,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(formData)
             })
             .then(() => {
-                bookingForm.innerHTML = `<div class="serif" style="font-size: 2rem; text-align: center; color: #C5A059;">Inquiry Sent. We will contact you soon.</div>`;
+                bookingForm.innerHTML = `<div class="serif" style="font-size: 2rem; text-align: center; color: #C5A059; padding: 40px 0;">Inquiry Sent. <br><small style="font-size: 1rem; color: #888;">We will contact you soon.</small></div>`;
+            })
+            .catch(err => {
+                console.error('Booking error:', err);
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+                alert('Failed to send inquiry. Please try again.');
             });
         });
     }
@@ -123,3 +151,4 @@ document.addEventListener('DOMContentLoaded', () => {
         dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
     }
 });
+

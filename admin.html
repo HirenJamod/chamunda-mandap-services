@@ -211,22 +211,35 @@
         <aside class="admin-sidebar">
             <a href="index.html" class="logo serif">CMS<span>Admin</span></a>
             <ul class="admin-nav">
-                <li><a href="#" class="active"><i class="fas fa-calendar-check"></i> Bookings</a></li>
-                <li><a href="#gallery-section"><i class="fas fa-image"></i> Gallery</a></li>
-                <li><a href="#services-section"><i class="fas fa-concierge-bell"></i> Services</a></li>
+                <li><a href="#" class="active" onclick="switchSection(event, 'bookings-section')"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+                <li><a href="#gallery-section" onclick="switchSection(event, 'gallery-section')"><i class="fas fa-image"></i> Gallery Manager</a></li>
+                <li><a href="#services-section" onclick="switchSection(event, 'services-section')"><i class="fas fa-concierge-bell"></i> Services Manager</a></li>
+                
+                <li style="margin-top: 30px; padding-left: 12px; color: #555; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Client View</li>
+                <li><a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> Home Page</a></li>
+                <li><a href="services.html" target="_blank"><i class="fas fa-external-link-alt"></i> Our Services</a></li>
+                <li><a href="portfolio.html" target="_blank"><i class="fas fa-external-link-alt"></i> Portfolio</a></li>
+                
                 <li style="margin-top: 40px;"><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </aside>
 
         <!-- Main Content -->
         <main class="admin-main">
-            <header class="admin-header">
-                <h1 class="serif">Booking Management</h1>
-                <p style="color: var(--text-muted);">Welcome back, Admin</p>
+            <header class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 class="serif" id="admin-page-title">Booking Management</h1>
+                    <p style="color: var(--text-muted);">Welcome back, Admin</p>
+                </div>
+                <button onclick="exportToCSV()" class="btn" style="background: rgba(197, 160, 89, 0.1); color: var(--secondary); border: 1px solid var(--secondary); padding: 10px 20px; font-size: 0.8rem; border-radius: 8px;">
+                    <i class="fas fa-file-export"></i> Export CSV
+                </button>
             </header>
 
-            <!-- Stats -->
-            <div class="stats-grid">
+            <!-- Bookings Section Wrapper -->
+            <div id="bookings-section" class="admin-tab-content">
+                <!-- Stats -->
+                <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Total Inquiries</h3>
                     <div class="value" id="total-bookings">0</div>
@@ -260,9 +273,10 @@
                     <tbody id="bookings-list"></tbody>
                 </table>
             </div>
+            </div> <!-- End Bookings Section -->
 
             <!-- Gallery Manager -->
-            <div id="gallery-section" class="admin-table-container">
+            <div id="gallery-section" class="admin-table-container admin-tab-content" style="display: none;">
                 <h2 class="serif" style="margin-bottom: 20px;">Gallery Manager</h2>
                 <form id="gallery-form" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 30px;">
                     <div style="display: flex; flex-direction: column; gap: 5px;">
@@ -279,7 +293,7 @@
             </div>
 
             <!-- Service Manager -->
-            <div id="services-section" class="admin-table-container">
+            <div id="services-section" class="admin-table-container admin-tab-content" style="display: none;">
                 <h2 class="serif" style="margin-bottom: 20px;">Service Manager</h2>
                 <form id="service-form" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; margin-bottom: 30px;">
                     <div style="display: flex; flex-direction: column; gap: 5px;">
@@ -310,6 +324,39 @@
         function logout() {
             localStorage.removeItem('adminToken');
             window.location.href = 'login.html';
+        }
+
+        function switchSection(event, sectionId) {
+            if (event) event.preventDefault();
+            
+            // Hide all sections
+            document.querySelectorAll('.admin-tab-content').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show target section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = sectionId === 'bookings-section' ? 'block' : 'block'; // Fallback for table containers
+                if (sectionId === 'bookings-section') {
+                    // Stats grid needs display grid
+                    targetSection.style.display = 'block';
+                }
+            }
+
+            // Update title
+            const titleMap = {
+                'bookings-section': 'Booking Management',
+                'gallery-section': 'Gallery Management',
+                'services-section': 'Service Management'
+            };
+            document.getElementById('admin-page-title').innerText = titleMap[sectionId] || 'Admin Dashboard';
+
+            // Update active link
+            document.querySelectorAll('.admin-nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+            if (event) event.currentTarget.classList.add('active');
         }
 
         function loadBookings() {
@@ -352,14 +399,17 @@
         }
 
         function loadGallery() {
-            fetch('/api/gallery')
+            fetch(`/api/gallery?t=${Date.now()}`)
                 .then(res => res.json())
                 .then(images => {
                     const list = document.getElementById('gallery-list');
                     list.innerHTML = images.map(img => `
-                        <div style="position: relative;">
+                        <div style="position: relative; group">
                             <img src="${img.image_url}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 8px;">
-                            <button onclick="deleteImage(${img.id})" style="position: absolute; top: -5px; right: -5px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;"><i class="fas fa-trash-can" style="font-size: 10px;"></i></button>
+                            <div style="position: absolute; top: 5px; right: 5px; display: flex; gap: 5px;">
+                                <button onclick="editImage(${img.id}, '${img.caption}')" style="background: var(--secondary); color: var(--primary); border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;"><i class="fas fa-edit" style="font-size: 10px;"></i></button>
+                                <button onclick="deleteImage(${img.id})" style="background: #dc3545; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;"><i class="fas fa-trash-can" style="font-size: 10px;"></i></button>
+                            </div>
                         </div>
                     `).join('');
                 });
@@ -393,18 +443,21 @@
         }
 
         function loadServices() {
-            fetch('/api/services')
+            fetch(`/api/services?t=${Date.now()}`)
                 .then(res => res.json())
                 .then(services => {
                     const list = document.getElementById('services-admin-list');
                     list.innerHTML = services.map(s => `
                         <div style="display: flex; align-items: center; gap: 20px; padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                             <img src="${s.image_url}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
-                            <div style="flex-grow: 1;">
+                             <div style="flex-grow: 1;">
                                 <strong style="color: var(--secondary);">${s.title}</strong>
                                 <p style="font-size: 0.8rem; color: var(--text-muted);">${s.description}</p>
                             </div>
-                            <button onclick="deleteService(${s.id})" class="action-btn" style="color: #dc3545;"><i class="fas fa-trash"></i></button>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="editService(${s.id}, '${s.title}', '${s.description}')" class="action-btn" style="color: var(--secondary);"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteService(${s.id})" class="action-btn" style="color: #dc3545;"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                     `).join('');
                 });
@@ -436,6 +489,53 @@
             if (confirm('Delete service?')) {
                 fetch(`/api/services/${id}`, { method: 'DELETE' }).then(() => loadServices());
             }
+        }
+
+        function editImage(id, oldCaption) {
+            const newCaption = prompt('Enter new caption:', oldCaption);
+            if (newCaption !== null) {
+                fetch(`/api/gallery/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ caption: newCaption })
+                }).then(() => loadGallery());
+            }
+        }
+
+        function editService(id, oldTitle, oldDesc) {
+            const newTitle = prompt('Enter new title:', oldTitle);
+            if (newTitle === null) return;
+            const newDesc = prompt('Enter new description:', oldDesc);
+            if (newDesc === null) return;
+
+            fetch(`/api/services/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: newTitle, description: newDesc })
+            }).then(() => loadServices());
+        }
+
+        function exportToCSV() {
+            fetch('/api/bookings')
+                .then(res => res.json())
+                .then(bookings => {
+                    const headers = ['ID', 'Name', 'Phone', 'Date', 'Style', 'Status', 'Timestamp'];
+                    const rows = bookings.map(b => [
+                        b.id, b.name, b.phone, b.date, b.style, b.status, b.timestamp
+                    ]);
+                    
+                    let csvContent = "data:text/csv;charset=utf-8," 
+                        + headers.join(",") + "\n"
+                        + rows.map(e => e.join(",")).join("\n");
+
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", `bookings_export_${new Date().toLocaleDateString()}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
         }
 
         // Custom Cursor Logic

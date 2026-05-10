@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Event | Chamunda Mandap Services</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <nav id="navbar" class="scrolled">
+        <a href="index.html" class="logo serif">CHAMUNDA<span>.</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="booking.html" class="active">Book Now</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="booking" style="padding-top: 150px; background-color: #fcf8f3; min-height: 100vh;">
+        <div class="section-header">
+            <h1 class="serif" style="color: var(--primary); font-size: 4rem; margin-bottom: 20px;">Reserve Your Date</h1>
+            <p style="color: #666; max-width: 600px; margin: 0 auto; margin-bottom: 50px;">Fill out the form below and our team will get back to you within 24 hours to discuss your dream wedding.</p>
+        </div>
+        <div class="booking-container" style="max-width: 800px; margin: 0 auto;">
+            <form id="booking-form">
+                <div class="form-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" required placeholder="Enter your name">
+                </div>
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" required placeholder="Your contact number">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-date">Wedding Date</label>
+                        <input type="date" id="event-date" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="service-type">Preferred Style</label>
+                    <select id="service-type">
+                        <option value="traditional">Royal Traditional</option>
+                        <option value="modern">Modern Minimalist</option>
+                        <option value="floral">Floral Paradise</option>
+                        <option value="custom">Custom Theme</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Special Requirements</label>
+                    <textarea id="message" rows="4" placeholder="Tell us about your dream wedding..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Check Availability</button>
+            </form>
+        </div>
+    </section>
+
+    <footer id="contact" style="background: var(--primary); color: white; padding: 60px 10% 20px; text-align: center;">
+        <h2 class="serif" style="color: var(--secondary); margin-bottom: 30px;">CHAMUNDA</h2>
+        <p style="font-size: 0.8rem; opacity: 0.6;">&copy; 2026 Chamunda Mandap Services. All Rights Reserved.</p>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

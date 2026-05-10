@@ -23,12 +23,21 @@
     cursor: none; /* For custom cursor */
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: var(--primary);
     color: var(--text-light);
     overflow-x: hidden;
     line-height: 1.7;
+}
+
+::selection {
+    background: var(--secondary);
+    color: var(--primary);
 }
 
 h1, h2, h3, .serif {
