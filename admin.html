@@ -512,11 +512,21 @@
             fetch('/api/gallery', {
                 method: 'POST',
                 body: formData
-            }).then(() => {
+            }).then(async (res) => {
+                if (!res.ok) {
+                    const errData = await res.json();
+                    throw new Error(errData.error || 'Upload failed');
+                }
                 document.getElementById('gallery-form').reset();
                 submitBtn.innerText = 'Upload Photo';
                 submitBtn.disabled = false;
+                showToast('Photo uploaded successfully!');
                 loadGallery();
+            }).catch(err => {
+                submitBtn.innerText = 'Upload Photo';
+                submitBtn.disabled = false;
+                showToast(`Error: ${err.message}`);
+                console.error(err);
             });
         });
 
@@ -561,11 +571,21 @@
             fetch('/api/services', {
                 method: 'POST',
                 body: formData
-            }).then(() => {
+            }).then(async (res) => {
+                if (!res.ok) {
+                    const errData = await res.json();
+                    throw new Error(errData.error || 'Upload failed');
+                }
                 document.getElementById('service-form').reset();
                 submitBtn.innerText = 'Add Service';
                 submitBtn.disabled = false;
+                showToast('Service added successfully!');
                 loadServices();
+            }).catch(err => {
+                submitBtn.innerText = 'Add Service';
+                submitBtn.disabled = false;
+                showToast(`Error: ${err.message}`);
+                console.error(err);
             });
         });
 
