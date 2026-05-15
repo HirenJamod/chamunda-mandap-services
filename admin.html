@@ -461,6 +461,10 @@
             fetch('/api/bookings')
                 .then(res => res.json())
                 .then(bookings => {
+                    if (!Array.isArray(bookings)) {
+                        console.error('Expected array of bookings, got:', bookings);
+                        throw new Error(bookings.error || 'Invalid data received');
+                    }
                     const list = document.getElementById('bookings-list');
                     const table = document.getElementById('bookings-table');
                     const loader = document.getElementById('loader');
