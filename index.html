@@ -17,7 +17,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -86,12 +86,52 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <!-- Parallax background will be handled by CSS/JS -->
-        <img src="hero_mandap_decoration_1778151874213.png" class="hero-video" alt="Luxury Mandap">
+        <!-- Background image handled by CSS .hero -->
         <div class="hero-content">
             <p data-reveal id="hero-sub">Established 1995</p>
             <h1 class="serif" data-reveal id="hero-title">Exceptional <br>Wedding <br>Artistry</h1>
             <a href="booking.html" class="btn btn-primary" data-reveal>Inquire Now</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="glass-panel-premium" data-reveal>
+            <span style="color: var(--secondary); letter-spacing: 5px; font-size: 0.8rem; margin-bottom: 20px;">CURATING UNFORGETTABLE MOMENTS</span>
+            <h2 class="serif editorial-title">Our Artistry</h2>
+            <div class="services-grid-elysian" id="dynamic-services">
+                <div class="loader-container" style="grid-column: 1/-1; height: 300px; display: flex; align-items: center; justify-content: center;">
+                    <span class="loader"></span>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="services.html" class="btn-outline-gold">View All Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery">
+        <div class="glass-panel-premium" data-reveal>
+            <h2 class="serif editorial-title">The Masterpieces</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 50px;">A glimpse into our world of cinematic traditions.</p>
+            <div class="gallery-masonry-luxury" id="dynamic-gallery">
+                <div class="loader-container" style="grid-column: 1/-1; height: 300px; display: flex; align-items: center; justify-content: center;">
+                    <span class="loader"></span>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="portfolio.html" class="btn-outline-gold">Enter Full Gallery</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section Preview -->
+    <section id="booking">
+        <div class="glass-panel-premium" data-reveal style="text-align: center; background: radial-gradient(circle at center, rgba(197, 160, 89, 0.05) 0%, transparent 70%);">
+            <h2 class="serif editorial-title">Begin Your Journey</h2>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 40px;">Let us transform your vision into a royal reality. Reserve your date today.</p>
+            <a href="booking.html" class="btn btn-primary" style="padding: 20px 60px;">Start Planning Now</a>
         </div>
     </section>
 

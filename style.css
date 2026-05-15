@@ -47,9 +47,9 @@ section {
 
 /* Responsive Editorial Titles - Fixed Clashes */
 .editorial-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
     font-size: clamp(2rem, 6vw, 4.5rem); /* Scaled down for better fit */
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.1;
     margin-bottom: 20px;
     text-align: center;
@@ -69,7 +69,7 @@ html {
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Lora', serif;
     background-color: var(--primary);
     color: var(--text-light);
     overflow-x: hidden;
@@ -82,8 +82,8 @@ h2 { font-size: clamp(2rem, 6vw, 3.5rem); }
 h3 { font-size: clamp(1.5rem, 4vw, 2.2rem); }
 
 h1, h2, h3, .serif {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 600;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
     line-height: 1.1;
 }
 
@@ -304,7 +304,7 @@ section {
 }
 
 .client-logo-luxury {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
     font-size: 2rem;
     color: #fff;
     margin-bottom: 50px;
@@ -385,18 +385,15 @@ section {
     justify-content: center;
     text-align: center;
     padding: 0;
+    background: linear-gradient(to bottom, rgba(5, 5, 5, 0.4) 0%, rgba(5, 5, 5, 0.8) 100%), 
+                url('hero_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .hero-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-    opacity: 0.4;
-    transform: scale(1.1); /* Zoom effect */
+    display: none; /* Using CSS background instead */
 }
 
 .hero-content {
@@ -1018,7 +1015,7 @@ section {
 }
 
 .service-card h3 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
     font-size: 2.2rem;
     color: #fff;
     text-transform: uppercase;
@@ -1091,7 +1088,7 @@ input, select, textarea {
     border-radius: 16px !important;
     padding: 18px 24px !important;
     color: white !important;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Lora', serif;
     font-size: 1rem;
     transition: all 0.3s ease;
 }
@@ -1195,7 +1192,7 @@ input:focus, select:focus, textarea:focus {
     border-radius: 8px;
     padding: 15px 20px;
     color: #fff;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Lora', serif;
     transition: all 0.3s ease;
 }
 
@@ -1293,7 +1290,7 @@ input:focus, select:focus, textarea:focus {
 .font-tag {
     font-size: 0.7rem;
     color: #555;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
 }
 
 .inspiration-grid-v2 {
@@ -1463,7 +1460,7 @@ html {
 body {
     background-color: var(--primary);
     color: var(--text-light);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Lora', serif;
     overflow-x: hidden;
     line-height: 1.6;
 }
@@ -1478,6 +1475,9 @@ section {
     justify-content: center;
     padding: 100px 8%;
     position: relative;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(197, 160, 89, 0.02) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(197, 160, 89, 0.02) 0%, transparent 40%);
 }
 
 /* Floating Glass Container - The Artistry Layer */
@@ -1506,7 +1506,7 @@ section {
 
 /* Sophisticated Headings */
 .editorial-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
     font-size: clamp(3rem, 10vw, 6rem);
     font-weight: 300;
     line-height: 0.9;

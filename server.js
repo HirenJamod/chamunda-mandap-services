@@ -30,7 +30,75 @@ const upload = multer({ storage: multer.memoryStorage() });
 // Supabase Setup
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+let supabase;
+let isUsingMock = false;
+
+if (supabaseUrl && supabaseKey && supabaseUrl !== 'your_supabase_project_url') {
+    try {
+        supabase = createClient(supabaseUrl, supabaseKey);
+        console.log('✅ Supabase client initialized');
+    } catch (err) {
+        console.error('❌ Failed to initialize Supabase:', err.message);
+        isUsingMock = true;
+    }
+} else {
+    console.warn('⚠️ SUPABASE_URL or SUPABASE_KEY missing. Using local memory mock.');
+    isUsingMock = true;
+}
+
+// Mock Database for local development
+let mockDb = {
+    gallery: [],
+    services: [],
+    bookings: [],
+    settings: siteSettings
+};
+
+// Mock Supabase Client if needed
+if (isUsingMock) {
+    supabase = {
+        from: (table) => ({
+            select: () => ({
+                order: () => ({
+                    single: () => Promise.resolve({ data: mockDb[table] instanceof Array ? mockDb[table][0] : mockDb[table], error: null }),
+                    then: (fn) => fn({ data: mockDb[table], error: null })
+                }),
+                single: () => Promise.resolve({ data: mockDb[table] instanceof Array ? mockDb[table][0] : mockDb[table], error: null }),
+                eq: (key, val) => ({
+                    then: (fn) => fn({ data: mockDb[table] instanceof Array ? mockDb[table].filter(i => i[key] == val) : mockDb[table], error: null })
+                })
+            }),
+            insert: (data) => {
+                if (mockDb[table]) mockDb[table].push(...data);
+                return Promise.resolve({ data, error: null });
+            },
+            update: (data) => ({
+                eq: (key, val) => {
+                    const item = mockDb[table].find(i => i[key] == val);
+                    if (item) Object.assign(item, data);
+                    return Promise.resolve({ error: null });
+                }
+            }),
+            delete: () => ({
+                eq: (key, val) => {
+                    mockDb[table] = mockDb[table].filter(i => i[key] != val);
+                    return Promise.resolve({ error: null });
+                }
+            }),
+            upsert: (data) => {
+                mockDb[table] = data[0];
+                return Promise.resolve({ error: null });
+            }
+        }),
+        storage: {
+            from: () => ({
+                upload: () => Promise.resolve({ data: { path: 'mock-path' }, error: null }),
+                getPublicUrl: (path) => ({ data: { publicUrl: 'https://via.placeholder.com/800x600?text=Mock+Image' } })
+            })
+        }
+    };
+}
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin_chamunda";
 
@@ -155,19 +223,26 @@ app.get('/api/bookings', async (req, res) => {
 app.post('/api/bookings', async (req, res) => {
     try {
         const bookingData = req.body;
-        // Map frontend fields to DB fields if necessary
+        
+        // Format images for admin display if present
+        let finalMessage = bookingData.message || '';
+        if (bookingData.selected_images && bookingData.selected_images.length > 0) {
+            finalMessage += `\n\n|||IMAGES|||${JSON.stringify(bookingData.selected_images)}`;
+        }
+
         const entry = {
             id: bookingData.id || `BK-${Date.now()}`,
             name: bookingData.name || bookingData.couple_names,
             phone: bookingData.phone,
             date: bookingData.date || bookingData.event_date,
-            style: bookingData.style,
-            message: bookingData.message,
+            style: bookingData.style || bookingData.services_required?.join(', ') || 'Custom',
+            message: finalMessage,
             venue: bookingData.venue,
             guest_count: bookingData.guest_count,
-            services_required: bookingData.services_required,
+            services_required: bookingData.services_required || [],
             status: bookingData.status || 'Pending',
-            total_revenue: bookingData.total_revenue || 0
+            total_revenue: bookingData.total_revenue || 0,
+            ceremony_details: bookingData.ceremony_details || ''
         };
 
         const { data, error } = await supabase.from('bookings').insert([entry]);

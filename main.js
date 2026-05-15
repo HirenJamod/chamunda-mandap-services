@@ -302,6 +302,31 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // 15. Scroll Spying for Navigation Dots
+    const sections = document.querySelectorAll('section[id]');
+    const navDots = document.querySelectorAll('.section-nav .dot');
+
+    const scrollSpy = () => {
+        let currentSectionId = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (window.scrollY >= (sectionTop - 200)) {
+                currentSectionId = section.getAttribute('id');
+            }
+        });
+
+        navDots.forEach(dot => {
+            dot.classList.remove('active');
+            if (dot.getAttribute('href') === `#${currentSectionId}`) {
+                dot.classList.add('active');
+            }
+        });
+    };
+
+    window.addEventListener('scroll', scrollSpy);
+    scrollSpy(); // Run once on load
 });
 
 // 11. Global Helper for Service Selection
