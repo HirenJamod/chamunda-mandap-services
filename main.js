@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <i class="fas fa-camera-retro" style="font-size: 3rem; color: var(--secondary); opacity: 0.5; margin-bottom: 20px;"></i>
                                 <h3 class="serif" style="font-size: 1.5rem; margin-bottom: 10px;">Our Gallery is Growing</h3>
                                 <p style="color: var(--text-muted); margin-bottom: 30px;">Check back soon to see our latest wedding artistry, or start planning your own dream celebration today.</p>
-                                <a href="booking.html" class="btn-outline-gold" style="padding: 10px 25px;">Start Planning</a>
+                                <a href="client-auth.html" class="btn-outline-gold" style="padding: 10px 25px;">Start Planning</a>
                             </div>
                         `;
                     } else {

@@ -141,6 +141,28 @@
             <!-- Items loaded dynamically -->
         </div>
 
+        <div id="event-details-section" style="display: none; margin-top: 50px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 40px; border-radius: 20px;">
+            <h2 class="serif" style="color: var(--secondary); margin-bottom: 20px;">Event Details</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <label style="color: #888; font-size: 0.8rem; display: block; margin-bottom: 5px;">Event Date</label>
+                    <input type="date" id="event-date" style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: none; color: white; border-radius: 8px;">
+                </div>
+                <div>
+                    <label style="color: #888; font-size: 0.8rem; display: block; margin-bottom: 5px;">Expected Guests</label>
+                    <input type="number" id="event-guests" placeholder="Approx." style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: none; color: white; border-radius: 8px;">
+                </div>
+                <div style="grid-column: 1 / -1;">
+                    <label style="color: #888; font-size: 0.8rem; display: block; margin-bottom: 5px;">Venue Location</label>
+                    <input type="text" id="event-venue" placeholder="e.g. Surat International Convention Center" style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: none; color: white; border-radius: 8px;">
+                </div>
+                <div style="grid-column: 1 / -1;">
+                    <label style="color: #888; font-size: 0.8rem; display: block; margin-bottom: 5px;">Special Requests / Vision</label>
+                    <textarea id="event-notes" rows="4" placeholder="Tell us your story..." style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: none; color: white; border-radius: 8px; font-family: 'Lora', serif;"></textarea>
+                </div>
+            </div>
+        </div>
+
         <div id="empty-msg" class="empty-state" style="display: none;">
             <i class="fas fa-magic" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.2;"></i>
             <h3>Your portfolio is empty.</h3>
@@ -191,6 +213,9 @@
             emptyMsg.style.display = 'none';
             if (!clientBooking || clientBooking.status === 'Pending') {
                 finalizeBtn.style.display = 'block';
+                document.getElementById('event-details-section').style.display = 'block';
+            } else {
+                document.getElementById('event-details-section').style.display = 'none';
             }
             
             grid.innerHTML = portfolio.map(item => `
@@ -211,6 +236,13 @@
         }
 
         async function finalizeBooking() {
+            const date = document.getElementById('event-date').value;
+            const venue = document.getElementById('event-venue').value;
+            if (!date || !venue) {
+                alert("Please provide the Event Date and Venue Location before finalizing.");
+                return;
+            }
+
             const res = await fetch(`/api/client/portfolio/${clientInfo.id}`);
             const portfolio = await res.json();
             
@@ -218,8 +250,11 @@
                 client_id: clientInfo.id,
                 name: clientInfo.name,
                 phone: clientInfo.phone,
+                date: date,
+                venue: venue,
+                guest_count: document.getElementById('event-guests').value,
                 style: portfolio.map(p => p.details.title).join(', '),
-                message: `PORTFOLIO BOOKING\nItems: ${portfolio.length}\nClient ID: ${clientInfo.id}`,
+                message: `PORTFOLIO BOOKING\nItems: ${portfolio.length}\nClient ID: ${clientInfo.id}\nSpecial Requests: ${document.getElementById('event-notes').value}`,
                 status: 'Selection Finalized'
             };
 
@@ -233,6 +268,7 @@
                 alert('Your portfolio has been sent to the Admin! We will review it and update you shortly.');
                 document.getElementById('booking-status').style.display = 'block';
                 document.getElementById('finalize-btn').style.display = 'none';
+                document.getElementById('event-details-section').style.display = 'none';
             }
         }
 
