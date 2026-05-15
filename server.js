@@ -165,6 +165,16 @@ app.post('/api/client/reset-password', async (req, res) => {
     res.json({ success: true, message: 'Password updated' });
 });
 
+// Admin endpoint to view registered clients
+app.get('/api/clients', (req, res) => {
+    // Return all clients but omit their passwords
+    const safeClients = mockDb.client_profiles.map(c => {
+        const { password, ...safeData } = c;
+        return safeData;
+    });
+    res.json(safeClients);
+});
+
 // === Client Portfolio Management ===
 app.get('/api/client/portfolio/:clientId', (req, res) => {
     const { clientId } = req.params;

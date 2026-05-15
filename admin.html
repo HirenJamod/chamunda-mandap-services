@@ -223,6 +223,7 @@
                 <li><a href="#" class="active" onclick="switchSection(event, 'bookings-section')"><i class="fas fa-calendar-check"></i> Bookings</a></li>
                 <li><a href="#gallery-section" onclick="switchSection(event, 'gallery-section')"><i class="fas fa-image"></i> Gallery Manager</a></li>
                 <li><a href="#services-section" onclick="switchSection(event, 'services-section')"><i class="fas fa-concierge-bell"></i> Services Manager</a></li>
+                <li><a href="#clients-section" onclick="switchSection(event, 'clients-section')"><i class="fas fa-users"></i> Registered Clients</a></li>
                 <li><a href="#settings-section" onclick="switchSection(event, 'settings-section')"><i class="fas fa-cog"></i> Site Settings</a></li>
                 
                 <li style="margin-top: 30px; padding-left: 12px; color: #555; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Client View</li>
@@ -325,6 +326,25 @@
                 <div id="services-admin-list"></div>
             </div>
 
+            <!-- Clients Manager -->
+            <div id="clients-section" class="admin-table-container admin-tab-content" style="display: none;">
+                <h2 class="serif" style="margin-bottom: 20px;">Registered Clients</h2>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead style="background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--glass-border);">
+                            <tr>
+                                <th style="padding: 15px; font-weight: 600; color: var(--secondary);">Name</th>
+                                <th style="padding: 15px; font-weight: 600; color: var(--secondary);">Email</th>
+                                <th style="padding: 15px; font-weight: 600; color: var(--secondary);">Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clients-list">
+                            <!-- Loaded via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Site Settings Manager -->
             <div id="settings-section" class="admin-table-container admin-tab-content" style="display: none;">
                 <h2 class="serif" style="margin-bottom: 20px;">Site Configuration</h2>
@@ -424,6 +444,7 @@
                 'bookings-section': 'Booking Management',
                 'gallery-section': 'Gallery Management',
                 'services-section': 'Service Management',
+                'clients-section': 'Registered Clients',
                 'settings-section': 'Site Configuration'
             };
             document.getElementById('admin-page-title').innerText = titleMap[sectionId] || 'Admin Dashboard';
@@ -483,8 +504,29 @@
 
                     loader.style.display = 'none';
                     table.style.display = 'table';
+                }).catch(error => {
+                    showToast('Failed to load bookings');
                 });
         }
+            
+            // Fetch and load registered clients
+            async function loadClients() {
+                try {
+                    const res = await fetch('/api/clients');
+                    if (!res.ok) throw new Error();
+                    const clients = await res.json();
+                    
+                    document.getElementById('clients-list').innerHTML = clients.map(c => `
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 15px; font-weight: bold;">${c.name}</td>
+                            <td style="padding: 15px; color: #aaa;">${c.email}</td>
+                            <td style="padding: 15px; color: #aaa;">${c.phone}</td>
+                        </tr>
+                    `).join('');
+                } catch (error) {
+                    showToast('Failed to load clients');
+                }
+            }
 
         function updateStatus(id, newStatus) {
             fetch(`/api/bookings/${id}`, {
@@ -565,6 +607,21 @@
                                 <button onclick="deleteService(${s.id})" class="action-btn" style="color: #dc3545;"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
+                    `).join('');
+                });
+        }
+        
+        function loadClients() {
+            fetch('/api/clients')
+                .then(res => res.json())
+                .then(clients => {
+                    const list = document.getElementById('clients-list');
+                    list.innerHTML = clients.map(c => `
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 15px; font-weight: bold; color: #fff;">${c.name}</td>
+                            <td style="padding: 15px; color: #aaa;">${c.email}</td>
+                            <td style="padding: 15px; color: #aaa;">${c.phone}</td>
+                        </tr>
                     `).join('');
                 });
         }
@@ -735,6 +792,7 @@
             loadBookings();
             loadGallery();
             loadServices();
+            loadClients();
             loadSettings();
         });
 
