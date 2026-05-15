@@ -520,6 +520,7 @@
                                 <strong style="color:#dc3545;">🔧 Admin Troubleshooting Guide:</strong>
                                 <ul style="color:#aaa; font-size:0.85rem; margin-top:10px; padding-left:20px; line-height:1.6;">
                                     <li><strong>Table Missing:</strong> Ensure the <code>bookings</code> table exists in your Supabase dashboard.</li>
+                                    <li><strong>Required Columns:</strong> Ensure columns like <code>id</code>, <code>name</code>, <code>phone</code>, <code>status</code> exist.</li>
                                     <li><strong>RLS Policy:</strong> Verify that 'Row Level Security' (RLS) is disabled or has a 'Select' policy for 'Anon' users.</li>
                                     <li><strong>Env Vars:</strong> Check if <code>SUPABASE_URL</code> and <code>SUPABASE_KEY</code> are correctly set in Render.</li>
                                 </ul>

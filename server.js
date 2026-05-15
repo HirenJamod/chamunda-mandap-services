@@ -276,7 +276,8 @@ app.patch('/api/services/:id', async (req, res) => {
 // === Bookings Endpoints (Single Definition) ===
 app.get('/api/bookings', async (req, res) => {
     try {
-        const { data, error } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
+        // We use 'id' for ordering because it follows BK-timestamp format and is more reliable than 'created_at'
+        const { data, error } = await supabase.from('bookings').select('*').order('id', { ascending: false });
         if (error) throw error;
         res.json(data || []);
     } catch (err) {
