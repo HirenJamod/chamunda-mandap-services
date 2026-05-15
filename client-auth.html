@@ -171,6 +171,11 @@
     </div>
 
     <script>
+        // Check for existing session
+        if (localStorage.getItem('clientToken')) {
+            window.location.href = 'client-dashboard.html';
+        }
+
         function showForm(type) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById('login-form').style.display = 'none';

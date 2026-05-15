@@ -335,6 +335,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', scrollSpy);
     scrollSpy(); // Run once on load
+    // 16. Smart Navigation - Redirect Client Portal to Dashboard if logged in
+    const updateAuthLinks = () => {
+        const token = localStorage.getItem('clientToken');
+        if (token) {
+            document.querySelectorAll('a[href="client-auth.html"]').forEach(link => {
+                link.href = 'client-dashboard.html';
+                // Check if it's the "Book Now" link or "Client Portal"
+                if (link.textContent.toLowerCase().includes('book now')) {
+                    link.innerHTML = '<i class="fas fa-heart"></i> My Portfolio';
+                }
+            });
+        }
+    };
+    updateAuthLinks();
 });
 
 // 11. Global Helper for Service Selection
