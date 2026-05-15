@@ -509,29 +509,29 @@
 
                     loader.style.display = 'none';
                     table.style.display = 'table';
-                }).catch(error => {
-                    showToast('Failed to load bookings');
+                }).catch(err => {
+                    console.error('Fetch Error:', err);
+                    document.getElementById('loader').innerHTML = `
+                        <div style="text-align:center; padding:40px;">
+                            <i class="fas fa-exclamation-triangle" style="font-size:3rem; color:#dc3545; margin-bottom:20px;"></i>
+                            <h3 style="color:#fff;">Database Connection Error</h3>
+                            <p style="color:#888; margin-bottom:20px;">${err.message}</p>
+                            <div style="background:rgba(220,53,69,0.1); border:1px solid rgba(220,53,69,0.2); padding:25px; border-radius:15px; text-align:left; max-width:600px; margin:20px auto;">
+                                <strong style="color:#dc3545;">🔧 Admin Troubleshooting Guide:</strong>
+                                <ul style="color:#aaa; font-size:0.85rem; margin-top:10px; padding-left:20px; line-height:1.6;">
+                                    <li><strong>Table Missing:</strong> Ensure the <code>bookings</code> table exists in your Supabase dashboard.</li>
+                                    <li><strong>RLS Policy:</strong> Verify that 'Row Level Security' (RLS) is disabled or has a 'Select' policy for 'Anon' users.</li>
+                                    <li><strong>Env Vars:</strong> Check if <code>SUPABASE_URL</code> and <code>SUPABASE_KEY</code> are correctly set in Render.</li>
+                                </ul>
+                                <p style="margin-top:15px; font-size:0.8rem; color:#666;">Tip: Run the SQL setup script from your documentation to auto-create all tables.</p>
+                            </div>
+                        </div>
+                    `;
+                    showToast('Critical Error: ' + err.message);
                 });
         }
             
-            // Fetch and load registered clients
-            async function loadClients() {
-                try {
-                    const res = await fetch('/api/clients');
-                    if (!res.ok) throw new Error();
-                    const clients = await res.json();
-                    
-                    document.getElementById('clients-list').innerHTML = clients.map(c => `
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td style="padding: 15px; font-weight: bold;">${c.name}</td>
-                            <td style="padding: 15px; color: #aaa;">${c.email}</td>
-                            <td style="padding: 15px; color: #aaa;">${c.phone}</td>
-                        </tr>
-                    `).join('');
-                } catch (error) {
-                    showToast('Failed to load clients');
-                }
-            }
+
 
         function updateStatus(id, newStatus) {
             fetch(`/api/bookings/${id}`, {
