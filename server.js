@@ -172,10 +172,28 @@ app.get('/api/clients', (req, res) => {
 });
 
 // === Client Portfolio Management ===
-app.get('/api/client/portfolio/:clientId', (req, res) => {
+app.get('/api/client/portfolio/:clientId', async (req, res) => {
     const { clientId } = req.params;
     const portfolio = mockDb.client_portfolios.filter(p => p.client_id === clientId);
-    res.json(portfolio);
+    
+    // Enrich with images and mock prices
+    const enriched = portfolio.map(item => {
+        let sourceItem;
+        if (item.item_type === 'service') {
+            sourceItem = mockDb.services.find(s => s.id == item.item_id);
+        } else {
+            sourceItem = mockDb.gallery.find(g => g.id == item.item_id);
+        }
+        
+        return {
+            ...item,
+            image_url: sourceItem ? sourceItem.image_url : 'https://via.placeholder.com/400x300?text=Premium+Service',
+            price: sourceItem ? (sourceItem.title ? 18500 : 9200) : 5000, // Mock prices
+            description: sourceItem ? (sourceItem.description || sourceItem.caption) : ''
+        };
+    });
+    
+    res.json(enriched);
 });
 
 app.post('/api/client/portfolio', (req, res) => {

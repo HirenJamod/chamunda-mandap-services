@@ -15,7 +15,7 @@
             --text-gold: #D4AF37;
             --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body {
@@ -29,13 +29,13 @@
         .dashboard-container {
             display: flex;
             min-height: 100vh;
-            background: radial-gradient(circle at 0% 0%, #0a0a0a 0%, #050505 100%);
+            background: radial-gradient(circle at 20% 20%, #111 0%, #050505 100%);
         }
 
         /* Sidebar Luxury Styling */
         .sidebar {
             width: 260px;
-            background: #080808;
+            background: rgba(8, 8, 8, 0.95);
             border-right: 1px solid var(--glass-border);
             padding: 40px 0;
             display: flex;
@@ -43,11 +43,11 @@
             position: fixed;
             height: 100vh;
             z-index: 1000;
+            backdrop-filter: blur(20px);
         }
 
         .sidebar-brand {
             padding: 0 30px 40px 30px;
-            text-align: left;
         }
 
         .sidebar-brand h2 {
@@ -69,204 +69,273 @@
             padding: 15px 30px;
             color: rgba(255,255,255,0.4);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             display: flex;
             align-items: center;
             gap: 15px;
-            transition: all 0.4s var(--transition);
-            border-left: 3px solid transparent;
-        }
-
-        .sidebar-link i {
-            font-size: 1.1rem;
-            width: 20px;
-        }
-
-        .sidebar-link:hover {
-            color: var(--secondary);
-            background: rgba(197, 160, 89, 0.03);
+            transition: var(--transition);
+            position: relative;
         }
 
         .sidebar-link.active {
             color: var(--secondary);
-            background: rgba(197, 160, 89, 0.08);
-            border-left-color: var(--secondary);
-            font-weight: 600;
+            background: rgba(197, 160, 89, 0.05);
+        }
+
+        .sidebar-link.active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 20%;
+            height: 60%;
+            width: 3px;
+            background: var(--secondary);
+            box-shadow: 0 0 15px var(--secondary);
         }
 
         .main-content {
             margin-left: 260px;
-            padding: 60px 6%;
+            padding: 60px 5%;
             width: calc(100% - 260px);
-            min-height: 100vh;
         }
 
-        /* Header & Titles */
-        .dashboard-header {
-            margin-bottom: 60px;
+        .dashboard-layout-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 50px;
+            margin-top: 40px;
+        }
+
+        /* Summary Card (Left) */
+        .summary-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 0;
+            overflow: hidden;
+            position: sticky;
+            top: 60px;
+            height: fit-content;
+            backdrop-filter: blur(20px);
+        }
+
+        .summary-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
             border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 30px;
+        }
+
+        .summary-content {
+            padding: 30px;
+        }
+
+        .summary-content h4 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 10px;
+        }
+
+        .summary-content .date {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .progress-container {
+            margin-top: 30px;
+        }
+
+        .progress-label {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
+            font-size: 0.75rem;
+            margin-bottom: 10px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary), #D4AF37);
+            width: 65%;
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.4);
+        }
+
+        /* Portfolio Items (Right) */
+        .portfolio-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .premium-item-card {
+            display: flex;
+            gap: 25px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            transition: var(--transition);
+            align-items: center;
+        }
+
+        .premium-item-card:hover {
+            border-color: var(--secondary);
+            background: rgba(255,255,255,0.05);
+            transform: translateX(10px);
+        }
+
+        .item-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 1px solid var(--glass-border);
+        }
+
+        .item-info {
+            flex-grow: 1;
+        }
+
+        .item-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            margin: 0 0 5px 0;
+            color: #fff;
+        }
+
+        .item-info p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.4);
+            margin: 0 0 15px 0;
+            line-height: 1.4;
+        }
+
+        .item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-tag {
+            color: var(--secondary);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .selected-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--secondary);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            background: rgba(197, 160, 89, 0.1);
+            padding: 5px 12px;
+            border-radius: 5px;
+            border: 1px solid rgba(197, 160, 89, 0.2);
+        }
+
+        .total-row {
+            margin-top: 40px;
+            padding: 30px;
+            border-top: 1px dashed var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary);
+        }
+
+        /* Action Buttons */
+        .action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 280px;
+        }
+
+        .btn-luxury {
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            border: none;
+        }
+
+        .btn-outline-gold {
+            background: transparent;
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn-fill-gold {
+            background: linear-gradient(135deg, var(--secondary), #D4AF37);
+            color: #000;
+            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.3);
+        }
+
+        .btn-luxury:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.2);
         }
 
         .dashboard-header h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 3rem !important;
-            margin: 0 0 10px 0 !important;
-            background: linear-gradient(to right, #fff, var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: left !important;
+            font-size: 2.5rem;
+            margin: 0;
+            color: #fff;
         }
 
-        /* Portfolio Cards */
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
+        .remove-icon {
+            color: rgba(220, 53, 69, 0.3);
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .portfolio-item {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 30px;
-            position: relative;
-            transition: all 0.5s var(--transition);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .portfolio-item:hover {
-            transform: translateY(-10px);
-            border-color: var(--secondary);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        .item-type {
-            font-size: 0.7rem;
-            color: var(--secondary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            display: block;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .remove-btn {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(220, 53, 69, 0.1);
+        .remove-icon:hover {
             color: #dc3545;
-            cursor: pointer;
-            transition: 0.3s;
-            opacity: 0.5;
         }
 
-        .remove-btn:hover {
-            opacity: 1;
-            background: #dc3545;
-            color: #fff;
-        }
-
-        /* Forms & Details */
-        .details-panel {
-            background: rgba(197, 160, 89, 0.02);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 50px;
-            margin-top: 80px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .input-group label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--secondary);
-            font-weight: 600;
-        }
-
-        .luxury-input {
-            background: #0d0d0d;
-            border: 1px solid var(--glass-border);
-            padding: 18px;
-            border-radius: 12px;
-            color: #fff;
-            font-family: 'Lora', serif;
-            transition: 0.3s;
-        }
-
-        .luxury-input:focus {
-            outline: none;
-            border-color: var(--secondary);
-            background: #121212;
-        }
-
-        .finalize-btn-premium {
-            position: fixed;
-            bottom: 40px;
-            right: 6%;
-            background: linear-gradient(135deg, var(--secondary), #D4AF37);
-            color: #000;
-            padding: 22px 50px;
-            border-radius: 100px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            cursor: pointer;
-            box-shadow: 0 15px 45px rgba(197, 160, 89, 0.3);
-            border: none;
-            transition: 0.4s;
-            z-index: 2000;
-            display: none;
-        }
-
-        .finalize-btn-premium:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(197, 160, 89, 0.5);
-            background: #fff;
-        }
-
-        .status-pill {
-            padding: 10px 25px;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 800;
-            backdrop-filter: blur(10px);
-        }
-
-        .pill-selection-finalized { background: rgba(197, 160, 89, 0.15); color: var(--secondary); border: 1px solid var(--secondary); }
-        .pill-pending { background: rgba(255, 255, 255, 0.05); color: #888; border: 1px solid rgba(255,255,255,0.1); }
-
-        .empty-state {
-            text-align: center;
-            padding: 100px 0;
-            color: #444;
+        @media (max-width: 1100px) {
+            .dashboard-layout-grid {
+                grid-template-columns: 1fr;
+            }
+            .summary-card {
+                position: relative;
+                top: 0;
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -290,37 +359,70 @@
         <div class="main-content">
             <header class="dashboard-header">
                 <div>
-                    <h1 class="serif">My Wedding Portfolio</h1>
-                    <p style="color: #666; font-size: 1.1rem;" id="welcome-msg">Curating your dream celebration.</p>
+                    <h4 style="font-size: 0.8rem; letter-spacing: 3px; color: var(--secondary); margin-bottom: 10px;">PROPOSAL DASHBOARD</h4>
+                    <h1>MY WEDDING PORTFOLIO</h1>
+                    <p style="color: #666; font-size: 1rem; margin-top: 10px;" id="welcome-msg">Curating your dream celebration.</p>
                 </div>
-                <div id="booking-status" class="status-pill pill-pending" style="display: none;">Status: Selection In Progress</div>
+                <div class="action-group">
+                    <button class="btn-luxury btn-outline-gold" onclick="window.location.href='services.html'">UPDATE SERVICES</button>
+                    <button id="finalize-btn" class="btn-luxury btn-fill-gold" onclick="finalizeBooking()">FINALIZE BOOKING</button>
+                </div>
             </header>
 
-            <div id="portfolio-content" class="portfolio-grid">
-                <!-- Items loaded dynamically -->
-            </div>
+            <div class="dashboard-layout-grid">
+                <!-- Summary Card (Left) -->
+                <div class="summary-card">
+                    <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1200" class="summary-img" id="summary-banner">
+                    <div class="summary-content">
+                        <h4>Wedding Date</h4>
+                        <div class="date" id="display-date">Select a date...</div>
+                        
+                        <h4>Current Status</h4>
+                        <div id="booking-status-text" style="color: var(--secondary); font-weight: 600; font-size: 0.9rem; margin-bottom: 20px;">Planning Phase</div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Planning Phase</span>
+                                <span id="progress-val">65% complete</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                        </div>
 
-            <div id="event-details-section" class="details-panel" style="display: none;">
-                <h2 class="serif" style="color: var(--secondary); margin-bottom: 40px; font-size: 2rem;">Event Specifics</h2>
-                <div class="form-grid">
-                    <div class="input-group">
-                        <label>Expected Event Date</label>
-                        <input type="date" id="event-date" class="luxury-input">
+                        <div id="event-details-mini" style="margin-top: 40px; padding-top: 30px; border-top: 1px solid var(--glass-border);">
+                            <div class="input-group">
+                                <label>Target Wedding Date</label>
+                                <input type="date" id="event-date" class="luxury-input" style="margin-bottom: 15px;" onchange="updateDisplayDate(this.value)">
+                            </div>
+                            <div class="input-group">
+                                <label>Venue Location</label>
+                                <input type="text" id="event-venue" placeholder="e.g. Surat, Gujarat" class="luxury-input">
+                            </div>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label>Approx. Guest Count</label>
-                        <input type="number" id="event-guests" placeholder="e.g. 500" class="luxury-input">
+                </div>
+
+                <!-- Portfolio List (Right) -->
+                <div>
+                    <div id="portfolio-content" class="portfolio-list">
+                        <!-- Items loaded dynamically -->
                     </div>
-                    <div class="input-group" style="grid-column: span 2;">
-                        <label>Proposed Venue Location</label>
-                        <input type="text" id="event-venue" placeholder="e.g. Grand Ballroom, Heritage Palace" class="luxury-input">
-                    </div>
-                    <div class="input-group" style="grid-column: span 2;">
-                        <label>Additional Notes or Vision</label>
-                        <textarea id="event-notes" rows="4" placeholder="Share your unique requirements or theme ideas..." class="luxury-input"></textarea>
+
+                    <div class="total-row">
+                        <div class="total-label">Portfolio Total:</div>
+                        <div class="total-amount" id="portfolio-total">$0.00</div>
                     </div>
                 </div>
             </div>
+
+            <div id="empty-msg" class="empty-state" style="display: none;">
+                <i class="fas fa-gem" style="font-size: 4rem; margin-bottom: 30px; opacity: 0.1;"></i>
+                <h3 class="serif" style="color: #666; font-size: 1.8rem;">Your Canvas is Empty</h3>
+                <p style="margin-bottom: 40px;">Explore our curated collections to begin your journey.</p>
+                <a href="services.html" class="btn btn-primary" style="padding: 18px 45px;">Explore Services</a>
+            </div>
+        </div>
 
             <div id="empty-msg" class="empty-state" style="display: none;">
                 <i class="fas fa-gem" style="font-size: 4rem; margin-bottom: 30px; opacity: 0.1;"></i>
@@ -347,7 +449,7 @@
             const grid = document.getElementById('portfolio-content');
             const emptyMsg = document.getElementById('empty-msg');
             const finalizeBtn = document.getElementById('finalize-btn');
-            const statusPill = document.getElementById('booking-status');
+            const totalDisplay = document.getElementById('portfolio-total');
 
             // Check for existing booking status
             const bookStatusRes = await fetch('/api/bookings');
@@ -355,38 +457,57 @@
             const clientBooking = allBookings.find(b => b.phone === clientInfo.phone || b.client_id === clientInfo.id);
             
             if (clientBooking) {
-                statusPill.innerText = `Status: ${clientBooking.status}`;
-                statusPill.style.display = 'inline-block';
-                statusPill.className = `status-pill pill-${clientBooking.status.toLowerCase().replace(/ /g, '-')}`;
-                if (clientBooking.status !== 'Pending') {
-                    finalizeBtn.style.display = 'none';
-                }
+                document.getElementById('booking-status-text').innerText = clientBooking.status;
+                document.getElementById('display-date').innerText = clientBooking.date;
+                document.getElementById('event-date').value = clientBooking.date;
+                document.getElementById('event-venue').value = clientBooking.venue;
+                
+                // Update progress based on status
+                let progress = 65;
+                if (clientBooking.status === 'Confirmed') progress = 85;
+                if (clientBooking.status === 'Completed') progress = 100;
+                document.getElementById('progress-fill').style.width = progress + '%';
+                document.getElementById('progress-val').innerText = progress + '% complete';
             }
 
             if (portfolio.length === 0) {
                 grid.innerHTML = '';
                 if (!clientBooking) emptyMsg.style.display = 'block';
-                finalizeBtn.style.display = 'none';
                 return;
             }
 
             emptyMsg.style.display = 'none';
-            if (!clientBooking || clientBooking.status === 'Pending') {
-                finalizeBtn.style.display = 'block';
-                document.getElementById('event-details-section').style.display = 'block';
-            } else {
-                document.getElementById('event-details-section').style.display = 'none';
-            }
             
-            grid.innerHTML = portfolio.map(item => `
-                <div class="portfolio-item">
-                    <span class="item-type">${item.item_type}</span>
-                    <h3 style="margin: 0; font-size: 1.2rem;">${item.details.title}</h3>
-                    <div class="remove-btn" onclick="removeItem('${item.id}')">
-                        <i class="fas fa-times"></i>
+            let total = 0;
+            grid.innerHTML = portfolio.map((item, index) => {
+                total += item.price;
+                return `
+                    <div class="premium-item-card">
+                        <img src="${item.image_url}" class="item-img">
+                        <div class="item-info">
+                            <h4 style="color:var(--secondary); font-size:0.7rem; letter-spacing:1px; margin-bottom:5px;">${index + 1}. ${item.item_type.toUpperCase()}</h4>
+                            <h3>${item.details.title}</h3>
+                            <p>${item.description || 'Premium wedding service selection.'}</p>
+                            <div class="item-meta">
+                                <div class="price-tag">Price: $${item.price.toLocaleString()}</div>
+                                <div class="selected-indicator">Selected <i class="fas fa-check-circle"></i></div>
+                            </div>
+                        </div>
+                        <div class="remove-icon" onclick="removeItem('${item.id}')">
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+
+            totalDisplay.innerText = `$${total.toLocaleString()}`;
+        }
+
+        function updateDisplayDate(val) {
+            if (!val) return;
+            const date = new Date(val);
+            const options = { month: 'long', day: 'numeric', year: 'numeric' };
+            document.getElementById('display-date').innerText = date.toLocaleDateString('en-US', options);
         }
 
         async function removeItem(itemId) {
@@ -396,13 +517,14 @@
         }
 
         async function finalizeBooking() {
-            const date = document.getElementById('event-date').value;
+            const dateInput = document.getElementById('event-date').value;
             const venue = document.getElementById('event-venue').value;
-            if (!date || !venue) {
+            if (!dateInput || !venue) {
                 alert("Please provide the Event Date and Venue Location before finalizing.");
                 return;
             }
 
+            const date = document.getElementById('display-date').innerText;
             const res = await fetch(`/api/client/portfolio/${clientInfo.id}`);
             const portfolio = await res.json();
             
@@ -412,9 +534,8 @@
                 phone: clientInfo.phone,
                 date: date,
                 venue: venue,
-                guest_count: document.getElementById('event-guests').value,
                 style: portfolio.map(p => p.details.title).join(', '),
-                message: `PORTFOLIO BOOKING\nItems: ${portfolio.length}\nClient ID: ${clientInfo.id}\nSpecial Requests: ${document.getElementById('event-notes').value}`,
+                message: `PORTFOLIO BOOKING\nItems: ${portfolio.length}\nClient ID: ${clientInfo.id}`,
                 status: 'Selection Finalized'
             };
 
@@ -425,10 +546,8 @@
             });
 
             if (bookRes.ok) {
-                alert('Your portfolio has been sent to the Admin! We will review it and update you shortly.');
-                document.getElementById('booking-status').style.display = 'block';
-                document.getElementById('finalize-btn').style.display = 'none';
-                document.getElementById('event-details-section').style.display = 'none';
+                alert('Your portfolio has been finalized! We will review it shortly.');
+                loadPortfolio();
             }
         }
 
