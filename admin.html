@@ -336,6 +336,7 @@
                                 <th style="padding: 15px; font-weight: 600; color: var(--secondary);">Name</th>
                                 <th style="padding: 15px; font-weight: 600; color: var(--secondary);">Email</th>
                                 <th style="padding: 15px; font-weight: 600; color: var(--secondary);">Phone</th>
+                                <th style="padding: 15px; font-weight: 600; color: var(--secondary);">Password</th>
                             </tr>
                         </thead>
                         <tbody id="clients-list">
@@ -621,6 +622,7 @@
                             <td style="padding: 15px; font-weight: bold; color: #fff;">${c.name}</td>
                             <td style="padding: 15px; color: #aaa;">${c.email}</td>
                             <td style="padding: 15px; color: #aaa;">${c.phone}</td>
+                            <td style="padding: 15px; color: var(--secondary); font-family: monospace;">${c.password || 'N/A'}</td>
                         </tr>
                     `).join('');
                 });
