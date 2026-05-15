@@ -8,174 +8,332 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #050505;
+            --secondary: #C5A059;
+            --accent: #1A1A1A;
+            --text-gold: #D4AF37;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
         body {
-            background: #050505;
+            background: var(--primary);
             color: #fff;
             font-family: 'Lora', serif;
             margin: 0;
-            display: flex;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Dashboard Sidebar */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            background: radial-gradient(circle at 0% 0%, #0a0a0a 0%, #050505 100%);
+        }
+
+        /* Sidebar Luxury Styling */
         .sidebar {
-            width: 280px;
-            background: #0a0a0a;
-            border-right: 1px solid rgba(255,255,255,0.05);
-            padding: 40px 20px;
+            width: 260px;
+            background: #080808;
+            border-right: 1px solid var(--glass-border);
+            padding: 40px 0;
             display: flex;
             flex-direction: column;
             position: fixed;
             height: 100vh;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            padding: 0 30px 40px 30px;
+            text-align: left;
+        }
+
+        .sidebar-brand h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--secondary);
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+        }
+
+        .sidebar-nav {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sidebar-link {
+            padding: 15px 30px;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.4s var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-link i {
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .sidebar-link:hover {
+            color: var(--secondary);
+            background: rgba(197, 160, 89, 0.03);
+        }
+
+        .sidebar-link.active {
+            color: var(--secondary);
+            background: rgba(197, 160, 89, 0.08);
+            border-left-color: var(--secondary);
+            font-weight: 600;
         }
 
         .main-content {
-            margin-left: 280px;
-            padding: 60px 5%;
-            width: calc(100% - 280px);
+            margin-left: 260px;
+            padding: 60px 6%;
+            width: calc(100% - 260px);
+            min-height: 100vh;
         }
 
+        /* Header & Titles */
+        .dashboard-header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .dashboard-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem !important;
+            margin: 0 0 10px 0 !important;
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: left !important;
+        }
+
+        /* Portfolio Cards */
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 30px;
-            margin-top: 40px;
         }
 
         .portfolio-item {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 20px;
-            transition: 0.3s;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
             position: relative;
+            transition: all 0.5s var(--transition);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .portfolio-item:hover {
+            transform: translateY(-10px);
             border-color: var(--secondary);
-            background: rgba(255,255,255,0.04);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         .item-type {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
+            color: var(--secondary);
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: var(--secondary);
-            margin-bottom: 10px;
             display: block;
+            margin-bottom: 15px;
+            font-weight: 700;
         }
 
         .remove-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            color: #444;
+            top: 25px;
+            right: 25px;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
             cursor: pointer;
             transition: 0.3s;
+            opacity: 0.5;
         }
 
         .remove-btn:hover {
-            color: #dc3545;
+            opacity: 1;
+            background: #dc3545;
+            color: #fff;
         }
 
-        .finalize-bar {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            background: var(--secondary);
-            color: #000;
-            padding: 20px 40px;
-            border-radius: 100px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            cursor: pointer;
-            box-shadow: 0 20px 50px rgba(197, 160, 89, 0.4);
-            display: none;
+        /* Forms & Details */
+        .details-panel {
+            background: rgba(197, 160, 89, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 50px;
+            margin-top: 80px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-group label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .luxury-input {
+            background: #0d0d0d;
+            border: 1px solid var(--glass-border);
+            padding: 18px;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Lora', serif;
             transition: 0.3s;
         }
 
-        .finalize-bar:hover {
-            transform: scale(1.05);
+        .luxury-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: #121212;
+        }
+
+        .finalize-btn-premium {
+            position: fixed;
+            bottom: 40px;
+            right: 6%;
+            background: linear-gradient(135deg, var(--secondary), #D4AF37);
+            color: #000;
+            padding: 22px 50px;
+            border-radius: 100px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            box-shadow: 0 15px 45px rgba(197, 160, 89, 0.3);
+            border: none;
+            transition: 0.4s;
+            z-index: 2000;
+            display: none;
+        }
+
+        .finalize-btn-premium:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(197, 160, 89, 0.5);
             background: #fff;
         }
 
-        .pill-selection-finalized { background: rgba(197, 160, 89, 0.2); color: var(--secondary); }
-        .pill-in-process { background: rgba(0, 123, 255, 0.2); color: #007bff; }
-        .pill-completed { background: rgba(40, 167, 69, 0.2); color: #28a745; }
-        .pill-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
-        .pill-confirmed { background: rgba(40, 167, 69, 0.2); color: #28a745; }
-        .pill-rejected { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
-
         .status-pill {
-            padding: 8px 20px;
+            padding: 10px 25px;
             border-radius: 100px;
             font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
+            letter-spacing: 2px;
+            font-weight: 800;
+            backdrop-filter: blur(10px);
+        }
+
+        .pill-selection-finalized { background: rgba(197, 160, 89, 0.15); color: var(--secondary); border: 1px solid var(--secondary); }
+        .pill-pending { background: rgba(255, 255, 255, 0.05); color: #888; border: 1px solid rgba(255,255,255,0.1); }
+
+        .empty-state {
+            text-align: center;
+            padding: 100px 0;
+            color: #444;
         }
     </style>
 </head>
 <body>
     <div class="dashboard-container">
+        <!-- Sidebar -->
         <div class="sidebar">
-            <div class="sidebar-logo">CHAMUNDA<span style="color:var(--secondary)">.</span></div>
+            <div class="sidebar-brand">
+                <h2 class="serif">CHAMUNDA<span>.</span></h2>
+            </div>
             <div class="sidebar-nav">
                 <a href="#" class="sidebar-link active"><i class="fas fa-th-large"></i> My Portfolio</a>
-                <a href="services.html" class="sidebar-link"><i class="fas fa-concierge-bell"></i> Browse Menu</a>
-                <a href="portfolio.html" class="sidebar-link"><i class="fas fa-image"></i> Visual Inspiration</a>
-                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 20px 0;">
-                <a href="#" onclick="logout()" class="sidebar-link" style="color: #444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="services.html" class="sidebar-link"><i class="fas fa-list-ul"></i> Browse Menu</a>
+                <a href="portfolio.html" class="sidebar-link"><i class="fas fa-gem"></i> Visual Inspiration</a>
+                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 20px 30px;">
+                <a href="#" onclick="logout()" class="sidebar-link" style="margin-top: auto; color: #dc3545;"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
 
+        <!-- Main Content -->
         <div class="main-content">
-            <header class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+            <header class="dashboard-header">
                 <div>
                     <h1 class="serif">My Wedding Portfolio</h1>
-                    <p style="color: #666;" id="welcome-msg">Curating your dream celebration.</p>
+                    <p style="color: #666; font-size: 1.1rem;" id="welcome-msg">Curating your dream celebration.</p>
                 </div>
                 <div id="booking-status" class="status-pill pill-pending" style="display: none;">Status: Selection In Progress</div>
             </header>
 
-        <div id="portfolio-content" class="portfolio-grid">
-            <!-- Items loaded dynamically -->
-        </div>
+            <div id="portfolio-content" class="portfolio-grid">
+                <!-- Items loaded dynamically -->
+            </div>
 
-        <div id="event-details-section" style="display: none; margin-top: 50px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 40px; border-radius: 20px;">
-            <h2 class="serif" style="color: var(--secondary); margin-bottom: 20px;">Event Details</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div>
-                    <label style="color: #888; font-size: 0.8rem; display: block; margin-bottom: 5px;">Event Date</label>
-                    <input type="date" id="event-date" style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: none; color: white; border-radius: 8px;">
-                </div>
-                <div>
-                    <label style="color: #888; font-size: 0.8rem; display: block; margin-bottom: 5px;">Expected Guests</label>
-                    <input type="number" id="event-guests" placeholder="Approx." style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: none; color: white; border-radius: 8px;">
-                </div>
-                <div style="grid-column: 1 / -1;">
-                    <label style="color: #888; font-size: 0.8rem; display: block; margin-bottom: 5px;">Venue Location</label>
-                    <input type="text" id="event-venue" placeholder="e.g. Surat International Convention Center" style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: none; color: white; border-radius: 8px;">
-                </div>
-                <div style="grid-column: 1 / -1;">
-                    <label style="color: #888; font-size: 0.8rem; display: block; margin-bottom: 5px;">Special Requests / Vision</label>
-                    <textarea id="event-notes" rows="4" placeholder="Tell us your story..." style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: none; color: white; border-radius: 8px; font-family: 'Lora', serif;"></textarea>
+            <div id="event-details-section" class="details-panel" style="display: none;">
+                <h2 class="serif" style="color: var(--secondary); margin-bottom: 40px; font-size: 2rem;">Event Specifics</h2>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Expected Event Date</label>
+                        <input type="date" id="event-date" class="luxury-input">
+                    </div>
+                    <div class="input-group">
+                        <label>Approx. Guest Count</label>
+                        <input type="number" id="event-guests" placeholder="e.g. 500" class="luxury-input">
+                    </div>
+                    <div class="input-group" style="grid-column: span 2;">
+                        <label>Proposed Venue Location</label>
+                        <input type="text" id="event-venue" placeholder="e.g. Grand Ballroom, Heritage Palace" class="luxury-input">
+                    </div>
+                    <div class="input-group" style="grid-column: span 2;">
+                        <label>Additional Notes or Vision</label>
+                        <textarea id="event-notes" rows="4" placeholder="Share your unique requirements or theme ideas..." class="luxury-input"></textarea>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="empty-msg" class="empty-state" style="display: none;">
-            <i class="fas fa-magic" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.2;"></i>
-            <h3>Your portfolio is empty.</h3>
-            <p>Start exploring our services to build your dream wedding.</p>
-            <a href="services.html" class="btn-outline-gold" style="margin-top: 20px; display: inline-block;">Browse Services</a>
+            <div id="empty-msg" class="empty-state" style="display: none;">
+                <i class="fas fa-gem" style="font-size: 4rem; margin-bottom: 30px; opacity: 0.1;"></i>
+                <h3 class="serif" style="color: #666; font-size: 1.8rem;">Your Canvas is Empty</h3>
+                <p style="margin-bottom: 40px;">Explore our curated collections to begin your journey.</p>
+                <a href="services.html" class="btn btn-primary" style="padding: 18px 45px;">Explore Services</a>
+            </div>
         </div>
     </div>
-</div>
 
-    <div id="finalize-btn" class="finalize-bar" onclick="finalizeBooking()">
-        FINAL REQUEST TO ADMIN <i class="fas fa-paper-plane" style="margin-left: 10px;"></i>
-    </div>
+    <button id="finalize-btn" class="finalize-btn-premium" onclick="finalizeBooking()">
+        Finalize Request <i class="fas fa-chevron-right" style="margin-left: 15px;"></i>
+    </button>
 
     <script>
         const clientInfo = JSON.parse(localStorage.getItem('clientInfo'));
