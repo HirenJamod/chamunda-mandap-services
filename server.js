@@ -146,7 +146,7 @@ app.post('/api/client/signup', async (req, res) => {
 
 app.post('/api/client/login', async (req, res) => {
     const { email, password } = req.body;
-    const client = mockDb.client_profiles.find(p => p.email === email && p.password === password);
+    const client = mockDb.client_profiles.find(p => p.email.toLowerCase() === email.toLowerCase() && p.password === password);
     if (!client) return res.status(401).json({ success: false, message: 'Invalid credentials' });
     
     // In production, sign a JWT. Here we return a mock token.
@@ -155,7 +155,7 @@ app.post('/api/client/login', async (req, res) => {
 
 app.post('/api/client/reset-password', async (req, res) => {
     const { email, phone, newPassword } = req.body;
-    const clientIndex = mockDb.client_profiles.findIndex(p => p.email === email && p.phone === phone);
+    const clientIndex = mockDb.client_profiles.findIndex(p => p.email.toLowerCase() === email.toLowerCase() && p.phone === phone);
     
     if (clientIndex === -1) {
         return res.status(400).json({ success: false, error: 'Verification failed. Email and phone do not match any account.' });
