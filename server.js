@@ -279,7 +279,15 @@ app.get('/api/bookings', async (req, res) => {
     if (error) return res.status(400).json({ error: error.message });
     res.json(data);
 });
-
+app.get('/api/bookings', async (req, res) => {
+    try {
+        const { data, error } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        res.json(data);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 app.post('/api/bookings', async (req, res) => {
     try {
         const bookingData = req.body;
