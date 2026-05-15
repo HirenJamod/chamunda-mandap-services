@@ -117,25 +117,26 @@
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h2 class="serif" style="color: var(--secondary); margin-bottom: 40px;">CHAMUNDA<span>.</span></h2>
-        <nav style="display: flex; flex-direction: column; gap: 10px;">
-            <a href="#" class="active" style="color: var(--secondary); text-decoration: none; font-size: 0.9rem; padding: 12px; background: rgba(197, 160, 89, 0.1); border-radius: 8px;">My Portfolio</a>
-            <a href="services.html" style="color: #666; text-decoration: none; font-size: 0.9rem; padding: 12px;">Browse Menu</a>
-            <a href="portfolio.html" style="color: #666; text-decoration: none; font-size: 0.9rem; padding: 12px;">Visual Inspiration</a>
-            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 20px 0;">
-            <a href="#" onclick="logout()" style="color: #666; text-decoration: none; font-size: 0.9rem; padding: 12px;">Logout</a>
-        </nav>
-    </div>
-
-    <div class="main-content">
-        <header style="display: flex; justify-content: space-between; align-items: flex-end;">
-            <div>
-                <h1 class="serif" style="font-size: 2.5rem; margin-bottom: 10px;">My Wedding Portfolio</h1>
-                <p style="color: #666;" id="welcome-msg">Curating your dream celebration.</p>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-logo">CHAMUNDA<span style="color:var(--secondary)">.</span></div>
+            <div class="sidebar-nav">
+                <a href="#" class="sidebar-link active"><i class="fas fa-th-large"></i> My Portfolio</a>
+                <a href="services.html" class="sidebar-link"><i class="fas fa-concierge-bell"></i> Browse Menu</a>
+                <a href="portfolio.html" class="sidebar-link"><i class="fas fa-image"></i> Visual Inspiration</a>
+                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 20px 0;">
+                <a href="#" onclick="logout()" class="sidebar-link" style="color: #444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
-            <div id="booking-status" class="status-pill pill-pending" style="display: none;">Status: Selection In Progress</div>
-        </header>
+        </div>
+
+        <div class="main-content">
+            <header class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+                <div>
+                    <h1 class="serif">My Wedding Portfolio</h1>
+                    <p style="color: #666;" id="welcome-msg">Curating your dream celebration.</p>
+                </div>
+                <div id="booking-status" class="status-pill pill-pending" style="display: none;">Status: Selection In Progress</div>
+            </header>
 
         <div id="portfolio-content" class="portfolio-grid">
             <!-- Items loaded dynamically -->
@@ -170,6 +171,7 @@
             <a href="services.html" class="btn-outline-gold" style="margin-top: 20px; display: inline-block;">Browse Services</a>
         </div>
     </div>
+</div>
 
     <div id="finalize-btn" class="finalize-bar" onclick="finalizeBooking()">
         FINAL REQUEST TO ADMIN <i class="fas fa-paper-plane" style="margin-left: 10px;"></i>
