@@ -147,6 +147,9 @@
             text-transform: uppercase;
         }
 
+        .status-selection-finalized { background: rgba(197, 160, 89, 0.2); color: var(--secondary); }
+        .status-in-process { background: rgba(0, 123, 255, 0.2); color: #007bff; }
+        .status-completed { background: rgba(40, 167, 69, 0.2); color: #28a745; }
         .status-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
         .status-confirmed { background: rgba(40, 167, 69, 0.2); color: #28a745; }
         .status-rejected { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
@@ -441,12 +444,14 @@
                     const loader = document.getElementById('loader');
                     
                     document.getElementById('total-bookings').innerText = bookings.length;
-                    document.getElementById('pending-bookings').innerText = bookings.filter(b => b.status === 'Pending').length;
-                    document.getElementById('confirmed-bookings').innerText = bookings.filter(b => b.status === 'Confirmed').length;
+                    document.getElementById('pending-bookings').innerText = bookings.filter(b => b.status === 'Pending' || b.status === 'Selection Finalized').length;
+                    document.getElementById('confirmed-bookings').innerText = bookings.filter(b => b.status === 'Confirmed' || b.status === 'In Process').length;
 
                     list.innerHTML = bookings.map(b => {
                         let imagesHtml = '';
                         let styleText = b.style;
+                        let portfolioTag = b.status === 'Selection Finalized' ? '<span style="color:var(--secondary); font-size:0.6rem; border:1px solid var(--secondary); padding:2px 5px; border-radius:4px; margin-left:5px;">PORTFOLIO</span>' : '';
+                        
                         if (b.message && b.message.includes('|||IMAGES|||')) {
                             try {
                                 const parts = b.message.split('|||IMAGES|||');
@@ -454,16 +459,23 @@
                                 imagesHtml = '<div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap;">' + images.map(img => `<a href="${img}" target="_blank"><img src="${img}" style="width:40px; height:40px; object-fit:cover; border-radius:4px; border:1px solid #444;"></a>`).join('') + '</div>';
                             } catch(e) {}
                         }
+                        
                         return `
                             <tr>
-                                <td>#${b.id.substring(3,8)}</td>
-                                <td><strong>${b.name}</strong><br><small>${b.phone}</small></td>
+                                <td>#${b.id.substring(b.id.length-5)}</td>
+                                <td><strong>${b.name}</strong>${portfolioTag}<br><small>${b.phone}</small></td>
                                 <td>${b.date}</td>
                                 <td><strong>${styleText}</strong>${imagesHtml}</td>
-                                <td><span class="status-badge status-${b.status.toLowerCase()}">${b.status}</span></td>
+                                <td><span class="status-badge status-${b.status.toLowerCase().replace(/ /g, '-')}">${b.status}</span></td>
                                 <td>
-                                    <button class="action-btn" onclick="updateStatus('${b.id}', 'Confirmed')"><i class="fas fa-check"></i></button>
-                                    <button class="action-btn" onclick="updateStatus('${b.id}', 'Rejected')"><i class="fas fa-times"></i></button>
+                                    <select onchange="updateStatus('${b.id}', this.value)" style="background:#111; color:var(--secondary); border:1px solid #333; border-radius:4px; padding:5px; font-size:0.75rem;">
+                                        <option value="" disabled selected>Update...</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Confirmed">Confirmed</option>
+                                        <option value="In Process">In Process</option>
+                                        <option value="Completed">Completed</option>
+                                        <option value="Rejected">Rejected</option>
+                                    </select>
                                 </td>
                             </tr>
                         `;

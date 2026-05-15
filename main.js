@@ -39,7 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <img src="${service.image_url}" alt="${service.title}">
                                 <h3>${service.title}</h3>
                                 <p>${service.description}</p>
-                                <button class="btn-elysian-gold" onclick="window.location.href='portfolio.html'">VIEW GALLERY</button>
+                                <div style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-elysian-gold" onclick="window.location.href='portfolio.html'">VIEW GALLERY</button>
+                                    <button class="btn-elysian-gold" style="background: transparent; border: 1px solid var(--secondary); color: var(--secondary);" onclick="window.addToPortfolio('${service.id}', 'service', '${service.title}')">ADD TO PORTFOLIO</button>
+                                </div>
                             </div>
                         `).join('');
                     }
@@ -101,8 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         `;
                     } else {
                         gallery.innerHTML = images.map((img, index) => `
-                            <div class="gallery-item-luxury ${index % 3 === 1 ? 'highlight' : ''}">
+                            <div class="gallery-item-luxury ${index % 3 === 1 ? 'highlight' : ''}" style="position: relative;">
                                 <img src="${img.image_url}" alt="${img.caption}">
+                                <div class="gallery-overlay" style="opacity: 0; position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; transition: 0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">
+                                    <button onclick="window.addToPortfolio('${img.id}', 'image', '${img.caption || 'Masterpiece'}')" style="background: var(--secondary); border: none; padding: 10px 15px; border-radius: 50%; color: #000; cursor: pointer;" title="Add to Portfolio">
+                                        <i class="fas fa-thumbtack"></i>
+                                    </button>
+                                </div>
                             </div>
                         `).join('');
                     }
@@ -353,5 +361,37 @@ window.selectServiceAndBook = (serviceTitle) => {
         bookingSection.scrollIntoView({ behavior: 'smooth' });
     } else {
         window.location.href = `index.html?service=${encodeURIComponent(serviceTitle)}#booking`;
+    }
+};
+
+// 12. New Wedding Platform 2.0 - Add to Portfolio Logic
+window.addToPortfolio = async (itemId, itemType, itemTitle) => {
+    const token = localStorage.getItem('clientToken');
+    const clientInfo = JSON.parse(localStorage.getItem('clientInfo'));
+
+    if (!token || !clientInfo) {
+        alert('Please login to add items to your Wedding Portfolio.');
+        window.location.href = 'client-auth.html';
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/client/portfolio', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                client_id: clientInfo.id,
+                item_id: itemId,
+                item_type: itemType,
+                details: { title: itemTitle }
+            })
+        });
+        const result = await res.json();
+        if (result.success) {
+            alert(`"${itemTitle}" added to your portfolio!`);
+        }
+    } catch (err) {
+        console.error('Error adding to portfolio:', err);
+        alert('Failed to add item. Please try again.');
     }
 };

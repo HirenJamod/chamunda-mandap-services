@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wedding Portfolio | Chamunda Mandap Services</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #050505;
+            color: #fff;
+            font-family: 'Lora', serif;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Dashboard Sidebar */
+        .sidebar {
+            width: 280px;
+            background: #0a0a0a;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 60px 5%;
+            width: calc(100% - 280px);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .portfolio-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 20px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .portfolio-item:hover {
+            border-color: var(--secondary);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .item-type {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #444;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .remove-btn:hover {
+            color: #dc3545;
+        }
+
+        .finalize-bar {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: var(--secondary);
+            color: #000;
+            padding: 20px 40px;
+            border-radius: 100px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            box-shadow: 0 20px 50px rgba(197, 160, 89, 0.4);
+            display: none;
+            transition: 0.3s;
+        }
+
+        .finalize-bar:hover {
+            transform: scale(1.05);
+            background: #fff;
+        }
+
+        .pill-selection-finalized { background: rgba(197, 160, 89, 0.2); color: var(--secondary); }
+        .pill-in-process { background: rgba(0, 123, 255, 0.2); color: #007bff; }
+        .pill-completed { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .pill-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .pill-confirmed { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .pill-rejected { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+
+        .status-pill {
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="serif" style="color: var(--secondary); margin-bottom: 40px;">CHAMUNDA<span>.</span></h2>
+        <nav style="display: flex; flex-direction: column; gap: 10px;">
+            <a href="#" class="active" style="color: var(--secondary); text-decoration: none; font-size: 0.9rem; padding: 12px; background: rgba(197, 160, 89, 0.1); border-radius: 8px;">My Portfolio</a>
+            <a href="services.html" style="color: #666; text-decoration: none; font-size: 0.9rem; padding: 12px;">Browse Menu</a>
+            <a href="portfolio.html" style="color: #666; text-decoration: none; font-size: 0.9rem; padding: 12px;">Visual Inspiration</a>
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 20px 0;">
+            <a href="#" onclick="logout()" style="color: #666; text-decoration: none; font-size: 0.9rem; padding: 12px;">Logout</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <h1 class="serif" style="font-size: 2.5rem; margin-bottom: 10px;">My Wedding Portfolio</h1>
+                <p style="color: #666;" id="welcome-msg">Curating your dream celebration.</p>
+            </div>
+            <div id="booking-status" class="status-pill pill-pending" style="display: none;">Status: Selection In Progress</div>
+        </header>
+
+        <div id="portfolio-content" class="portfolio-grid">
+            <!-- Items loaded dynamically -->
+        </div>
+
+        <div id="empty-msg" class="empty-state" style="display: none;">
+            <i class="fas fa-magic" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.2;"></i>
+            <h3>Your portfolio is empty.</h3>
+            <p>Start exploring our services to build your dream wedding.</p>
+            <a href="services.html" class="btn-outline-gold" style="margin-top: 20px; display: inline-block;">Browse Services</a>
+        </div>
+    </div>
+
+    <div id="finalize-btn" class="finalize-bar" onclick="finalizeBooking()">
+        FINAL REQUEST TO ADMIN <i class="fas fa-paper-plane" style="margin-left: 10px;"></i>
+    </div>
+
+    <script>
+        const clientInfo = JSON.parse(localStorage.getItem('clientInfo'));
+        if (!clientInfo) window.location.href = 'client-auth.html';
+
+        document.getElementById('welcome-msg').innerText = `Welcome back, ${clientInfo.name}. Curating your dream celebration.`;
+
+        async function loadPortfolio() {
+            const res = await fetch(`/api/client/portfolio/${clientInfo.id}`);
+            const portfolio = await res.json();
+            const grid = document.getElementById('portfolio-content');
+            const emptyMsg = document.getElementById('empty-msg');
+            const finalizeBtn = document.getElementById('finalize-btn');
+            const statusPill = document.getElementById('booking-status');
+
+            // Check for existing booking status
+            const bookStatusRes = await fetch('/api/bookings');
+            const allBookings = await bookStatusRes.json();
+            const clientBooking = allBookings.find(b => b.phone === clientInfo.phone || b.client_id === clientInfo.id);
+            
+            if (clientBooking) {
+                statusPill.innerText = `Status: ${clientBooking.status}`;
+                statusPill.style.display = 'inline-block';
+                statusPill.className = `status-pill pill-${clientBooking.status.toLowerCase().replace(/ /g, '-')}`;
+                if (clientBooking.status !== 'Pending') {
+                    finalizeBtn.style.display = 'none';
+                }
+            }
+
+            if (portfolio.length === 0) {
+                grid.innerHTML = '';
+                if (!clientBooking) emptyMsg.style.display = 'block';
+                finalizeBtn.style.display = 'none';
+                return;
+            }
+
+            emptyMsg.style.display = 'none';
+            if (!clientBooking || clientBooking.status === 'Pending') {
+                finalizeBtn.style.display = 'block';
+            }
+            
+            grid.innerHTML = portfolio.map(item => `
+                <div class="portfolio-item">
+                    <span class="item-type">${item.item_type}</span>
+                    <h3 style="margin: 0; font-size: 1.2rem;">${item.details.title}</h3>
+                    <div class="remove-btn" onclick="removeItem('${item.id}')">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function removeItem(itemId) {
+            if (!confirm('Remove this item from your portfolio?')) return;
+            const res = await fetch(`/api/client/portfolio/${itemId}`, { method: 'DELETE' });
+            if (res.ok) loadPortfolio();
+        }
+
+        async function finalizeBooking() {
+            const res = await fetch(`/api/client/portfolio/${clientInfo.id}`);
+            const portfolio = await res.json();
+            
+            const bookingData = {
+                client_id: clientInfo.id,
+                name: clientInfo.name,
+                phone: clientInfo.phone,
+                style: portfolio.map(p => p.details.title).join(', '),
+                message: `PORTFOLIO BOOKING\nItems: ${portfolio.length}\nClient ID: ${clientInfo.id}`,
+                status: 'Selection Finalized'
+            };
+
+            const bookRes = await fetch('/api/bookings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bookingData)
+            });
+
+            if (bookRes.ok) {
+                alert('Your portfolio has been sent to the Admin! We will review it and update you shortly.');
+                document.getElementById('booking-status').style.display = 'block';
+                document.getElementById('finalize-btn').style.display = 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('clientToken');
+            localStorage.removeItem('clientInfo');
+            window.location.href = 'index.html';
+        }
+
+        loadPortfolio();
+    </script>
+</body>
+</html>

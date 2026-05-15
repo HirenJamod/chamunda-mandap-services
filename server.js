@@ -52,7 +52,9 @@ let mockDb = {
     gallery: [],
     services: [],
     bookings: [],
-    settings: siteSettings
+    settings: siteSettings,
+    client_profiles: [],
+    client_portfolios: []
 };
 
 // Mock Supabase Client if needed
@@ -129,6 +131,47 @@ app.post('/api/login', (req, res) => {
     } else {
         res.status(401).json({ success: false, message: 'Invalid password' });
     }
+});
+
+// === Client Authentication ===
+app.post('/api/client/signup', async (req, res) => {
+    const { email, password, name, phone } = req.body;
+    const existing = mockDb.client_profiles.find(p => p.email === email);
+    if (existing) return res.status(400).json({ error: 'User already exists' });
+
+    const newProfile = { id: `CL-${Date.now()}`, email, password, name, phone, created_at: new Date().toISOString() };
+    mockDb.client_profiles.push(newProfile);
+    res.json({ success: true, client: { id: newProfile.id, name: newProfile.name } });
+});
+
+app.post('/api/client/login', async (req, res) => {
+    const { email, password } = req.body;
+    const client = mockDb.client_profiles.find(p => p.email === email && p.password === password);
+    if (client) {
+        res.json({ success: true, token: `client-token-${client.id}`, client: { id: client.id, name: client.name } });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+});
+
+// === Client Portfolio Management ===
+app.get('/api/client/portfolio/:clientId', (req, res) => {
+    const { clientId } = req.params;
+    const portfolio = mockDb.client_portfolios.filter(p => p.client_id === clientId);
+    res.json(portfolio);
+});
+
+app.post('/api/client/portfolio', (req, res) => {
+    const { client_id, item_id, item_type, details } = req.body;
+    const newItem = { id: `ITEM-${Date.now()}`, client_id, item_id, item_type, details, added_at: new Date().toISOString() };
+    mockDb.client_portfolios.push(newItem);
+    res.json({ success: true, item: newItem });
+});
+
+app.delete('/api/client/portfolio/:itemId', (req, res) => {
+    const { itemId } = req.params;
+    mockDb.client_portfolios = mockDb.client_portfolios.filter(p => p.id !== itemId);
+    res.json({ success: true, message: 'Item removed from portfolio' });
 });
 
 // Booking routes defined below after gallery/services (single definition)
