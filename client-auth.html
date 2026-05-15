@@ -107,6 +107,7 @@
         <div class="tabs">
             <span class="tab active" onclick="showForm('login')">Login</span>
             <span class="tab" onclick="showForm('signup')">Sign Up</span>
+            <span class="tab" id="tab-reset" style="display: none;">Reset</span>
         </div>
 
         <!-- Login Form -->
@@ -120,6 +121,9 @@
                 <input type="password" id="login-pass" placeholder="••••••••" required>
             </div>
             <button type="submit" class="btn btn-primary btn-auth">ENTER DASHBOARD</button>
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="#" onclick="showForm('reset')" style="color: #666; text-decoration: none; font-size: 0.75rem;">Forgot Password?</a>
+            </div>
         </form>
 
         <!-- Sign Up Form -->
@@ -143,6 +147,24 @@
             <button type="submit" class="btn btn-primary btn-auth">CREATE ACCOUNT</button>
         </form>
 
+        <!-- Reset Password Form -->
+        <form id="reset-form" style="display: none;">
+            <p style="color: #888; font-size: 0.8rem; margin-bottom: 20px; text-align: left;">Verify your account details to reset your password.</p>
+            <div class="form-group">
+                <label>Registered Email</label>
+                <input type="email" id="reset-email" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+                <label>Registered Phone</label>
+                <input type="tel" id="reset-phone" placeholder="+91 00000 00000" required>
+            </div>
+            <div class="form-group">
+                <label>New Password</label>
+                <input type="password" id="reset-pass" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-auth">RESET PASSWORD</button>
+        </form>
+
         <div style="margin-top: 2rem;">
             <a href="index.html" style="color: #444; text-decoration: none; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;">← Back to Home</a>
         </div>
@@ -151,14 +173,24 @@
     <script>
         function showForm(type) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('reset-form').style.display = 'none';
             
             if (type === 'login') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
                 document.getElementById('login-form').style.display = 'block';
-                document.getElementById('signup-form').style.display = 'none';
-            } else {
-                document.getElementById('login-form').style.display = 'none';
+            } else if (type === 'signup') {
+                document.querySelectorAll('.tab')[1].classList.add('active');
                 document.getElementById('signup-form').style.display = 'block';
+            } else if (type === 'reset') {
+                document.getElementById('tab-reset').style.display = 'inline-block';
+                document.getElementById('tab-reset').classList.add('active');
+                document.getElementById('reset-form').style.display = 'block';
+            }
+            
+            if (type !== 'reset') {
+                document.getElementById('tab-reset').style.display = 'none';
             }
         }
 
@@ -208,6 +240,30 @@
                 window.location.href = 'client-dashboard.html';
             } else {
                 alert(result.message || 'Login failed');
+            }
+        });
+
+        // Logic for Password Reset
+        document.getElementById('reset-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                email: document.getElementById('reset-email').value,
+                phone: document.getElementById('reset-phone').value,
+                newPassword: document.getElementById('reset-pass').value
+            };
+            
+            const res = await fetch('/api/client/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            
+            if (result.success) {
+                alert('Password reset successfully! You can now login.');
+                showForm('login');
+            } else {
+                alert(result.error || 'Verification failed. Please check your email and phone number.');
             }
         });
     </script>
